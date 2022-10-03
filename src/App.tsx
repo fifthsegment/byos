@@ -2,9 +2,9 @@ import React from "react";
 import "./App.css";
 
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
+import Dashboard from "./pages/dashboard";
+import Home from "./pages/home";
+import Login from "./pages/login";
 
 function App() {
   return (
