@@ -1,14 +1,32 @@
-import { Asset } from "./types";
+import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3'
+import { S3Initializer, GetAssetArgs, Asset } from './types'
 
-export const getAssets: (directoryId: string) => Asset[] = (_directoryId) => {
-  /**
-   * Implementation here
-   */
-  return [];
-};
+export const init = (initializationData: S3Initializer) => {
+    const { credentials, region, endpoint } = initializationData
+    const client: any = new S3Client({
+        region: region,
+        credentials: credentials,
+        endpoint: endpoint,
+    })
+    return client
+}
+
+export const getAssets: (
+    client: S3Client,
+    directoryId: string
+) => Promise<Asset[] | undefined> = async (client, params: GetAssetArgs) => {
+    const command = new ListObjectsV2Command(params)
+    const response = await client.send(command)
+    return response.Contents?.map((item) => {
+        return {
+            name: item?.ETag,
+            size: item?.LastModified,
+        } as Asset
+    })
+}
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {
-  /**
-   * Implementation here
-   */
-};
+    /**
+     * Implementation here
+     */
+}
