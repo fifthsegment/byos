@@ -13,7 +13,7 @@ export const init = (initializationData: S3Initializer) => {
 
 export const getAssets: (
     client: S3Client,
-    directoryId: GetAssetArgs
+    params: GetAssetArgs
 ) => Promise<Asset[] | undefined> = async (client, params) => {
     const command = new ListObjectsV2Command(params)
     const response = await client.send(command)
