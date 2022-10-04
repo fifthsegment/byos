@@ -3,4 +3,6 @@
  * user's api Keys, currently viewed directory, etc
  */
 
-export default {};
+import { createContext } from 'react'
+
+export const ApplicationContext = createContext(Object.create(null))
