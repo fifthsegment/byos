@@ -7,6 +7,7 @@ export const BasicProvider = ({children} : React.PropsWithChildren) => {
         if (routingState.isReady === false) {
             setRoutingState({...routingState, isReady: true});
         }
+        // eslint-disable-next-line
     }, [routingState.isReady, routingState.routes])
     return <>
         {children}

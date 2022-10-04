@@ -19,6 +19,7 @@ export const AzureAdProvider = ({children}: React.PropsWithChildren) => {
             return route;
           }), isReady: true});
       }
+      // eslint-disable-next-line
   }, [routingState.isReady, routingState.routes])
     return <MsalProvider instance={msalInstance}>
       {children}
