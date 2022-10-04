@@ -2,41 +2,28 @@ import React from "react";
 import "./App.css";
 
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/dashboard";
-import Home from "./pages/home";
-import Login from "./pages/login";
-
-import { isEnabled } from "./services/azure/authConfig";
-
-function withLoginIntegration() {
-  return (
-    <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/" element={<Login />} />
-      <Route path="*" element={<Home />} />
-      
-    </Routes>
-  );
-}
-
-function withoutLoginIntegration() {
-  return (
-    <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/" element={<Home />} />
-      <Route path="*" element={<Home />} />
-      
-    </Routes>
-  );
-}
+import { InternalRouteDef } from "./routes";
+import { Link } from "react-router-dom";
+import { RoutingContext } from "./contexts/routing/RoutingContext";
 
 function App() {
+  const [routingState, _setRoutingState] = React.useContext(RoutingContext);  
   return (
-    <div className="App">
       <Router>
-        {isEnabled ? withLoginIntegration() : withoutLoginIntegration()}
+        <Routes>
+          {routingState.isReady && routingState.routes.map((route: InternalRouteDef) => {
+            return <Route key={route.path} path={route.path} element={route.component} />
+          })}
+        </Routes>
+        <div>
+          Routes defined: 
+        <ul>
+        {routingState.routes.map((route: InternalRouteDef) => {
+            return <li><Link key={route.path} to={route.path}  >{route.path}</Link></li>
+          })}
+          </ul>
+        </div>
       </Router>
-    </div>
   );
 }
 
