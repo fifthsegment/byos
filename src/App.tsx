@@ -6,10 +6,11 @@ import { InternalRouteDef } from './routes'
 import { Link } from 'react-router-dom'
 import { RoutingContext } from './contexts/routing/RoutingContext'
 import { ApplicationContext } from './contexts/application/ApplicationContext'
+import initialData from './contexts/application/initialData'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
-    const applicationState = useState()
+    const applicationState = useState(initialData)
     return (
         <ApplicationContext.Provider value={applicationState}>
             <Router>
