@@ -1,9 +1,11 @@
-import React from "react";
+import React from 'react'
+import { SaveCredentialsForm } from '../../components/SaveCredentialsForm'
 
 export default function Login() {
-  return (
-    <div>
-      <h5>Login Page</h5>
-    </div>
-  );
+    return (
+        <div>
+            <h2>Login Page</h2>
+            <SaveCredentialsForm />
+        </div>
+    )
 }
