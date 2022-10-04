@@ -3,6 +3,7 @@ export const msalConfig = {
       clientId: "1308c1b6-585b-4b12-ba62-7cfd2790849f",
       //authority:"https://login.microsoftonline.com/45155b2d-22e5-40e1-9ca6-cf423ef564be",
       authority: "https://byo5.b2clogin.com/byo5.onmicrosoft.com/B2C_1_test1",
+      // eslint-disable-next-line
       redirectUri: location.protocol+'//'+location.host+location.pathname,
       //redirectUri: "http://localhost:3000/dashboard",
       knownAuthorities: ["byo5.b2clogin.com"],
