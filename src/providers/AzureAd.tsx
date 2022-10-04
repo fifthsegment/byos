@@ -19,7 +19,7 @@ export const AzureAdProvider = ({children}: React.PropsWithChildren) => {
             return route;
           }), isReady: true});
       }
-  }, [])
+  }, [routingState.isReady, routingState.routes])
     return <MsalProvider instance={msalInstance}>
       {children}
     </MsalProvider>

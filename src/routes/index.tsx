@@ -20,7 +20,9 @@ const routes: InternalRouteDef[] = [
     {path: "/", component: <Home /> }
 ]
 
-export default {
+const internalRoutes = {
     isReady: false,
     routes: routes
-} 
+};
+
+export default internalRoutes

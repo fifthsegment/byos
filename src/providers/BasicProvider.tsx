@@ -7,7 +7,7 @@ export const BasicProvider = ({children} : React.PropsWithChildren) => {
         if (routingState.isReady === false) {
             setRoutingState({...routingState, isReady: true});
         }
-    }, [])
+    }, [routingState.isReady, routingState.routes])
     return <>
         {children}
     </>

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { RoutingContext } from "./contexts/routing/RoutingContext";
 
 function App() {
-  const [routingState, _setRoutingState] = React.useContext(RoutingContext);  
+  const [routingState, ] = React.useContext(RoutingContext);  
   return (
       <Router>
         <Routes>
