@@ -24,6 +24,23 @@
     jsonpointer "^5.0.0"
     leven "^3.1.0"
 
+"@azure/msal-browser@^2.29.0":
+  version "2.29.0"
+  resolved "https://registry.npmjs.org/@azure/msal-browser/-/msal-browser-2.29.0.tgz"
+  integrity sha512-ezrB0qL1WsJSNgvLmAN5vKr/4pH28UYLe8JUZeHzB6Z408JU8qYXXGnHAhDPzpDg0g91eG05IdIVrLwxk/i15g==
+  dependencies:
+    "@azure/msal-common" "^7.5.0"
+
+"@azure/msal-common@^7.5.0":
+  version "7.5.0"
+  resolved "https://registry.npmjs.org/@azure/msal-common/-/msal-common-7.5.0.tgz"
+  integrity sha512-W+SIsGSjkUAyDggA/6QVMKErttQ/8Bq9l/7ADr7GJwt9JFsc+XNBdQDsOsUvZ7YCVkZcSgzJw2MZJLIBqfQtQA==
+
+"@azure/msal-react@^1.4.8":
+  version "1.4.8"
+  resolved "https://registry.npmjs.org/@azure/msal-react/-/msal-react-1.4.8.tgz"
+  integrity sha512-sU5/dTf/dW1jo3wRVnFJ83A0/ir+sq46a761aGfXLdOCUlt+xwF+E6CR0w5+DucHroDuZhm9u9pE1gonA8f5qg==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.16.0", "@babel/code-frame@^7.18.6", "@babel/code-frame@^7.8.3":
   version "7.18.6"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.18.6.tgz"
@@ -1755,7 +1772,7 @@
 
 "@remix-run/router@1.0.1":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.1.tgz#88d7ac31811ab0cef14aaaeae2a0474923b278bc"
+  resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.0.1.tgz"
   integrity sha512-eBV5rvW4dRFOU1eajN7FmYxjAIVz/mRHgUE9En9mBn6m3mulK3WTR5C3iQhL9MZ14rWAq+xOlEaCkDiW0/heOg==
 
 "@rollup/plugin-babel@^5.2.0":
@@ -2114,7 +2131,7 @@
 
 "@types/history@^4.7.11":
   version "4.7.11"
-  resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.11.tgz#56588b17ae8f50c53983a524fc3cc47437969d64"
+  resolved "https://registry.npmjs.org/@types/history/-/history-4.7.11.tgz"
   integrity sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==
 
 "@types/html-minifier-terser@^6.0.0":
@@ -2222,7 +2239,7 @@
 
 "@types/react-router-dom@^5.3.3":
   version "5.3.3"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.3.3.tgz#e9d6b4a66fcdbd651a5f106c2656a30088cc1e83"
+  resolved "https://registry.npmjs.org/@types/react-router-dom/-/react-router-dom-5.3.3.tgz"
   integrity sha512-kpqnYK4wcdm5UaWI3fLcELopqLrHgLqNsdpHauzlQktfkHL3npOSwtj1Uz9oKBAzs7lFtVkV8j83voAz2D8fhw==
   dependencies:
     "@types/history" "^4.7.11"
@@ -2231,7 +2248,7 @@
 
 "@types/react-router@*":
   version "5.1.19"
-  resolved "https://registry.yarnpkg.com/@types/react-router/-/react-router-5.1.19.tgz#9b404246fba7f91474d7008a3d48c17b6e075ad6"
+  resolved "https://registry.npmjs.org/@types/react-router/-/react-router-5.1.19.tgz"
   integrity sha512-Fv/5kb2STAEMT3wHzdKQK2z8xKq38EDIGVrutYLmQVVLe+4orDFquU52hQrULnEHinMKv9FSA6lf9+uNT1ITtA==
   dependencies:
     "@types/history" "^4.7.11"
@@ -7268,6 +7285,11 @@ prelude-ls@~1.1.2:
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz"
   integrity sha512-ESF23V4SKG6lVSGZgYNpbsiaAkdab6ZgOxe52p7+Kid3W3u3bxR4Vfd/o21dmN7jSt0IwgZ4v5MUd26FEtXE9w==
 
+prettier@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
+  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
+
 pretty-bytes@^5.3.0, pretty-bytes@^5.4.1:
   version "5.6.0"
   resolved "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-5.6.0.tgz"
@@ -7480,7 +7502,7 @@ react-refresh@^0.11.0:
 
 react-router-dom@^6.4.1:
   version "6.4.1"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.1.tgz#99c9b7c4967890701c888517475aa5d54d25760e"
+  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.4.1.tgz"
   integrity sha512-MY7NJCrGNVJtGp8ODMOBHu20UaIkmwD2V3YsAOUQoCXFk7Ppdwf55RdcGyrSj+ycSL9Uiwrb3gTLYSnzcRoXww==
   dependencies:
     "@remix-run/router" "1.0.1"
@@ -7488,7 +7510,7 @@ react-router-dom@^6.4.1:
 
 react-router@6.4.1, react-router@^6.4.1:
   version "6.4.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.1.tgz#dd9cc4dfa264751d143a4b6c9d4faa60ab3ce26c"
+  resolved "https://registry.npmjs.org/react-router/-/react-router-6.4.1.tgz"
   integrity sha512-OJASKp5AykDWFewgWUim1vlLr7yfD4vO/h+bSgcP/ix8Md+LMHuAjovA74MQfsfhQJGGN1nHRhwS5qQQbbBt3A==
   dependencies:
     "@remix-run/router" "1.0.1"
