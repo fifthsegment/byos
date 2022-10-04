@@ -10,8 +10,8 @@ export type S3Initializer = {
 }
 
 export type Asset = {
-    name: string
-    lastModified: number
+    name: string | undefined
+    lastModified: Date | undefined
 }
 
 export type GetAssetArgs = {

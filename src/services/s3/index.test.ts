@@ -17,3 +17,5 @@ async function initFn() {
   const response = await client.send(command);
 }
 */
+
+export {}
