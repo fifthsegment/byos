@@ -3,6 +3,21 @@
  * user's api Keys, currently viewed directory, etc
  */
 
-import { createContext } from 'react'
+import React, { createContext } from 'react'
 
-export const ApplicationContext = createContext(Object.create(null))
+export type ApplicationState = {
+    s3credentials: {
+        apiKey: string | undefined
+        apiSecret: string | undefined
+    }
+    otherStuff: string
+}
+
+export type ApplicationContextType = [
+    ApplicationState,
+    React.Dispatch<React.SetStateAction<ApplicationState>>
+]
+
+export const ApplicationContext = createContext<ApplicationContextType>(
+    Object.create(null)
+)

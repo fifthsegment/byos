@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ApplicationContext } from '../contexts/application/ApplicationContext'
+import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
@@ -14,11 +14,22 @@ export const SaveCredentialsForm = () => {
             setSaved(false)
         }, 1000)
     }
+
+    const { s3credentials } = appState
+    const { apiKey, apiSecret } = s3credentials
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input {...register('apiKey')} placeholder="apiKey" />
-            <input {...register('apiSecret')} placeholder="apiSecret" />
-            <input type="submit" />
+            <input
+                {...register('apiKey')}
+                placeholder="apiKey"
+                value={apiKey}
+            />
+            <input
+                {...register('apiSecret')}
+                placeholder="apiSecret"
+                value={apiSecret}
+            />
+            <input type="submit" value={'Submit'} />
             <div>{saved && 'Saved!'}</div>
         </form>
     )

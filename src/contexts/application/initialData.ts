@@ -1,7 +1,9 @@
-const initialData = {
+import { ApplicationState } from './ApplicationContext'
+
+const initialData: ApplicationState = {
     s3credentials: {
-        apiKey: '',
-        apiSecret: '',
+        apiKey: undefined,
+        apiSecret: undefined,
     },
     otherStuff: '',
 }
