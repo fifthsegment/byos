@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 
 export const SaveCredentialsForm = () => {
@@ -7,8 +7,11 @@ export const SaveCredentialsForm = () => {
     const { register, handleSubmit } = useForm()
     const [saved, setSaved] = useState(false)
 
-    const onSubmit = (data: any) => {
-        setAppState({ ...appState, s3credentials: data })
+    const onSubmit = (data: FieldValues) => {
+        /**
+         * Build the s3 client here
+         */
+        setAppState({ ...appState, s3credentials: data as any })
         setSaved(true)
         setTimeout(() => {
             setSaved(false)

@@ -3,7 +3,7 @@ import { S3Initializer, GetAssetArgs, Asset } from './types'
 
 export const init = (initializationData: S3Initializer) => {
     const { credentials, region, endpoint } = initializationData
-    const client: any = new S3Client({
+    const client = new S3Client({
         region: region,
         credentials: credentials,
         endpoint: endpoint,

@@ -3,6 +3,7 @@
  * user's api Keys, currently viewed directory, etc
  */
 
+import { S3Client } from '@aws-sdk/client-s3'
 import React, { createContext } from 'react'
 
 export type ApplicationState = {
@@ -11,6 +12,7 @@ export type ApplicationState = {
         apiSecret: string | undefined
     }
     otherStuff: string
+    s3client: S3Client | undefined
 }
 
 export type ApplicationContextType = [

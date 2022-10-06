@@ -9,7 +9,7 @@ export const ListAssets = () => {
     const { s3credentials } = appState
     const { apiKey, apiSecret } = s3credentials
     if (apiKey === undefined || apiSecret === undefined) {
-        return <></>
+        return <>[ListAssets] No S3 Credentials found</>
     }
-    return <div>{s3credentials.apiKey}</div>
+    return <div>[ListAssets] Found S3 Credentials</div>
 }

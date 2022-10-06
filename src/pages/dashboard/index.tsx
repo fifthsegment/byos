@@ -1,5 +1,11 @@
-import React from "react";
+import React from 'react'
+import { ListAssets } from '../../components/ListAssets'
 
 export default function Dashboard() {
-  return <div>Dashboard</div>;
+    return (
+        <div>
+            Dashboard
+            <ListAssets />
+        </div>
+    )
 }
