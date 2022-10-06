@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
-import { buildS3Client } from '../../services/s3'
-import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3'
+import { buildS3Client, getAssets } from '../../services/s3'
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
@@ -22,18 +21,19 @@ export const SaveCredentialsForm = () => {
         setSaved(true)
         setTimeout(() => {
             setSaved(false)
-            const s3Client = buildS3Client({
-                credentials: {
-                    accessKeyId: data.apiKey,
-                    secretAccessKey: data.apiSecret,
-                },
-                region: data.region,
-                endpoint: data.endpoint,
-            })
         }, 1000)
         /**
          * Build the s3 client here
          */
+        const s3Client = buildS3Client({
+            credentials: {
+                accessKeyId: data.apiKey,
+                secretAccessKey: data.apiSecret,
+            },
+            region: data.region,
+            endpoint: data.endpoint,
+        })
+        getAssets(s3Client, { Bucket: "testingbyos", Delimiter: "/", Prefix: "" })
     }
 
     const connectToS3 = () => {
