@@ -1,13 +1,5 @@
 import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { S3Initializer, GetAssetArgs, Asset } from './types'
-//const { S3Client, AbortMultipartUploadCommand } = require('@aws-sdk/client-s3')
-
-class S3VirtualClient {
-    constructor() {
-        const client = new S3Client({ region: 'REGION' })
-        return client
-    }
-}
 
 export const buildS3Client = (initializationData: S3Initializer) => {
     const { credentials, region, endpoint } = initializationData

@@ -6,7 +6,6 @@ import { buildS3Client, getAssets } from '../../services/s3'
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { apiKey, apiSecret, region, endpoint } = s3credentials
     const { register, handleSubmit } = useForm({
         defaultValues: s3credentials,
     })
