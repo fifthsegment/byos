@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
+import { init } from '../../services/s3'
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
@@ -11,7 +12,19 @@ export const SaveCredentialsForm = () => {
         /**
          * Build the s3 client here
          */
-        setAppState({ ...appState, s3credentials: data as any })
+        const s3Client = init({
+            credentials: {
+                accessKeyId: '',
+                secretAccessKey: '',
+            },
+            region: '',
+            endpoint: 'west',
+        })
+        setAppState({
+            ...appState,
+            s3credentials: data as any,
+            s3client: s3Client,
+        })
         setSaved(true)
         setTimeout(() => {
             setSaved(false)
