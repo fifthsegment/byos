@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
+import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 
 export const SaveCredentialsForm = () => {
