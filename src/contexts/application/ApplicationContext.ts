@@ -3,6 +3,23 @@
  * user's api Keys, currently viewed directory, etc
  */
 
-import { createContext } from 'react'
+import { S3Client } from '@aws-sdk/client-s3'
+import React, { createContext } from 'react'
 
-export const ApplicationContext = createContext(Object.create(null))
+export type ApplicationState = {
+    s3credentials: {
+        apiKey: string | undefined
+        apiSecret: string | undefined
+    }
+    otherStuff: string
+    s3client: S3Client | undefined
+}
+
+export type ApplicationContextType = [
+    ApplicationState,
+    React.Dispatch<React.SetStateAction<ApplicationState>>
+]
+
+export const ApplicationContext = createContext<ApplicationContextType>(
+    Object.create(null)
+)
