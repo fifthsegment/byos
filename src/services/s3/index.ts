@@ -1,4 +1,4 @@
-import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
+import { S3Client, ListObjectsCommand } from "@aws-sdk/client-s3";
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 
 export const buildS3Client = (initializationData: S3Initializer) => {
@@ -15,7 +15,7 @@ export const getAssets: (
     client: S3Client,
     params: GetAssetArgs
 ) => Promise<Asset[] | undefined> = async (client, params) => {
-    const command = new ListObjectsV2Command(params)
+    const command = new ListObjectsCommand({ Bucket: "testingbyos" })
     const response = await client.send(command)
     return response.Contents?.map((item) => {
         return {
