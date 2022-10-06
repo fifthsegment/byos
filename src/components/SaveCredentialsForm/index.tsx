@@ -32,7 +32,7 @@ export const SaveCredentialsForm = () => {
     }
 
     const { s3credentials } = appState
-    const { apiKey, apiSecret } = s3credentials
+    const { apiKey, apiSecret, region } = s3credentials
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <input
@@ -44,6 +44,11 @@ export const SaveCredentialsForm = () => {
                 {...register('apiSecret')}
                 placeholder="apiSecret"
                 value={apiSecret}
+            />
+            <input
+                {...register('region')}
+                placeholder="region"
+                value={region}
             />
             <input type="submit" value={'Submit'} />
             <div>{saved && 'Saved!'}</div>

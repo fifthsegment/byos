@@ -10,6 +10,7 @@ export type ApplicationState = {
     s3credentials: {
         apiKey: string | undefined
         apiSecret: string | undefined
+        region: string | undefined
     }
     otherStuff: string
     s3client: S3Client | undefined
