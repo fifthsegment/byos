@@ -11,6 +11,7 @@ export type ApplicationState = {
         apiKey: string | undefined
         apiSecret: string | undefined
         region: string | undefined
+        endpoint: string | undefined
     }
     otherStuff: string
     s3client: S3Client | undefined
