@@ -35,17 +35,6 @@ export const SaveCredentialsForm = () => {
         getAssets(s3Client, { Bucket: "testingbyos", Delimiter: "/", Prefix: "" })
     }
 
-    const connectToS3 = () => {
-        const s3Client = buildS3Client({
-            credentials: {
-                accessKeyId: '',
-                secretAccessKey: '',
-            },
-            region: 'west',
-            endpoint: 'https://ask.com',
-        })
-    }
-
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -59,7 +48,6 @@ export const SaveCredentialsForm = () => {
                 <input type="submit" value={'Submit'} />
                 <div>{saved && 'Saved!'}</div>
             </form>
-            <button onClick={connectToS3}>Attempt connection</button>
         </>
     )
 }
