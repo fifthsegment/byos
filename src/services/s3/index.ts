@@ -15,8 +15,7 @@ export const getAssets: (
     client: S3Client,
     params: GetAssetArgs
 ) => Promise<Asset[] | undefined> = async (client, params) => {
-    console.log("Test params", params);
-    const command = new ListObjectsCommand({ Bucket: "testingbyos" })
+    const command = new ListObjectsCommand(params)
     const response = await client.send(command)
     return response.Contents?.map((item) => {
         return {
