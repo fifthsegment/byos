@@ -11,6 +11,7 @@ export type S3Initializer = {
 
 export type Asset = {
     name: string | undefined
+    size: number | undefined
     lastModified: Date | undefined
 }
 

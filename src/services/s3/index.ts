@@ -1,6 +1,5 @@
 import { S3Client, ListObjectsCommand } from "@aws-sdk/client-s3";
 import { S3Initializer, GetAssetArgs, Asset } from './types'
-import * as dayjs from 'dayjs'
 
 
 export const buildS3Client = (initializationData: S3Initializer) => {
@@ -10,18 +9,7 @@ export const buildS3Client = (initializationData: S3Initializer) => {
         credentials: credentials,
         endpoint: endpoint,
     })
-    return client
-}
-
-export const getAssets: (
-    client: S3Client,
-    params: GetAssetArgs
-) => Promise<Asset[] | undefined> = async (client, params) => {
-    client.config.logger = console;
-    const command = new ListObjectsCommand(params)
-
-    command.middlewareStack.add((next, context) => async (args) => {
-        console.log(args.request);
+    client.middlewareStack.add((next, context) => async (args) => {
         //args.request.headers["Custom-Header"] = "value";
         //eslint-disable-next-line
         // @ts-ignore
@@ -42,15 +30,23 @@ export const getAssets: (
     }, {
         step: "finalizeRequest",
         name: "removeHeaders",
-        tags: ["METADATA", "FOO"],
     })
+    return client
+}
+
+export const getAssets: (
+    client: S3Client,
+    params: GetAssetArgs
+) => Promise<Asset[] | undefined> = async (client, params) => {
+    const command = new ListObjectsCommand(params)
     const response = await client.send(command)
     return response.Contents?.map((item) => {
         return {
-            name: item?.ETag,
+            name: item?.Key,
             lastModified: item?.LastModified,
+            size: item?.Size
         } as Asset
-    })
+    }) || []
 }
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {
