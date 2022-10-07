@@ -19,7 +19,7 @@ const style = {
 }
 
 export function SaveCredentialsModal() {
-    const [appState, setAppState] = useContext(ApplicationContext)
+    const [appState ] = useContext(ApplicationContext)
     const { s3credentials } = appState
     const [open, setOpen] = useState<boolean>(false)
 
