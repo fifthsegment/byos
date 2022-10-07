@@ -4,7 +4,6 @@ import {
     ApplicationContextType,
 } from '../../contexts/application/ApplicationContext'
 import { useGetAssets } from '../../hooks/useGetAssets'
-import { Asset } from '../../services/types'
 
 export const ListAssets = () => {
     const [search, setSearch] = useState("");
