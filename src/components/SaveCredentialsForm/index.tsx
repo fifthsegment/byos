@@ -32,7 +32,7 @@ export const SaveCredentialsForm = () => {
             region: data.region,
             endpoint: data.endpoint,
         })
-        getAssets(s3Client, { Bucket: "testingbyos", Delimiter: "/", Prefix: "" })
+        getAssets(s3Client, { Bucket: "testinghumza" })
     }
 
     return (

@@ -16,6 +16,6 @@ export type Asset = {
 
 export type GetAssetArgs = {
     Bucket: string
-    Delimiter: string // e.g /
-    Prefix: string // e.g 'foldername/'
+    Delimiter?: string // e.g /
+    Prefix?: string // e.g 'foldername/'
 }
