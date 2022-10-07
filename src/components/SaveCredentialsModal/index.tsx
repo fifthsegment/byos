@@ -3,6 +3,20 @@ import { SaveCredentialsForm } from '../SaveCredentialsForm'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 
 import Modal from '@mui/material/Modal'
+import Box from '@mui/material/Box'
+import Fade from '@mui/material/Fade'
+
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+}
 
 export function SaveCredentialsModal() {
     const [appState, setAppState] = useContext(ApplicationContext)
@@ -26,9 +40,11 @@ export function SaveCredentialsModal() {
                 closeAfterTransition
                 disableEnforceFocus
             >
-                <>
-                    <SaveCredentialsForm />
-                </>
+                <Fade in={open}>
+                    <Box sx={style}>
+                        <SaveCredentialsForm />
+                    </Box>
+                </Fade>
             </Modal>
         </div>
     )
