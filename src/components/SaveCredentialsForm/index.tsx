@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 
 export const SaveCredentialsForm = () => {
-    const [appState, setAppState] = useContext(ApplicationContext)
+    const [appState] = useContext(ApplicationContext)
     const { register, handleSubmit } = useForm()
     const [saved, setSaved] = useState(false)
 
