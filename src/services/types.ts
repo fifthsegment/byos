@@ -3,4 +3,6 @@ export type Asset = {
   createdAt: string;
   updatedAt: string;
   assetId: string;
+  fileType: string;
+  fileSize: string;
 };
