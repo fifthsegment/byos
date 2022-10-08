@@ -5,7 +5,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { Asset } from '../../services/types';
 import prettyBytes from 'pretty-bytes';
 // @ts-ignore
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime);
 

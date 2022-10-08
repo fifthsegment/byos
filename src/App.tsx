@@ -14,7 +14,6 @@ import {
     getApplicationStateLS,
     setApplicationStateLS,
 } from './services/localstorage'
-import { buildS3Client } from './services/s3'
 import Dashboard from './pages/dashboard'
 
 function App() {
