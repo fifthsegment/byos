@@ -8,8 +8,8 @@ import { RoutingContext } from './contexts/routing/RoutingContext'
 import {
     ApplicationContext,
     ApplicationState,
+    initialData,
 } from './contexts/application/ApplicationContext'
-import initialData from './contexts/application/initialData'
 import {
     getApplicationStateLS,
     setApplicationStateLS,

@@ -72,7 +72,6 @@ export const SaveCredentialsForm = () => {
                     autoComplete="api-key"
                     autoFocus
                     {...register('apiKey')}
-                    value={apiKey}
                 />
                 <TextField
                     margin="normal"
@@ -82,7 +81,6 @@ export const SaveCredentialsForm = () => {
                     label="Api secret"
                     autoComplete="api-secret"
                     {...register('apiSecret')}
-                    value={apiSecret}
                 />
                 <TextField
                     margin="normal"
@@ -92,7 +90,6 @@ export const SaveCredentialsForm = () => {
                     label="Region"
                     autoComplete="region"
                     {...register('region')}
-                    value={region}
                 />
                 <TextField
                     margin="normal"
@@ -103,9 +100,19 @@ export const SaveCredentialsForm = () => {
                     autoComplete="endpoint"
                     placeholder="https://s3.yourcompany.io"
                     {...register('endpoint')}
-                    value={endpoint}
+                    helperText="Demo value for Endpoint: https://s3.us-west-004.backblazeb2.com/"
                 />
-                 Demo value for Endpoint: https://s3.us-west-004.backblazeb2.com/
+
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="bucket"
+                    label="Bucket"
+                    autoComplete="bucket"
+                    placeholder="Bucket-name"
+                    {...register('bucket')}
+                />
                 <Button
                     type="submit"
                     fullWidth
