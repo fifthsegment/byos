@@ -1,8 +1,5 @@
 import React from "react";
-import { Icon } from "@mui/material";
 import { Asset } from "../../services/types";
-import FolderIcon from '@mui/icons-material/Folder';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 //defination of data model for row items (files or folders)
 export type dataModel = {
@@ -10,7 +7,7 @@ export type dataModel = {
     name: string,
     size: string,
     lastModified: string,
-    s3Object: Asset 
+    s3Object: Asset
 };
 
 const tempAssets: Array<Asset> = [
@@ -19,7 +16,7 @@ const tempAssets: Array<Asset> = [
         fileName: "Tutorials",
         fileSize: "15 MB",
         updatedAt: "07/10/2022",
-        createdAt :"",
+        createdAt: "",
         assetId: ""
     },
     {
@@ -27,7 +24,7 @@ const tempAssets: Array<Asset> = [
         fileName: "Hello World.c",
         fileSize: "15 KB",
         updatedAt: "07/10/2022",
-        createdAt :"",
+        createdAt: "",
         assetId: ""
     },
     {
@@ -35,7 +32,7 @@ const tempAssets: Array<Asset> = [
         fileName: "Hello World.py",
         fileSize: "15 KB",
         updatedAt: "07/10/2022",
-        createdAt :"",
+        createdAt: "",
         assetId: ""
     },
     {
@@ -43,7 +40,7 @@ const tempAssets: Array<Asset> = [
         fileName: "Moonlight Saga",
         fileSize: "15 KB",
         updatedAt: "07/10/2022",
-        createdAt :"",
+        createdAt: "",
         assetId: ""
     }
 ];
@@ -51,7 +48,7 @@ const tempAssets: Array<Asset> = [
 
 export const fillDataModel = () => {
     const assets: Array<Asset> = tempAssets //replace this with actual assets
-    return assets?.map((item:Asset) => {
+    return assets?.map((item: Asset) => {
         return {
             name: item.fileName,
             size: item.fileSize,
