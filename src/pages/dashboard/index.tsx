@@ -1,8 +1,6 @@
 import React from 'react'
 import { ListAssets } from '../../components/ListAssets'
 
-import Grid from '@mui/material'
-
 export default function Dashboard() {
     return (
         <div>
