@@ -11,11 +11,12 @@ export type S3Initializer = {
 
 export type Asset = {
     name: string | undefined
+    size: number | undefined
     lastModified: Date | undefined
 }
 
 export type GetAssetArgs = {
     Bucket: string
-    Delimiter: string // e.g /
-    Prefix: string // e.g 'foldername/'
+    Delimiter?: string // e.g /
+    Prefix?: string // e.g 'foldername/'
 }

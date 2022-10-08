@@ -1,31 +1,29 @@
-import React, {  useState } from "react"
+import React, { useState } from "react"
 import config from '../client-config'
 import { RoutingContext } from "../contexts/routing/RoutingContext";
 import routes from "../routes";
 import { AzureAdProvider } from "./AzureAd";
 import { BasicProvider } from "./BasicProvider";
+import QueryProvider from "./QueryProvider";
 
 
-/**
- * 
- * TODO: The msalConfig should be constructed here using variables from the clientconfig
- */
-
-export const Provider = ({children}: React.PropsWithChildren) => {
-    const {useAzureLogin} = config;
+export const Provider = ({ children }: React.PropsWithChildren) => {
+    const { useAzureLogin } = config;
     const routingState = useState(routes);
     if (useAzureLogin) {
-        return <RoutingContext.Provider value={routingState}>
-                    <AzureAdProvider >
+        return <QueryProvider>
+            <RoutingContext.Provider value={routingState}>
+                <AzureAdProvider >
                     {children}
-                    </AzureAdProvider>
+                </AzureAdProvider>
             </RoutingContext.Provider>
+        </QueryProvider>
     }
-    return <>
-    <RoutingContext.Provider value={routingState}>
-        <BasicProvider>
-        {children}
-        </BasicProvider>
-    </RoutingContext.Provider>
-    </>
+    return <QueryProvider>
+        <RoutingContext.Provider value={routingState}>
+            <BasicProvider>
+                {children}
+            </BasicProvider>
+        </RoutingContext.Provider>
+    </QueryProvider>
 }
