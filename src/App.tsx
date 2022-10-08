@@ -14,6 +14,7 @@ import {
     getApplicationStateLS,
     setApplicationStateLS,
 } from './services/localstorage'
+import Dashboard from './pages/dashboard'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
@@ -40,18 +41,20 @@ function App() {
                             )
                         })}
                 </Routes>
+                <Dashboard />
                 <div>
-                    Routes defined:
                     <ul>
-                        {routingState.routes.map((route: InternalRouteDef) => {
-                            return (
-                                <li>
-                                    <Link key={route.path} to={route.path}>
-                                        {route.path}
-                                    </Link>
-                                </li>
-                            )
-                        })}
+                        {routingState.routes
+                            .filter((route: InternalRouteDef) => route.showInNavigation)
+                            .map((route: InternalRouteDef) => {
+                                return (
+                                    <li key={route.path}>
+                                        <Link key={route.path} to={route.path}>
+                                            {route.path}
+                                        </Link>
+                                    </li>
+                                )
+                            })}
                     </ul>
                 </div>
             </Router>

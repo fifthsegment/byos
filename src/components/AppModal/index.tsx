@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, PropsWithChildren } from 'react'
 import { SaveCredentialsForm } from '../SaveCredentialsForm'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 
@@ -13,36 +13,30 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
 }
 
-export function SaveCredentialsModal() {
-    const [appState ] = useContext(ApplicationContext)
-    const { s3credentials } = appState
-    const [open, setOpen] = useState<boolean>(false)
+export type AppModalProps = {
+    isOpen: boolean
+    handleClose: () => void
+}
 
-    if (Object.keys(s3credentials).length === 0) {
-        setTimeout(() => {
-            setOpen(true)
-        }, 1000)
-    }
-    const handleClose = () => setOpen(false)
+export function AppModal({ children, isOpen, handleClose }: PropsWithChildren<AppModalProps>) {
 
     return (
         <div>
             <Modal
-                aria-labelledby="Modal for Api credentials"
-                aria-describedby="modal with a form holding 2 reuired input fields"
-                open={open}
+                aria-labelledby="Modal"
+                aria-describedby="Modal"
+                open={isOpen}
                 onClose={handleClose}
                 closeAfterTransition
                 disableEnforceFocus
             >
-                <Fade in={open}>
+                <Fade in={isOpen}>
                     <Box sx={style}>
-                        <SaveCredentialsForm />
+                        {children}
                     </Box>
                 </Fade>
             </Modal>

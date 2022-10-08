@@ -1,12 +1,12 @@
-import Login from "../pages/login"
-import Dashboard from "../pages/dashboard"
-import Home from "../pages/home"
 import React from "react";
-
+import Home from "../pages/home";
+import Credentials from "../pages/credentials";
 
 export type InternalRouteDef = {
     path: string;
     component: JSX.Element;
+    showInNavigation: boolean;
+
 };
 
 export type RoutingObjectDef = {
@@ -15,9 +15,8 @@ export type RoutingObjectDef = {
 }
 
 const routes: InternalRouteDef[] = [
-    {path: "/dashboard", component: <Dashboard /> },
-    {path: "/login", component: <Login /> },
-    {path: "/", component: <Home /> }
+    { path: "/credentials", component: <Credentials />, showInNavigation: true },
+    { path: "/", component: <Home />, showInNavigation: true }
 ]
 
 const internalRoutes = {
