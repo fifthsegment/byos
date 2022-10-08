@@ -15,6 +15,7 @@ import {
     setApplicationStateLS,
 } from './services/localstorage'
 import { buildS3Client } from './services/s3'
+import Dashboard from './pages/dashboard'
 
 const initiateS3Client = (appState: ApplicationState) => {
     const { s3credentials } = appState;
@@ -60,18 +61,21 @@ function App() {
                             )
                         })}
                 </Routes>
-                <nav className="remove-this-style-nav">
-                    Routes defined:
+                <Dashboard />
+                <div>
+                  <nav className="remove-this-style-nav">
                     <ul>
-                        {routingState.routes.map((route: InternalRouteDef) => {
-                            return (
-                                <li key={route.path}>
-                                    <Link to={route.path}>
-                                        {route.path}
-                                    </Link>
-                                </li>
-                            )
-                        })}
+                        {routingState.routes
+                            .filter((route: InternalRouteDef) => route.showInNavigation)
+                            .map((route: InternalRouteDef) => {
+                                return (
+                                    <li key={route.path}>
+                                        <Link key={route.path} to={route.path}>
+                                            {route.path}
+                                        </Link>
+                                    </li>
+                                )
+                            })}
                     </ul>
                 </nav>
             </Router>

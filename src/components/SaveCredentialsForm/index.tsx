@@ -3,6 +3,14 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
 
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import Alert from '@mui/material/Alert'
+
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
@@ -36,20 +44,80 @@ export const SaveCredentialsForm = () => {
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input {...register('apiKey')} placeholder="apiKey" />
-                <input {...register('apiSecret')} placeholder="apiSecret" />
-                <input {...register('region')} placeholder="region" />
-                <input
-                    {...register('endpoint')}
-                    placeholder="https://s3.yourcompany.io"
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+        >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+                Api Credentials
+            </Typography>
+            <Box
+                component="form"
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                sx={{ mt: 1 }}
+            >
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="api-key"
+                    label="Api Key"
+                    autoComplete="api-key"
+                    autoFocus
+                    {...register('apiKey')}
+                    value={apiKey}
                 />
-                <input type="submit" value={'Submit'} />
-                <div>{saved && 'Saved!'}</div>
-                <br />
-                Demo value for Endpoint: https://s3.us-west-004.backblazeb2.com/
-            </form>
-        </>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="api-secret"
+                    label="Api secret"
+                    autoComplete="api-secret"
+                    {...register('apiSecret')}
+                    value={apiSecret}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="region"
+                    label="Region"
+                    autoComplete="region"
+                    {...register('region')}
+                    value={region}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="endpoint"
+                    label="Endpoint"
+                    autoComplete="endpoint"
+                    placeholder="https://s3.yourcompany.io"
+                    {...register('endpoint')}
+                    value={endpoint}
+                />
+                 Demo value for Endpoint: https://s3.us-west-004.backblazeb2.com/
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
+                    Save
+                </Button>
+                {saved && (
+                    <Alert severity="success">Credentials are saved!</Alert>
+                )}
+            </Box>
+        </Box>
     )
 }
