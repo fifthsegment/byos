@@ -10,6 +10,7 @@ export type S3Initializer = {
 }
 
 export type Asset = {
+    etag: string,
     name: string | undefined
     size: number | undefined
     lastModified: Date | undefined
