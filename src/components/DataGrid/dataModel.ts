@@ -1,4 +1,3 @@
-import React from "react";
 import { Asset } from "../../services/types";
 
 //defination of data model for row items (files or folders)
