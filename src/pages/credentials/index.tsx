@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useLinkClickHandler } from 'react-router-dom'
 import { AppModal } from '../../components/AppModal'
 import { SaveCredentialsForm } from '../../components/SaveCredentialsForm'
-import { redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function Credentials() {
     const [isOpen, setIsOpen] = useState(false)
-
+    const navigate = useNavigate()
     const onClick = useLinkClickHandler('/credentials')
     useEffect(() => {
         setIsOpen(true)
@@ -14,7 +14,7 @@ export default function Credentials() {
 
     const handleClose = () => {
         setIsOpen(false)
-        redirect('/')
+        navigate('/')
     }
 
     return (
