@@ -41,7 +41,6 @@ export const getAssets: (
     const command = new ListObjectsCommand(params)
     const response = await client.send(command)
     return response.Contents?.map((item) => {
-        console.log("item = ", item);
         return {
             etag: item.ETag,
             name: item?.Key,
