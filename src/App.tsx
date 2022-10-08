@@ -62,8 +62,7 @@ function App() {
                         })}
                 </Routes>
                 <Dashboard />
-                <div>
-                  <nav className="remove-this-style-nav">
+                <nav className="remove-this-style-nav">
                     <ul>
                         {routingState.routes
                             .filter((route: InternalRouteDef) => route.showInNavigation)
