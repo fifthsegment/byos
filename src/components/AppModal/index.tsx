@@ -1,6 +1,4 @@
-import React, { useState, useContext, PropsWithChildren } from 'react'
-import { SaveCredentialsForm } from '../SaveCredentialsForm'
-import { ApplicationContext } from '../../contexts/application/ApplicationContext'
+import React, { PropsWithChildren } from 'react'
 
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
