@@ -2,6 +2,7 @@
 
 ### Code Practices
 
+- ** Use yarn instead of npm**
 - No file should exceed 120 Lines (We will try our best to adhere by this rule :p )
 - We should `type` everything! No `any` types
 - `services` is the folder where we will keep interactions like fetching from other APIs, for example S3
