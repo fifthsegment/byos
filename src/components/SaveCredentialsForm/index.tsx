@@ -3,13 +3,15 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
 
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
+import {
+    Avatar,
+    Button,
+    TextField,
+    Box,
+    Typography,
+    Alert,
+} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import Alert from '@mui/material/Alert'
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
@@ -40,7 +42,8 @@ export const SaveCredentialsForm = () => {
             region: data.region,
             endpoint: data.endpoint,
         })
-        getAssets(s3Client, { Bucket: "testinghumza" })
+        console.log(getAssets(s3Client, { Bucket: 'testinghumza' }))
+        //getAssets(s3Client, { Bucket: "testinghumza" })
     }
 
     return (
