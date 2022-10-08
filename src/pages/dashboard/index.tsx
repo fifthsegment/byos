@@ -4,7 +4,7 @@ import { ListAssets } from '../../components/ListAssets'
 export default function Dashboard() {
     return (
         <div>
-            Dashboard
+            Dashboard : Preview
             <ListAssets />
 
         </div>
