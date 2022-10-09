@@ -14,8 +14,6 @@ export const ContextMenu = () => {
 
   return (
     <>
-      <div>
-        Context Menu
-      </div>
+
     </>)
 }
