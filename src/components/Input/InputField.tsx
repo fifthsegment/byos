@@ -1,4 +1,4 @@
-import { Controller, useController } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
 
 
@@ -13,7 +13,7 @@ export const InputField = ({ control, name, label }: any) => {
     if (control === undefined) {
         return null;
     }
-    const {
+    /*const {
         field: { onChange, onBlur, value, ref },
         fieldState: { invalid, isTouched, isDirty },
         formState: { touchedFields, dirtyFields }
@@ -22,7 +22,7 @@ export const InputField = ({ control, name, label }: any) => {
         control,
         rules: { required: true },
         defaultValue: "",
-    });
+    });*/
 
     return <>
         <Controller
@@ -35,7 +35,10 @@ export const InputField = ({ control, name, label }: any) => {
                         label={label}
                         value={value}
                         onChange={onChange}
-                        onChageText={onChange}
+                        onChageText={(text) => {
+                            console.log("[InputChange] name = ", name, " value = ", text)
+                            onChange(text)
+                        }}
                         onBlur={onBlur}
                     />
                 </>
