@@ -24,6 +24,8 @@ export const SaveCredentialsForm = () => {
     const onSubmit = () => {
         onToggleSnackBar();
         const data = getValues();
+        console.log("[SaveCredentialsForm] Saving data = ", data)
+
         setAppState({
             ...appState,
             s3credentials: data as any,
@@ -56,61 +58,61 @@ export const SaveCredentialsForm = () => {
 
     return (
         <ScrollView>
-        <Surface>
-            <Card>
-                <Card.Content>
-                    <Text variant="headlineSmall">API Configuration</Text>  
-                    <InputField
-                        control={control}
-                        name="apiKey"
-                        label="API KEY"
-                    />
-                              
-                    <InputField
-                        control={control}
-                        name="apiSecret"
-                        label="Api Secret"
-                    />
-                    
-                    <InputField
-                        control={control}
-                        name="endpoint"
-                        label="Endpoint"
-                    />
-            
-                  <InputField
-                        control={control}
-                        name="bucket"
-                        label="Bucket"
-                    />
+            <Surface>
+                <Card>
+                    <Card.Content>
+                        <Text variant="headlineSmall">API Configuration</Text>
+                        <InputField
+                            control={control}
+                            name="apiKey"
+                            label="API KEY"
+                        />
 
-                    <InputField
-                        control={control}
-                        name="region"
-                        label="Region"
-                    />
+                        <InputField
+                            control={control}
+                            name="apiSecret"
+                            label="Api Secret"
+                        />
+
+                        <InputField
+                            control={control}
+                            name="endpoint"
+                            label="Endpoint"
+                        />
+
+                        <InputField
+                            control={control}
+                            name="bucket"
+                            label="Bucket"
+                        />
+
+                        <InputField
+                            control={control}
+                            name="region"
+                            label="Region"
+                        />
                     </Card.Content>
                     <Card.Actions>
-                    <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+                        <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
                     </Card.Actions>
-            </Card>
-                     
+                </Card>
+
                 <Snackbar
                     visible={visible}
                     onDismiss={onDismissSnackBar}
                     action={{
-                    label: 'Dismiss',
-                    onPress: () => {
-                        // Do something
-                    },
+                        label: 'Dismiss',
+                        onPress: () => {
+                            // Do something
+                        },
                     }}>
-                    
+
                     Credentials are saved!
 
                     {/* {saved ? <Text>Credentials are saved!</Text> : <Text>Credentials not saved!</Text>} */}
-                    </Snackbar>
-            
-        </Surface>
+                </Snackbar>
+
+            </Surface>
         </ScrollView>
     )
 }

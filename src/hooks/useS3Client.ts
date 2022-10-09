@@ -8,6 +8,9 @@ export const useS3Client: (appState: ApplicationState) => S3Client | undefined =
     const { apiKey, apiSecret, region, endpoint } = s3credentials;
     const client = useMemo(() => {
         if (apiKey && apiSecret && endpoint) {
+            console.log("[useS3Client] Building S3 Client region = ", region)
+            console.log("[useS3Client] Building S3 Client apiKey = ", apiKey)
+
             return buildS3Client({
                 region,
                 credentials: {

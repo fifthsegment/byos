@@ -39,24 +39,26 @@ function App() {
 
     useEffect(() => {
         if (isLoaded) {
+            console.log("[App] Application state was updated = ", applicationStateData)
+
             setApplicationStateLS({ ...applicationStateData })
         }
     }, [applicationStateData, isLoaded])
 
     return (
         <PaperProvider>
-        <ApplicationContext.Provider value={applicationState}>
-                    {routingState.isReady &&
-                        routingState.routes.map((route: InternalRouteDef) => {
-                            return (
-                                null
-                            )
-                        })}
-            
+            <ApplicationContext.Provider value={applicationState}>
+                {routingState.isReady &&
+                    routingState.routes.map((route: InternalRouteDef) => {
+                        return (
+                            null
+                        )
+                    })}
+
                 <Header title="BYOS" />
-                <MobileNavigation/>
-           
-        </ApplicationContext.Provider>
+                <MobileNavigation />
+
+            </ApplicationContext.Provider>
         </PaperProvider>
     )
 }
