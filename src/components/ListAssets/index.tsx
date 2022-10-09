@@ -7,6 +7,7 @@ import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
 import { Platform, View } from 'react-native';
+import { Text } from 'react-native-paper';
 
 export const ListAssets = () => {
     console.log("Platform = ", Platform);
@@ -22,7 +23,8 @@ export const ListAssets = () => {
     });
 
 
-    return <View>
+    return <>
+        <Text variant="headlineMedium">Data Grid</Text>  
         <DataGrid assets={data} />
-    </View>
+    </>
 }

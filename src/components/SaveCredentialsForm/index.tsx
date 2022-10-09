@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-import { Card, Text as Typography } from 'react-native-paper';
+import { Text, Card, Surface, Title } from 'react-native-paper';
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
+import { Snackbar } from '../Snackbar/Snackbar';
 
 
 
@@ -19,7 +20,8 @@ export const SaveCredentialsForm = () => {
     const [saved, setSaved] = useState(false)
 
     const onSubmit = (data: FieldValues) => {
-        console.log("FormData = ", data)
+        //console.log("FormData = ", data)
+        onToggleSnackBar()
         setAppState({
             ...appState,
             s3credentials: data as any,
@@ -44,46 +46,69 @@ export const SaveCredentialsForm = () => {
     }
 
     const [text, setText] = React.useState("");
+
+    //snackbar
+    const [visible, setVisible] = React.useState(false);
+    const onToggleSnackBar = () => setVisible(!visible);
+    const onDismissSnackBar = () => setVisible(false);
+
     return (
-        <Card>
+        <ScrollView>
+        <Surface>
+            <Card>
+                <Card.Content>
+                    <Text variant="headlineSmall">API Configuration</Text>  
+                    <InputField
+                        control={control}
+                        name="apiKey"
+                        label="API KEY"
+                    />
+                              
+                    <InputField
+                        control={control}
+                        name="apiSecret"
+                        label="Api Secret"
+                    />
+                    
+                    <InputField
+                        control={control}
+                        name="endpoint"
+                        label="Endpoint"
+                    />
 
-            <Typography >
-                Api Credentials
-            </Typography>
+                    <InputField
+                        control={control}
+                        name="bucket"
+                        label="Bucket"
+                    />
 
-                <InputField
-                    control={control}
-                    name="apiKey"
-                    label="API KEY"
-                />
-                 <InputField
-                    control={control}
-                    name="apiSecret"
-                    label="Api Secret"
-                />
-                <InputField
-                    control={control}
-                    name="endpoint"
-                    label="Endpoint"
-                />
+                    <InputField
+                        control={control}
+                        name="region"
+                        label="Region"
+                    />
+                    </Card.Content>
+                    <Card.Actions>
+                    <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+                    </Card.Actions>
+            </Card>
+                     
+                <Snackbar
+                    visible={visible}
+                    onDismiss={onDismissSnackBar}
+                    action={{
+                    label: 'Dismiss',
+                    onPress: () => {
+                        // Do something
+                    },
+                    }}>
+                    
+                    Credentials are saved!
 
-                <InputField
-                    control={control}
-                    name="bucket"
-                    label="Bucket"
-                />
-
-                <InputField
-                    control={control}
-                    name="region"
-                    label="Region"
-                />
-                
-                <Button onPress={handleSubmit(onSubmit)}>Submit</Button> 
-
-
-                {saved && <Typography>Credentials are saved!</Typography>}
-
-        </Card>
+                    {/* {saved ? <Text>Credentials are saved!</Text> : <Text>Credentials not saved!</Text>} */}
+                    </Snackbar>
+            
+        </Surface>
+        </ScrollView>
     )
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-
 //import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InternalRouteDef } from './routes'
 //import { Link } from 'react-router-dom'
@@ -14,9 +13,10 @@ import {
     getApplicationStateLS,
     setApplicationStateLS,
 } from './services/localstorage'*/
-import Dashboard from './pages/dashboard'
-import { SaveCredentialsForm } from './components/SaveCredentialsForm'
-import { Appbar, Provider } from 'react-native-paper'
+
+import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import Header from './components/Header'
+import MobileNavigation from './components/MobileNavigation'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
@@ -27,7 +27,7 @@ function App() {
     const [applicationStateData] = applicationState
 
     return (
-        <Provider>
+        <PaperProvider>
         <ApplicationContext.Provider value={applicationState}>
                     {routingState.isReady &&
                         routingState.routes.map((route: InternalRouteDef) => {
@@ -35,17 +35,12 @@ function App() {
                                 null
                             )
                         })}
-                <Appbar.Header>
-                    <Appbar.BackAction onPress={() => {}} />
-                    <Appbar.Content title="Title" />
-                    <Appbar.Action icon="calendar" onPress={() => {}} />
-                    <Appbar.Action icon="magnify" onPress={() => {}} />
-                </Appbar.Header>
-                <SaveCredentialsForm/>
-                {/* <Dashboard /> */}
-                            
+            
+                <Header title="BYOS" />
+                <MobileNavigation/>
+           
         </ApplicationContext.Provider>
-        </Provider>
+        </PaperProvider>
     )
 }
 

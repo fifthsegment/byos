@@ -1,3 +1,8 @@
+import { Snackbar as PaperSnack } from 'react-native-paper';
+
 export const Snackbar = (...args) => {
-    return <Snackbar {...args[0]}></Snackbar>
+    // @ts-ignore
+    return <PaperSnack
+        {...args[0]}
+    />
 }
