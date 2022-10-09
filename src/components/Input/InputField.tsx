@@ -35,6 +35,7 @@ export const InputField = ({ control, name, label }: any) => {
                         label={label}
                         value={value}
                         onChange={onChange}
+                        onChageText={onChange}
                         onBlur={onBlur}
                     />
                 </>
