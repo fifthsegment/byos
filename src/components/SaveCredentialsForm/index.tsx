@@ -1,14 +1,7 @@
 import React, { useContext, useState } from 'react'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
+import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-
-import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-//import Typography from '@mui/material/Typography'
-import Alert from '@mui/material/Alert'
-
 import { Text as Typography } from 'react-native-paper';
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
@@ -22,11 +15,9 @@ export const SaveCredentialsForm = () => {
         defaultValues: s3credentials,
     })
 
-    console.log("control", control)
     const [saved, setSaved] = useState(false)
 
     const onSubmit = (data: FieldValues) => {
-        console.log("Submitting form = ", data);
         setAppState({
             ...appState,
             s3credentials: data as any,
@@ -63,9 +54,7 @@ export const SaveCredentialsForm = () => {
                 alignItems: 'center',
             }}
         >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-            </Avatar>
+
             <Typography >
                 Api Credentials
             </Typography>
@@ -107,9 +96,8 @@ export const SaveCredentialsForm = () => {
                     Save
                 </Button>
 
-                {saved && (
-                    <Alert severity="success">Credentials are saved!</Alert>
-                )}
+
+                {saved && <div>Credentials are saved!</div>}
 
             </form>
         </div>

@@ -1,7 +1,5 @@
 import { ContextMenu } from '../ContextMenu'
 import { createColumnHelper } from '@tanstack/react-table'
-import FolderIcon from '@mui/icons-material/Folder';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { Asset } from '../../services/types';
 import prettyBytes from 'pretty-bytes';
 // @ts-ignore
@@ -13,11 +11,11 @@ dayjs.extend(relativeTime);
 const iconType = (icon: string) => {
     switch (icon) {
         case "folder":
-            return <FolderIcon />
+            return null
         case "textFile":
-            return <InsertDriveFileIcon />
+            return null
         default:
-            return <InsertDriveFileIcon />
+            return null
     }
 };
 

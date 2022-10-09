@@ -1,8 +1,7 @@
 import React, { PropsWithChildren } from 'react'
-
-import Modal from '@mui/material/Modal'
-import Box from '@mui/material/Box'
-import Fade from '@mui/material/Fade'
+import { Portal, Button, Provider } from 'react-native-paper';
+import Modal from 'modal-react-native-web';
+import { Text, TouchableHighlight, View } from 'react-native';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -20,24 +19,20 @@ export type AppModalProps = {
     handleClose: () => void
 }
 
-export function AppModal({ children, isOpen, handleClose }: PropsWithChildren<AppModalProps>) {
+// @ts-ignore
+const ViewVirtual = (...args) => <View {...args[0]} />
 
+// @ts-ignore
+const ButtonUntyped = (...args) => <Button {...args[0]} />
+
+export function AppModal({ children, isOpen, handleClose }: PropsWithChildren<AppModalProps>) {
+    const containerStyle = { backgroundColor: 'white', padding: 20 };
     return (
-        <div>
-            <Modal
-                aria-labelledby="Modal"
-                aria-describedby="Modal"
-                open={isOpen}
-                onClose={handleClose}
-                closeAfterTransition
-                disableEnforceFocus
-            >
-                <Fade in={isOpen}>
-                    <Box sx={style}>
-                        {children}
-                    </Box>
-                </Fade>
+        <ViewVirtual style={{ marginTop: 100 }}>
+            <Modal visible={isOpen} onDismiss={handleClose} contentContainerStyle={containerStyle}>
+                <ButtonUntyped onPress={() => handleClose()}>Close</ButtonUntyped>
+                {children}
             </Modal>
-        </div>
+        </ViewVirtual>
     )
 }
