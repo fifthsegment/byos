@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import './App.css'
 
 import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InternalRouteDef } from './routes'
