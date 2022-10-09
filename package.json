@@ -10,8 +10,6 @@
     "@azure/msal-react": "^1.4.8",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@mui/icons-material": "^5.10.6",
-    "@mui/material": "^5.10.8",
     "@tanstack/react-query": "^4.10.3",
     "@tanstack/react-table": "^8.5.15",
     "@testing-library/jest-dom": "^5.16.5",

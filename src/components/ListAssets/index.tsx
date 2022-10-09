@@ -6,7 +6,6 @@ import {
 import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
-import { Button } from 'react-native-paper';
 import { Platform } from 'react-native';
 
 export const ListAssets = () => {

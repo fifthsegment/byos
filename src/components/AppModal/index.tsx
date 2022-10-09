@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react'
-import { Portal, Button, Provider } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import Modal from 'modal-react-native-web';
-import { Text, TouchableHighlight, View } from 'react-native';
+import { View } from 'react-native';
 
 const style = {
     position: 'absolute' as 'absolute',

@@ -1,5 +1,3 @@
-
-
 export const menuItems = [
     {
         label: "Copy",
