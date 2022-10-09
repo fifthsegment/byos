@@ -12,14 +12,14 @@ import { View } from 'react-native';
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { control, handleSubmit, formState } = useForm({
+    const { control, handleSubmit, formState, getValues } = useForm({
         defaultValues: s3credentials,
     })
 
     const [saved, setSaved] = useState(false)
 
-    const onSubmit = (data: FieldValues) => {
-        console.log("FormData = ", data)
+    const onSubmit = () => {
+        const data = getValues();
         setAppState({
             ...appState,
             s3credentials: data as any,
@@ -51,38 +51,38 @@ export const SaveCredentialsForm = () => {
                 Api Credentials
             </Typography>
 
-                <InputField
-                    control={control}
-                    name="apiKey"
-                    label="API KEY"
-                />
-                 <InputField
-                    control={control}
-                    name="apiSecret"
-                    label="Api Secret"
-                />
-                <InputField
-                    control={control}
-                    name="endpoint"
-                    label="Endpoint"
-                />
+            <InputField
+                control={control}
+                name="apiKey"
+                label="API KEY"
+            />
+            <InputField
+                control={control}
+                name="apiSecret"
+                label="Api Secret"
+            />
+            <InputField
+                control={control}
+                name="endpoint"
+                label="Endpoint"
+            />
 
-                <InputField
-                    control={control}
-                    name="bucket"
-                    label="Bucket"
-                />
+            <InputField
+                control={control}
+                name="bucket"
+                label="Bucket"
+            />
 
-                <InputField
-                    control={control}
-                    name="region"
-                    label="Region"
-                />
-                
-                <Button onPress={handleSubmit(onSubmit)}>Submit</Button> 
+            <InputField
+                control={control}
+                name="region"
+                label="Region"
+            />
+
+            <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
 
 
-                {saved && <Typography>Credentials are saved!</Typography>}
+            {saved && <Typography>Credentials are saved!</Typography>}
 
         </Card>
     )
