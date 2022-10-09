@@ -22,9 +22,11 @@ export const ListAssets = () => {
         Delimiter: "/"
     });
 
-
+    console.log("Assets data loaded = ", data.length)
     return <>
-        <Text variant="headlineMedium">Data Grid</Text>  
+        {isLoading && <Text variant="headlineSmall">Loading</Text>}
+        {isError && <Text variant="headlineSmall">Error </Text>}
+
         <DataGrid assets={data} />
     </>
 }

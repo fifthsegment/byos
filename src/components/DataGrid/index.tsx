@@ -3,6 +3,7 @@ import { flexRender, getCoreRowModel, useReactTable, } from '@tanstack/react-tab
 import { DataGridColumns } from "./dataGridColumns";
 import { Asset } from "../../services/types";
 import { DataTable, Text } from 'react-native-paper';
+import { ScrollView } from "react-native";
 
 export type DataGridProps = {
   assets: Asset[] | undefined
@@ -38,19 +39,19 @@ export const DataGrid = ({ assets }: DataGridProps) => {
           </DataTable.Row>
         ))}
       </DataTable.Header>
-
-      {table.getRowModel().rows.map(row => {
-        return <DataTable.Row key={row.id}>
-          {row.getVisibleCells().map(cell => (
-            <DataTable.Cell key={cell.id}>
-              <Text style={{ color: "white" }}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Text>
-            </DataTable.Cell>
-          ))}
-        </DataTable.Row>
-      })}
-
+      <ScrollView>
+        {table.getRowModel().rows.map(row => {
+          return <DataTable.Row key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <DataTable.Cell key={cell.id}>
+                <Text style={{ color: "white" }}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Text>
+              </DataTable.Cell>
+            ))}
+          </DataTable.Row>
+        })}
+      </ScrollView>
     </DataTable>
   );
 }
