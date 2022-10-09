@@ -1,6 +1,15 @@
 import { Controller } from 'react-hook-form';
-import { TextInput } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
+
+const styles = StyleSheet.create({
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+});
 
 export const InternalInputField = (...args) => {
     // @ts-ignore
@@ -31,10 +40,13 @@ export const InputField = ({ control, name, label }: any) => {
             render={({ field: { value, onChange, onBlur } }: any) => {
                 return <>
                     <InternalInputField
+                        style={styles.input}
                         name={name}
                         label={label}
                         value={value}
-                        onChange={onChange}
+                        onChage={(e) => {
+                            console.log("[InputChange] name = ", name, " e = ", e)
+                        }}
                         onChageText={(text) => {
                             console.log("[InputChange] name = ", name, " value = ", text)
                             onChange(text)
