@@ -18,13 +18,15 @@ export const InputField = ({ control, name, label }: any) => {
             control={control}
             name={name}
             render={({ field: { value, onChange, onBlur } }: any) => {
-                return <InternalInputField
-                    name={name}
-                    label={label}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                />
+                return <>
+                    <InternalInputField
+                        name={name}
+                        label={label}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                    />
+                </>
             }}
         />
     </>

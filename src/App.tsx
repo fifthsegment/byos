@@ -17,34 +17,50 @@ import {
 import Dashboard from './pages/dashboard'
 import { SaveCredentialsForm } from './components/SaveCredentialsForm'
 import { Appbar, Provider } from 'react-native-paper'
+import { getApplicationStateLS, setApplicationStateLS } from './services/localstorage'
+import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
-    const savedApplicationData = (
-        initialData
-    )
+    const { data: savedApplicationData, isLoaded } = useGetApplicationStateFromLs(initialData);
+
     const applicationState = useState(savedApplicationData as ApplicationState)
-    const [applicationStateData] = applicationState
+
+    /*useEffect(() => {
+        applicationState[1](savedApplicationData);
+    }, [savedApplicationData])*/
+
+    const [applicationStateData, setApplicationStateData] = applicationState
+
+    useEffect(() => {
+        //setApplicationStateLS({ ...applicationStateData })
+        setApplicationStateData(savedApplicationData);
+    }, [savedApplicationData])
+
+    useEffect(() => {
+        if (isLoaded) {
+            setApplicationStateLS({ ...applicationStateData })
+        }
+    }, [applicationStateData, isLoaded])
 
     return (
         <Provider>
-        <ApplicationContext.Provider value={applicationState}>
-                    {routingState.isReady &&
-                        routingState.routes.map((route: InternalRouteDef) => {
-                            return (
-                                null
-                            )
-                        })}
+            <ApplicationContext.Provider value={applicationState}>
+                {routingState.isReady &&
+                    routingState.routes.map((route: InternalRouteDef) => {
+                        return (
+                            null
+                        )
+                    })}
                 <Appbar.Header>
-                    <Appbar.BackAction onPress={() => {}} />
+                    <Appbar.BackAction onPress={() => { }} />
                     <Appbar.Content title="Title" />
-                    <Appbar.Action icon="calendar" onPress={() => {}} />
-                    <Appbar.Action icon="magnify" onPress={() => {}} />
+                    <Appbar.Action icon="calendar" onPress={() => { }} />
+                    <Appbar.Action icon="magnify" onPress={() => { }} />
                 </Appbar.Header>
-                <SaveCredentialsForm/>
-                {/* <Dashboard /> */}
-                            
-        </ApplicationContext.Provider>
+                <SaveCredentialsForm />
+
+            </ApplicationContext.Provider>
         </Provider>
     )
 }

@@ -1,20 +1,21 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
 import { Card, Text as Typography } from 'react-native-paper';
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
-import { View } from 'react-native';
-
-
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { control, handleSubmit, formState, getValues } = useForm({
+    const { control, handleSubmit, formState, getValues, reset } = useForm({
         defaultValues: s3credentials,
     })
+
+    useEffect(() => {
+        reset(s3credentials)
+    }, [s3credentials])
 
     const [saved, setSaved] = useState(false)
 

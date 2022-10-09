@@ -1,48 +1,44 @@
 export const ApplicationStorageKey = 'byos/application'
 export const DomainStorageKey = 'byos/domain'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-if (!localStorage){
-    //@ts-ignore
-    localStorage = {}
+const storeData = async (value: any) => {
+    try {
+        await AsyncStorage.setItem(ApplicationStorageKey, JSON.stringify(value))
+    } catch (e) {
+        // saving error
+    }
 }
 
-export const getApplicationStateLS = (jsonString: string = '{}') => {
-
-    if (!localStorage){
-        //@ts-ignore
-        localStorage = {}
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem(ApplicationStorageKey)
+        if (value !== null) {
+            // value previously stored
+            return value;
+        }
+    } catch (e) {
+        // error reading value
     }
+    return ""
+}
 
-    const value = localStorage.getItem(ApplicationStorageKey)
+const parseJson = (jsonString: string) => {
+    try {
+        return JSON.parse(jsonString)
+    } catch (error) {
+        return {}
+    }
+}
+
+export const getApplicationStateLS = async (defaultValue: string = '{}') => {
+    const value = await getData();
     if (value) {
-        return JSON.parse(value)
+        return parseJson(value)
     }
-    return JSON.parse(jsonString)
+    return parseJson(defaultValue)
 }
 
 export const setApplicationStateLS = (value: any) => {
-    if (!localStorage){
-        //@ts-ignore
-        localStorage = {}
-    }
-
-    return localStorage.setItem(ApplicationStorageKey, JSON.stringify(value))
-}
-
-export const getDomainStateLS = () => {
-    if (!localStorage){
-        //@ts-ignore
-        localStorage = {}
-    }
-
-    const value = localStorage.getItem(DomainStorageKey) || '{}'
-    return JSON.parse(value)
-}
-
-export const setDomainStateLS = (value: any) => {
-    if (!localStorage){
-        //@ts-ignore
-        localStorage = {}
-    }
-    return localStorage.setItem(DomainStorageKey, JSON.stringify(value))
+    storeData(value);
 }
