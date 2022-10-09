@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     ApplicationContext,
     ApplicationContextType,
@@ -8,10 +8,11 @@ import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
 import { Platform, View } from 'react-native';
 import { Text } from 'react-native-paper';
+import { Button } from '../Button';
 
 export const ListAssets = () => {
-    console.log("Platform = ", Platform);
     const [search, setSearch] = useState("");
+    const [rerun, setRerun] = useState("");
     const [appState] = useContext<ApplicationContextType>(ApplicationContext)
     const s3client = useS3Client(appState);
     const { data, isLoading, isError } = useGetAssets(s3client, {
@@ -20,13 +21,12 @@ export const ListAssets = () => {
         Prefix: `${search}`,
         //Prefix: "",
         Delimiter: "/"
-    });
+    }, rerun);
 
-    console.log("Assets data loaded = ", data?.length)
     return <>
+        <Button onPress={() => { setRerun(`${(Math.random())}`) }} >Reload</Button>
         {isLoading && <Text variant="headlineSmall">Loading</Text>}
         {isError && <Text variant="headlineSmall">Error </Text>}
-
         {data && isLoading === false && <DataGrid assets={data} />}
     </>
 }

@@ -4,8 +4,8 @@ import { S3TypeToInternalAdapter } from '../adapters/s3';
 import { getAssets } from '../services/s3';
 import { GetAssetArgs } from '../services/s3/types';
 
-export const useGetAssets = (client: S3Client, params: GetAssetArgs) => {
-    const queryResponse = useQuery(['getAssets', params.Bucket || "", params.Delimiter || "", params.Prefix || ""], async () => {
+export const useGetAssets = (client: S3Client, params: GetAssetArgs, rerun: string = "") => {
+    const queryResponse = useQuery(['getAssets', rerun, params.Bucket || "", params.Delimiter || "", params.Prefix || ""], async () => {
         try {
             console.log("[useGetAssets] Getting data ")
             const data = await getAssets(client, params)
