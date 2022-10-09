@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput as Native } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 
 const styles = StyleSheet.create({
