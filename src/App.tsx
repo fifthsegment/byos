@@ -59,7 +59,7 @@ function App() {
                     <Appbar.Action icon="magnify" onPress={() => { }} />
                 </Appbar.Header>
                 <SaveCredentialsForm />
-
+                <Dashboard />
             </ApplicationContext.Provider>
         </Provider>
     )
