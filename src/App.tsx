@@ -17,14 +17,31 @@ import {
 import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import Header from './components/Header'
 import MobileNavigation from './components/MobileNavigation'
+import { getApplicationStateLS, setApplicationStateLS } from './services/localstorage'
+import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
-    const savedApplicationData = (
-        initialData
-    )
+    const { data: savedApplicationData, isLoaded } = useGetApplicationStateFromLs(initialData);
+
     const applicationState = useState(savedApplicationData as ApplicationState)
-    const [applicationStateData] = applicationState
+
+    /*useEffect(() => {
+        applicationState[1](savedApplicationData);
+    }, [savedApplicationData])*/
+
+    const [applicationStateData, setApplicationStateData] = applicationState
+
+    useEffect(() => {
+        //setApplicationStateLS({ ...applicationStateData })
+        setApplicationStateData(savedApplicationData);
+    }, [savedApplicationData])
+
+    useEffect(() => {
+        if (isLoaded) {
+            setApplicationStateLS({ ...applicationStateData })
+        }
+    }, [applicationStateData, isLoaded])
 
     return (
         <PaperProvider>

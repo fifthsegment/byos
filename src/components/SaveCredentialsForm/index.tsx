@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
@@ -8,20 +8,22 @@ import { Button } from '../Button'
 import { ScrollView } from 'react-native';
 import { Snackbar } from '../Snackbar/Snackbar';
 
-
-
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { control, handleSubmit, formState } = useForm({
+    const { control, handleSubmit, formState, getValues, reset } = useForm({
         defaultValues: s3credentials,
     })
 
+    useEffect(() => {
+        reset(s3credentials)
+    }, [s3credentials])
+
     const [saved, setSaved] = useState(false)
 
-    const onSubmit = (data: FieldValues) => {
-        //console.log("FormData = ", data)
-        onToggleSnackBar()
+    const onSubmit = () => {
+        onToggleSnackBar();
+        const data = getValues();
         setAppState({
             ...appState,
             s3credentials: data as any,
@@ -75,8 +77,8 @@ export const SaveCredentialsForm = () => {
                         name="endpoint"
                         label="Endpoint"
                     />
-
-                    <InputField
+            
+                  <InputField
                         control={control}
                         name="bucket"
                         label="Bucket"
