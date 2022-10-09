@@ -2,19 +2,21 @@ import React, { useContext, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-import { Text as Typography } from 'react-native-paper';
-import { InputField } from '../Input/InputField'
-import { Button } from '../Button'
 
-
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import Alert from '@mui/material/Alert'
 
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { control, register, handleSubmit, formState } = useForm({
+    const { register, handleSubmit } = useForm({
         defaultValues: s3credentials,
     })
-
     const [saved, setSaved] = useState(false)
 
     const onSubmit = (data: FieldValues) => {
@@ -41,65 +43,88 @@ export const SaveCredentialsForm = () => {
         getAssets(s3Client, { Bucket: "testinghumza" })
     }
 
-    const [text, setText] = React.useState("");
-
-    // @ts-ignore
-
-
     return (
-        <div
-            style={{
+        <Box
+            sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
             }}
         >
-
-            <Typography >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
                 Api Credentials
             </Typography>
-            <form
+            <Box
+                component="form"
                 onSubmit={handleSubmit(onSubmit)}
+                noValidate
+                sx={{ mt: 1 }}
             >
-                <InputField
-                    control={control}
-                    name="apiKey"
-                    label="API KEY"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="api-key"
+                    label="Api Key"
+                    autoComplete="api-key"
+                    autoFocus
+                    {...register('apiKey')}
                 />
-                <InputField
-                    control={control}
-                    name="apiSecret"
-                    label="Api Secret"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="api-secret"
+                    label="Api secret"
+                    autoComplete="api-secret"
+                    {...register('apiSecret')}
                 />
-                <InputField
-                    control={control}
-                    name="endpoint"
-                    label="Endpoint"
-                />
-
-                <InputField
-                    control={control}
-                    name="bucket"
-                    label="Bucket"
-                />
-
-                <InputField
-                    control={control}
-                    name="region"
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="region"
                     label="Region"
+                    autoComplete="region"
+                    {...register('region')}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="endpoint"
+                    label="Endpoint"
+                    autoComplete="endpoint"
+                    placeholder="https://s3.yourcompany.io"
+                    {...register('endpoint')}
+                    helperText="Demo value for Endpoint: https://s3.us-west-004.backblazeb2.com/"
                 />
 
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="bucket"
+                    label="Bucket"
+                    autoComplete="bucket"
+                    placeholder="Bucket-name"
+                    {...register('bucket')}
+                />
                 <Button
-                    mode="contained"
-                    onPress={handleSubmit(onSubmit)}
-                    disabled={!formState.isValid}>
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
                     Save
                 </Button>
-
-
-                {saved && <div>Credentials are saved!</div>}
-
-            </form>
-        </div>
+                {saved && (
+                    <Alert severity="success">Credentials are saved!</Alert>
+                )}
+            </Box>
+        </Box>
     )
 }
