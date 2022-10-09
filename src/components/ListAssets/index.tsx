@@ -22,7 +22,7 @@ export const ListAssets = () => {
         Delimiter: "/"
     });
 
-    console.log("Assets data loaded = ", data.length)
+    console.log("Assets data loaded = ", data?.length)
     return <>
         {isLoading && <Text variant="headlineSmall">Loading</Text>}
         {isError && <Text variant="headlineSmall">Error </Text>}
