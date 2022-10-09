@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form';
-import { TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native';
 
 
 export const InternalInputField = (...args) => {
