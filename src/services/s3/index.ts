@@ -1,6 +1,8 @@
 import { S3Client, ListObjectsCommand } from "@aws-sdk/client-s3";
 import { S3Initializer, GetAssetArgs, Asset } from './types'
-
+import 'react-native-url-polyfill/auto';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 export const buildS3Client = (initializationData: S3Initializer) => {
     const { credentials, region, endpoint } = initializationData
