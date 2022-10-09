@@ -44,7 +44,7 @@ export const DataGrid = ({ assets }: DataGridProps) => {
           return <DataTable.Row key={row.id}>
             {row.getVisibleCells().map(cell => (
               <DataTable.Cell key={cell.id}>
-                <Text style={{ color: "white" }}>
+                <Text >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Text>
               </DataTable.Cell>
