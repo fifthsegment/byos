@@ -41,7 +41,6 @@ export const InputField = ({ control, name, label }: any) => {
             render={({ field: { value, onChange, onBlur } }: any) => {
                 return <>
                     <InternalInputField
-                        style={styles.input}
                         name={name}
                         label={label}
                         value={value}
