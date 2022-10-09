@@ -44,9 +44,6 @@ export const InputField = ({ control, name, label }: any) => {
                         name={name}
                         label={label}
                         value={value}
-                        onChange={(e) => {
-                            console.log("[InputChange] name = ", name, " e = ", e)
-                        }}
                         onChangeText={(text) => {
                             console.log("[InputChange] name = ", name, " value = ", text)
                             onChange(text)
