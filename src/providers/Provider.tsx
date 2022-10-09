@@ -5,7 +5,7 @@ import routes from "../routes";
 import { AzureAdProvider } from "./AzureAd";
 import { BasicProvider } from "./BasicProvider";
 import QueryProvider from "./QueryProvider";
-import { Provider as PaperProvider } from "react-native-paper";
+
 
 export const Provider = ({ children }: React.PropsWithChildren) => {
     const { useAzureLogin } = config;

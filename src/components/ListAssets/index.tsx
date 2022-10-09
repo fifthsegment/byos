@@ -6,10 +6,8 @@ import {
 import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
-import { Platform } from 'react-native';
 
 export const ListAssets = () => {
-    console.log("Platform = ", Platform);
     const [search, setSearch] = useState("");
     const [appState] = useContext<ApplicationContextType>(ApplicationContext)
     const s3client = useS3Client(appState);
@@ -18,7 +16,7 @@ export const ListAssets = () => {
         //Delimiter: search.length > 0 && "/",
         Prefix: `${search}`,
         //Prefix: "",
-        Delimiter: "/"
+        Delimiter: ""
     });
 
 
