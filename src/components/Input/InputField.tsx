@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form';
+import { Controller, useController } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
 
 
@@ -13,6 +13,17 @@ export const InputField = ({ control, name, label }: any) => {
     if (control === undefined) {
         return null;
     }
+    const {
+        field: { onChange, onBlur, value, ref },
+        fieldState: { invalid, isTouched, isDirty },
+        formState: { touchedFields, dirtyFields }
+    } = useController({
+        name,
+        control,
+        rules: { required: true },
+        defaultValue: "",
+    });
+
     return <>
         <Controller
             control={control}
