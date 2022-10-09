@@ -27,6 +27,6 @@ export const ListAssets = () => {
         {isLoading && <Text variant="headlineSmall">Loading</Text>}
         {isError && <Text variant="headlineSmall">Error </Text>}
 
-        <DataGrid assets={data} />
+        {data && isLoading === false && <DataGrid assets={data} />}
     </>
 }
