@@ -1,11 +1,14 @@
-import BApp from "./App"
-import { Provider } from "./providers/Provider";
+import React from 'react';
+import { Text } from 'react-native-paper';
+import BAap from './App'
+import { Provider } from './providers/Provider';
 
 const ExportApp = () => {
-    return <Provider>
-        Hello
-        <BApp />
-    </Provider>
+    return (
+    <Provider>
+        <BAap />
+    </Provider>    
+    )
 }
 
 export default ExportApp

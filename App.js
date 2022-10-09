@@ -13,11 +13,7 @@ const styles = StyleSheet.create({
 });
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <BYOSApp />
-      <StatusBar style="auto" />
-    </View>
+      <BYOSApp/>
   );
 }
 registerRootComponent(App);

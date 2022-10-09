@@ -6,7 +6,7 @@ import {
 import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 
 export const ListAssets = () => {
     console.log("Platform = ", Platform);
@@ -22,15 +22,7 @@ export const ListAssets = () => {
     });
 
 
-    return <div>
-        <input type="text" onChange={(e) => { setSearch(e.target.value) }} value={search} placeholder="Prefix search..." />
-        <div>
-            Example prefix based search : "non-empty-folder/"
-        </div>
-        <br />
-        Results:
-        {isError && "Error Fetching Data"}
-        {isLoading && <>Loading</>}
-        {isError === false && <DataGrid assets={data} />}
-    </div>
+    return <View>
+        <DataGrid assets={data} />
+    </View>
 }

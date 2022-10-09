@@ -5,12 +5,14 @@ import routes from "../routes";
 import { AzureAdProvider } from "./AzureAd";
 import { BasicProvider } from "./BasicProvider";
 import QueryProvider from "./QueryProvider";
-import { Provider as PaperProvider } from "react-native-paper";
+import { Platform } from "react-native";
 
 export const Provider = ({ children }: React.PropsWithChildren) => {
     const { useAzureLogin } = config;
     const routingState = useState(routes);
-    if (useAzureLogin) {
+    
+    /**
+     if (useAzureLogin) {
         return <QueryProvider>
             <RoutingContext.Provider value={routingState}>
                 <AzureAdProvider >
@@ -18,12 +20,16 @@ export const Provider = ({ children }: React.PropsWithChildren) => {
                 </AzureAdProvider>
             </RoutingContext.Provider>
         </QueryProvider>
-    }
-    return <QueryProvider>
+    }else
+    { */
+    return (
+         <QueryProvider>
         <RoutingContext.Provider value={routingState}>
             <BasicProvider>
                 {children}
             </BasicProvider>
         </RoutingContext.Provider>
-    </QueryProvider>
+    </QueryProvider>)
+     
+      
 }
