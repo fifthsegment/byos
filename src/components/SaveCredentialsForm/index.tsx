@@ -11,7 +11,7 @@ import { Snackbar } from '../Snackbar/Snackbar';
 export const SaveCredentialsForm = () => {
     const [appState, setAppState] = useContext(ApplicationContext)
     const { s3credentials } = appState
-    const { control, handleSubmit, formState, getValues, reset, dirtyFields } = useForm({
+    const { control, handleSubmit, formState, getValues, reset } = useForm({
         defaultValues: s3credentials,
     })
 
@@ -19,9 +19,6 @@ export const SaveCredentialsForm = () => {
         reset(s3credentials)
     }, [s3credentials])
 
-    useEffect(() => {
-        console.log("Dirty fields = ", dirtyFields)
-    }, [dirtyFields])
 
     const [saved, setSaved] = useState(false)
 
