@@ -47,7 +47,7 @@ export const InputField = ({ control, name, label }: any) => {
                         onChange={(e) => {
                             console.log("[InputChange] name = ", name, " e = ", e)
                         }}
-                        onChageText={(text) => {
+                        onChangeText={(text) => {
                             console.log("[InputChange] name = ", name, " value = ", text)
                             onChange(text)
                         }}
