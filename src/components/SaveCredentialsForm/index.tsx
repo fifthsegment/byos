@@ -2,9 +2,10 @@ import React, { useContext, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-import { Text as Typography } from 'react-native-paper';
+import { Card, Text as Typography } from 'react-native-paper';
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
+import { View } from 'react-native';
 
 
 
@@ -44,24 +45,18 @@ export const SaveCredentialsForm = () => {
 
     const [text, setText] = React.useState("");
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-        >
+        <Card>
 
             <Typography >
                 Api Credentials
             </Typography>
-            <form onSubmit={handleSubmit(onSubmit)}>
+
                 <InputField
                     control={control}
                     name="apiKey"
                     label="API KEY"
                 />
-                <InputField
+                 <InputField
                     control={control}
                     name="apiSecret"
                     label="Api Secret"
@@ -83,14 +78,12 @@ export const SaveCredentialsForm = () => {
                     name="region"
                     label="Region"
                 />
+                
+                <Button onPress={handleSubmit(onSubmit)}>Submit</Button> 
 
 
-                <input type="submit" />
+                {saved && <Typography>Credentials are saved!</Typography>}
 
-
-                {saved && <div>Credentials are saved!</div>}
-
-            </form>
-        </div>
+        </Card>
     )
 }

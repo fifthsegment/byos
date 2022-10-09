@@ -1,67 +1,53 @@
 import React, { useEffect, useState } from 'react'
-import './App.css'
 
-import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+
+//import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InternalRouteDef } from './routes'
-import { Link } from 'react-router-dom'
+//import { Link } from 'react-router-dom'
 import { RoutingContext } from './contexts/routing/RoutingContext'
 import {
     ApplicationContext,
     ApplicationState,
     initialData,
 } from './contexts/application/ApplicationContext'
-import {
+/*import {
     getApplicationStateLS,
     setApplicationStateLS,
-} from './services/localstorage'
+} from './services/localstorage'*/
 import Dashboard from './pages/dashboard'
+import { SaveCredentialsForm } from './components/SaveCredentialsForm'
+import { Appbar, Provider } from 'react-native-paper'
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
-    const savedApplicationData = getApplicationStateLS(
-        JSON.stringify(initialData)
+    const savedApplicationData = (
+        initialData
     )
     const applicationState = useState(savedApplicationData as ApplicationState)
     const [applicationStateData] = applicationState
 
-    useEffect(() => {
-        setApplicationStateLS({ ...applicationStateData })
-    }, [applicationStateData])
-
     return (
+        <Provider>
         <ApplicationContext.Provider value={applicationState}>
-            <Router>
-                <Routes>
                     {routingState.isReady &&
                         routingState.routes.map((route: InternalRouteDef) => {
                             return (
-                                <Route
-                                    key={route.path}
-                                    path={route.path}
-                                    element={route.component}
-                                />
+                                null
                             )
                         })}
-                </Routes>
-                <Dashboard />
-                <nav className="remove-this-style-nav">
-                    <ul>
-                        {routingState.routes
-                            .filter((route: InternalRouteDef) => route.showInNavigation)
-                            .map((route: InternalRouteDef) => {
-                                return (
-                                    <li key={route.path}>
-                                        <Link key={route.path} to={route.path}>
-                                            {route.path}
-                                        </Link>
-                                    </li>
-                                )
-                            })}
-                    </ul>
-                </nav>
-            </Router>
+                <Appbar.Header>
+                    <Appbar.BackAction onPress={() => {}} />
+                    <Appbar.Content title="Title" />
+                    <Appbar.Action icon="calendar" onPress={() => {}} />
+                    <Appbar.Action icon="magnify" onPress={() => {}} />
+                </Appbar.Header>
+                <SaveCredentialsForm/>
+                {/* <Dashboard /> */}
+                            
         </ApplicationContext.Provider>
+        </Provider>
     )
 }
 
 export default App
+

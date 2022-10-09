@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { flexRender, getCoreRowModel, useReactTable, } from '@tanstack/react-table'
 import { DataGridColumns } from "./dataGridColumns";
 import { Asset } from "../../services/types";
+import { DataTable } from 'react-native-paper';
 
 export type DataGridProps = {
   assets: Asset[] | undefined
@@ -20,34 +21,34 @@ export const DataGrid = ({ assets }: DataGridProps) => {
 
 
   return (
-    <table>
-      <thead>
+    <DataTable>  
+      <DataTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
+          <DataTable.Row key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <th key={header.id} colSpan={header.colSpan}>
+              <DataTable.Title key={header.id}>
                 {header.isPlaceholder
                   ? null
                   : flexRender(
                     header.column.columnDef.header,
                     header.getContext()
                   )}
-              </th>
+              </DataTable.Title>
             ))}
-          </tr>
+          </DataTable.Row>
         ))}
-      </thead>
-      <tbody>
+      </DataTable.Header>
+     
         {table.getRowModel().rows.map(row => {
-          return <tr key={row.id}>
+          return <DataTable.Row key={row.id}>
             {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>
+              <DataTable.Cell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
+              </DataTable.Cell>
             ))}
-          </tr>
+          </DataTable.Row>
         })}
-      </tbody>
-    </table>
+    
+    </DataTable>
   );
 }
