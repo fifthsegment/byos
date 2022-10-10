@@ -1,22 +1,22 @@
 import * as React from 'react';
-import { BottomNavigation } from 'react-native-paper';
-import { ApiConfiguration } from '../ApiConfiguration/index'
+import { BottomNavigation as InternelBottomNavigation} from 'react-native-paper';
+import { Configuration } from '../../pages/Configuration/index'
 import Dashboard from '../../pages/dashboard';
 
-const MobileNavigation = () => {
+const BottomNavigation = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'assets', title: 'Assets', focusedIcon: 'folder'},
     { key: 'api_configuration', title: 'API Configuration', focusedIcon: 'cogs' }
   ]);
 
-  const renderScene = BottomNavigation.SceneMap({
+  const renderScene = InternelBottomNavigation.SceneMap({
     assets: Dashboard,
-    api_configuration: ApiConfiguration    
+    api_configuration: Configuration    
   });
 
   return (
-    <BottomNavigation
+    <InternelBottomNavigation
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
@@ -24,4 +24,4 @@ const MobileNavigation = () => {
   );
 };
 
-export default MobileNavigation;
+export default BottomNavigation;

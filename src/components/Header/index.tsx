@@ -1,9 +1,23 @@
 import { Appbar, Button } from 'react-native-paper';
+import { getDrawerStatusFromState } from '@react-navigation/drawer';
 
-const Header = (props: any) => (
-  <Appbar.Header mode='center-aligned' elevated={true}>
-    <Appbar.Content title={props.title} />
-  </Appbar.Header>
+const Header = ({ navigation, route, options }) => {
+
+  const handleToggel = ()=>{
+    getDrawerStatusFromState(navigation.getState()) === 'open' ? navigation.closeDrawer() : navigation.openDrawer();
+
+  }
+
+
+  return(
+    <Appbar.Header elevated={true}>
+      <Appbar.Action icon="menu" onPress={handleToggel}
+      />
+      <Appbar.Content title='Bring Your Own Server' />
+      <Appbar.Action icon="refresh" />
+    </Appbar.Header>
 );
+
+}
 
 export default Header

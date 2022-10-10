@@ -16,9 +16,10 @@ import {
 
 import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import Header from './components/Header'
-import MobileNavigation from './components/MobileNavigation'
+import BottomNavigation from './components/BottomNavigation'
 import { getApplicationStateLS, setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
+import { DrawerNavigation } from './components/DrawerNavigation';
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
@@ -55,8 +56,9 @@ function App() {
                         )
                     })}
 
-                <Header title="BYOS" />
-                <MobileNavigation />
+                {/* <Header />
+                <BottomNavigation /> */}
+                <DrawerNavigation />
 
             </ApplicationContext.Provider>
         </PaperProvider>
