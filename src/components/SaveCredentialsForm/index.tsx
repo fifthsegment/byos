@@ -5,7 +5,7 @@ import { buildS3Client, getAssets } from '../../services/s3'
 import { Text, Card, Surface, Title } from 'react-native-paper';
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
-import { ScrollView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
 import { Snackbar } from '../Snackbar/Snackbar';
 
 export const SaveCredentialsForm = () => {
@@ -57,16 +57,46 @@ export const SaveCredentialsForm = () => {
     const onToggleSnackBar = () => setVisible(!visible);
     const onDismissSnackBar = () => setVisible(false);
 
+    const styles = StyleSheet.create({
+        container: {
+          flex: 1
+        },
+        inner: {
+          padding: 24,
+          flex: 1,
+          justifyContent: "space-around"
+        },
+        header: {
+          fontSize: 36,
+          marginBottom: 48
+        },
+        textInput: {
+          height: 40,
+          borderColor: "#000000",
+          borderBottomWidth: 1,
+          marginBottom: 36
+        },
+        snackBarContainer: {
+            flex: 1,
+            justifyContent: 'space-between',
+        }
+      });
+
+
     return (
         <ScrollView>
-            <Surface>
+             <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.container}
+                >
+            <Surface style={styles.inner}>
                 <Card>
                     <Card.Content>
                         <Text variant="headlineSmall">API Configuration</Text>
                         <InputField
                             control={control}
                             name="apiKey"
-                            label="API KEY"
+                            label="API KEY"                            
                         />
 
                         <InputField
@@ -92,28 +122,34 @@ export const SaveCredentialsForm = () => {
                             name="region"
                             label="Region"
                         />
+                        
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
                     </Card.Actions>
                 </Card>
-
-                <Snackbar
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                        label: 'Dismiss',
-                        onPress: () => {
-                            // Do something
-                        },
-                    }}>
-
-                    Credentials are saved!
-
-                    {/* {saved ? <Text>Credentials are saved!</Text> : <Text>Credentials not saved!</Text>} */}
-                </Snackbar>
-
             </Surface>
+        </KeyboardAvoidingView>
+                
+        <View style={styles.snackBarContainer}>
+            <Snackbar
+                visible={visible}
+                onDismiss={onDismissSnackBar}
+                action={{
+                    label: 'Dismiss',
+                    onPress: () => {
+                        // Do something
+                    },
+                }}
+                >
+
+                Credentials are saved!
+
+                {/* {saved ? <Text>Credentials are saved!</Text> : <Text>Credentials not saved!</Text>} */}
+            </Snackbar>
+        </View>
+                
+            
         </ScrollView>
     )
 }
