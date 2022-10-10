@@ -20,7 +20,7 @@ jobs:
       - name: Install and Build
         run: |
           yarn
-          yarn build
+          yarn github:build
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1

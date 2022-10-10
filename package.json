@@ -8,7 +8,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider expo export:web"
+    "build": "NODE_OPTIONS=--openssl-legacy-provider expo export:web",
+    "github:build": "expo export:web"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.186.0",
