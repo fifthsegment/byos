@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form';
-import { StyleSheet, TextInput as Native } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { KeyboardAvoidingView, Platform, StyleSheet, TextInput as Native, View } from 'react-native';
+import { Surface, TextInput } from 'react-native-paper';
 
 
 const styles = StyleSheet.create({
@@ -34,7 +34,17 @@ export const InputField = ({ control, name, label }: any) => {
         defaultValue: "",
     });*/
 
-    return <>
+    const styles = StyleSheet.create({
+        textInput: {
+          height: 40,
+          //borderColor: "#000000",
+          //borderBottomWidth: 1,
+          marginTop: 20
+        }
+      });
+
+
+    return <>   
         <Controller
             control={control}
             name={name}
@@ -49,6 +59,7 @@ export const InputField = ({ control, name, label }: any) => {
                             onChange(text)
                         }}
                         onBlur={onBlur}
+                        style={styles.textInput}
                     />
                 </>
             }}
