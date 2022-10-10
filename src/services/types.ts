@@ -5,4 +5,6 @@ export type Asset = {
   assetId: string;
   fileType?: string;
   fileSize?: number;
+  isFolder: boolean;
+  prefix?: string;
 };
