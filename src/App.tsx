@@ -54,8 +54,6 @@ function App() {
     }
   }, [applicationStateData, isLoaded]);
 
-  console.log(theme);
-
   return (
     <PaperProvider theme={theme}>
       <PortalProvider>
