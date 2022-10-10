@@ -51,7 +51,7 @@ export const getAssets: (
         return {
             prefix: item.Prefix,
             etag: undefined,
-            name: item.Prefix.replace("/", ""),
+            name: item.Prefix,
             lastModified: undefined,
             size: 0
         } as Asset
@@ -64,7 +64,7 @@ export const getAssets: (
             size: item?.Size
         } as Asset
     }) || []
-    return [...folders, ...files].splice(0, 30);
+    return [...folders, ...files];
 }
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {

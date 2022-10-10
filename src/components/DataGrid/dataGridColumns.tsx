@@ -6,6 +6,7 @@ import prettyBytes from 'pretty-bytes';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { AntDesign, Feather } from '@expo/vector-icons';
+import { Platform } from 'react-native';
 
 dayjs.extend(relativeTime);
 
@@ -26,26 +27,30 @@ const iconType = (asset: Asset) => {
 export const DataGridColumns = () => {
     const columnHelper = createColumnHelper<Asset>()
     const columns = [
-
         // Dispaly file name with icon
         columnHelper.accessor('fileName', {
+            id: "fileName",
             header: "Name",
             cell: info => {
-                return (<>{iconType(info.row.original)} {info.getValue()}</>)
+                const row = info.row.original;
+                const fileName = row.isFolder ? info.getValue().slice(0, -1) : info.getValue();
+                return (<>{iconType(row)} {fileName}</>)
             }
         }),
 
         // Display file size
         columnHelper.accessor('fileSize', {
+            id: "fileSize",
             header: 'Size',
-            cell: info => prettyBytes(info.getValue())
+            cell: info => !info.row.original.isFolder && prettyBytes(info.getValue())
         }),
 
         //Dispaly last modified
         columnHelper.accessor('updatedAt', {
+            id: "updatedAt",
             header: 'Last Modified',
             cell: info => {
-                return dayjs(info.getValue()).fromNow()
+                return !info.row.original.isFolder && dayjs(info.getValue()).fromNow()
             }
         }),
 
@@ -55,5 +60,9 @@ export const DataGridColumns = () => {
             cell: () => <ContextMenu />,
         }),
     ]
+        .filter((item) => {
+            return Platform.OS !== "web" ? item.id === "fileName" : true
+
+        })
     return columns
 }

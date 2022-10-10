@@ -1,10 +1,11 @@
-import { Asset } from "../services/s3/types";
+import { Asset, GetAssetArgs } from "../services/s3/types";
 import { Asset as AppAssetType } from "../services/types"
-export const S3TypeToInternalAdapter = (assets: Asset[]) => {
+export const S3TypeToInternalAdapter = (assets: Asset[], params: GetAssetArgs) => {
     return assets.map((asset: Asset) => {
+        const fileName = asset.name.replace(params.Prefix, "");
         return {
             assetId: asset.etag,
-            fileName: asset.name,
+            fileName,
             fileSize: asset.size,
             updatedAt: asset.lastModified,
             isFolder: asset.prefix?.length > 0,
