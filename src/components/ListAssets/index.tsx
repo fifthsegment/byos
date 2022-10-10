@@ -40,9 +40,25 @@ export const ListAssets = () => {
         }
     }
 
+    const goBack = () => {
+        const prefix = dataQuery.Prefix;
+
+        if (prefix !== "") {
+            const index = prefix.replace("/", "").lastIndexOf("/");
+            if (index < 0) {
+                setPrefix("")
+            } else {
+                const newPrefix = prefix.substring(0, index)
+                console.log("New : ", newPrefix)
+                setPrefix(newPrefix)
+
+            }
+        }
+    }
+
     return <>
         <Button onPress={() => { setRerun(`${(Math.random())}`) }} >Reload</Button>
-        {dataQuery.Prefix?.length > 0 && <Button onPress={() => { setPrefix("") }}>Go To root</Button>}
+        {dataQuery.Prefix?.length > 0 && <Button onPress={() => { goBack() }}>Go back</Button>}
         {isLoading && <Text variant="headlineSmall">Loading</Text>}
         {isError && <Text variant="headlineSmall">Error </Text>}
         {data && isLoading === false && <DataGrid assets={data} onPress={onPress} />}

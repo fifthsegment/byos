@@ -64,7 +64,7 @@ export const getAssets: (
             size: item?.Size
         } as Asset
     }) || []
-    return [...folders, ...files]
+    return [...folders, ...files].splice(0, 30);
 }
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {
