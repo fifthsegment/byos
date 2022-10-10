@@ -19,6 +19,7 @@ import Header from './components/Header'
 import MobileNavigation from './components/MobileNavigation'
 import { getApplicationStateLS, setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
+import { PortalProvider } from '@gorhom/portal';
 
 function App() {
     const [routingState] = React.useContext(RoutingContext)
@@ -47,18 +48,20 @@ function App() {
 
     return (
         <PaperProvider>
-            <ApplicationContext.Provider value={applicationState}>
-                {routingState.isReady &&
-                    routingState.routes.map((route: InternalRouteDef) => {
-                        return (
-                            null
-                        )
-                    })}
+            <PortalProvider>
+                <ApplicationContext.Provider value={applicationState}>
+                    {routingState.isReady &&
+                        routingState.routes.map((route: InternalRouteDef) => {
+                            return (
+                                null
+                            )
+                        })}
 
-                <Header title="BYOS" />
-                <MobileNavigation />
+                    <Header title="BYOS" />
+                    <MobileNavigation />
 
-            </ApplicationContext.Provider>
+                </ApplicationContext.Provider>
+            </PortalProvider>
         </PaperProvider>
     )
 }

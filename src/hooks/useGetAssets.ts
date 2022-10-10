@@ -4,7 +4,7 @@ import { S3TypeToInternalAdapter } from '../adapters/s3';
 import { getAssets } from '../services/s3';
 import { GetAssetArgs } from '../services/s3/types';
 
-export const useGetAssets = (client: S3Client, params: GetAssetArgs, rerun: string = "") => {
+export const useGetAssets = (client: S3Client, clientInitialized: boolean, params: GetAssetArgs, rerun: string = "") => {
     const queryResponse = useQuery(['getAssets', rerun, params.Bucket || "", params.Delimiter || "", params.Prefix || ""], async () => {
         try {
             console.log("[useGetAssets] Getting data ")
@@ -15,6 +15,9 @@ export const useGetAssets = (client: S3Client, params: GetAssetArgs, rerun: stri
             console.log("[useGetAssets] Error : ", error)
         }
         return []
+    }, {
+        enabled: clientInitialized,
+        refetchOnWindowFocus: false
     })
     return queryResponse;
 }
