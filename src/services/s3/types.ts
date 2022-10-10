@@ -10,6 +10,7 @@ export type S3Initializer = {
 }
 
 export type Asset = {
+    prefix: string | undefined,
     etag: string,
     name: string | undefined
     size: number | undefined

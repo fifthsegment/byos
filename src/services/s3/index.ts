@@ -47,7 +47,16 @@ export const getAssets: (
     console.log("[s3:getAssets] Sending command using client.send")
 
     const response = await client.send(command)
-    return response.Contents?.map((item) => {
+    const folders = response.CommonPrefixes?.map((item) => {
+        return {
+            prefix: item.Prefix,
+            etag: undefined,
+            name: item.Prefix.replace("/", ""),
+            lastModified: undefined,
+            size: 0
+        } as Asset
+    }) || []
+    const files = response.Contents?.map((item) => {
         return {
             etag: item.ETag,
             name: item?.Key,
@@ -55,6 +64,7 @@ export const getAssets: (
             size: item?.Size
         } as Asset
     }) || []
+    return [...folders, ...files]
 }
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {

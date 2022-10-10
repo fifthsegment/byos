@@ -1,13 +1,16 @@
 {
   "name": "byos-mobile",
   "version": "1.0.0",
+  "homepage": "./",
   "scripts": {
     "legacy-ssl": "export NODE_OPTIONS=--openssl-legacy-provider",
     "start": "expo start",
     "start:dev-client": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider expo export:web",
+    "github:build": "expo export:web"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.186.0",

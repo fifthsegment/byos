@@ -5,17 +5,21 @@ import prettyBytes from 'pretty-bytes';
 // @ts-ignore
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { AntDesign, Feather } from '@expo/vector-icons';
+
 dayjs.extend(relativeTime);
 
 //icons for different file types or folders
-const iconType = (icon: string) => {
-    switch (icon) {
+const iconType = (asset: Asset) => {
+    const re = /(?:\.([^.]+))?$/;
+    const internalType = asset.isFolder ? "folder" : (re.exec(asset.fileName)[1] || "")
+    switch (internalType) {
         case "folder":
-            return null
-        case "textFile":
-            return null
+            return <AntDesign name="folder1" size={24} />
+        case "txt":
+            return <Feather name="file-text" size={24} />
         default:
-            return null
+            return <Feather name="file" size={24} />
     }
 };
 
@@ -27,7 +31,7 @@ export const DataGridColumns = () => {
         columnHelper.accessor('fileName', {
             header: "Name",
             cell: info => {
-                return (<>{iconType(info.row.original.fileType)} {info.getValue()}</>)
+                return (<>{iconType(info.row.original)} {info.getValue()}</>)
             }
         }),
 

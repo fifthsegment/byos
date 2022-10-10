@@ -6,10 +6,11 @@ import { DataTable, Text } from 'react-native-paper';
 import { ScrollView } from "react-native";
 
 export type DataGridProps = {
-  assets: Asset[] | undefined
+  assets: Asset[] | undefined,
+  onPress: (asset: Asset) => void
 }
 
-export const DataGrid = ({ assets }: DataGridProps) => {
+export const DataGrid = ({ assets, onPress }: DataGridProps) => {
   const [data, setData] = React.useState(() => assets || [])
   useEffect(() => {
     setData(assets || []);
@@ -25,7 +26,7 @@ export const DataGrid = ({ assets }: DataGridProps) => {
     <DataTable >
       <DataTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
-          <DataTable.Row key={headerGroup.id}>
+          <>
             {headerGroup.headers.map(header => (
               <DataTable.Title key={header.id}>
                 {header.isPlaceholder
@@ -36,12 +37,12 @@ export const DataGrid = ({ assets }: DataGridProps) => {
                   )}
               </DataTable.Title>
             ))}
-          </DataTable.Row>
+          </>
         ))}
       </DataTable.Header>
       <ScrollView>
         {table.getRowModel().rows.map(row => {
-          return <DataTable.Row key={row.id}>
+          return <DataTable.Row key={row.id} onPress={() => { onPress(row.original) }}>
             {row.getVisibleCells().map(cell => (
               <DataTable.Cell key={cell.id}>
                 <Text >
