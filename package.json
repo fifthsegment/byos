@@ -6,6 +6,7 @@
     "legacy-ssl": "export NODE_OPTIONS=--openssl-legacy-provider",
     "start": "expo start",
     "start:dev-client": "expo start --dev-client",
+    "start:tunnel": "expo start --tunnel",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
