@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, } from '@tanstack/react-table'
 import { DataGridColumns } from "./dataGridColumns";
 import { Asset } from "../../services/types";
@@ -34,22 +34,25 @@ export const DataGrid = ({ assets, onPress }: DataGridProps) => {
     <DataTable >
       <DataTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
-          <View key={headerGroup.id}>
+          <Fragment key={headerGroup.id}>
             {headerGroup.headers.map(header => (
-              <DataTable.Title key={"header" + header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
+              <DataTable.Title key={header.id}>
+                <Text >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                </Text >
+
               </DataTable.Title>
             ))}
-          </View>
+          </Fragment>
         ))}
       </DataTable.Header>
       {table.getRowModel().rows.map(row => {
-        return <DataTable.Row key={"dtbrow-" + row.id} onPress={() => { onPress(row.original) }}>
+        return <DataTable.Row key={row.id} onPress={() => { onPress(row.original) }}>
           {row.getVisibleCells().map(cell => (
             <DataTable.Cell key={cell.id}>
               <Text >
