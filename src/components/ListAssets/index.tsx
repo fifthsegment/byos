@@ -7,7 +7,7 @@ import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client';
 import { DataGrid } from '../DataGrid';
 import { Platform, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, ActivityIndicator } from 'react-native-paper';
 import { Button } from '../Button';
 import { Asset } from '../../services/types';
 import { GetAssetArgs } from '../../services/s3/types';
@@ -57,9 +57,9 @@ export const ListAssets = () => {
     }
 
     return <>
-        <Button onPress={() => { setRerun(`${(Math.random())}`) }} >Reload</Button>
-        {dataQuery.Prefix?.length > 0 && <Button onPress={() => { goBack() }}>Go back</Button>}
-        {isLoading && <Text variant="headlineSmall">Loading</Text>}
+        <Button onPress={() => { setRerun(`${(Math.random())}`) }} mode='outlined'>Reload</Button>
+        {dataQuery.Prefix?.length > 0 && <Button onPress={() => { goBack() }} mode='outlined'>Go back</Button>}
+        {isLoading && <ActivityIndicator animating={true}  />}
         {isError && <Text variant="headlineSmall">Error </Text>}
         {data && isLoading === false && <DataGrid assets={data} onPress={onPress} />}
     </>
