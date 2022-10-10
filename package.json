@@ -4,14 +4,13 @@
   "homepage": "./",
   "scripts": {
     "legacy-ssl": "export NODE_OPTIONS=--openssl-legacy-provider",
-    "start": "expo start",
-    "start:dev-client": "expo start --dev-client",
-    "start:tunnel": "expo start --tunnel",
-    "android": "expo run:android",
+    "start": "expo start --web",
+    "start:all": "expo start",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "android": "expo run:android",
     "build": "NODE_OPTIONS=--openssl-legacy-provider expo export:web",
-    "github:build": "expo export:web"
+    "github:build": "expo export:web",
+    "start:dev-client": "expo start --dev-client"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.186.0",
