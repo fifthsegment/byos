@@ -51,7 +51,7 @@ export const getAssets: (
         return {
             prefix: item.Prefix,
             etag: undefined,
-            name: item.Prefix.replace("/", ""),
+            name: item.Prefix,
             lastModified: undefined,
             size: 0
         } as Asset

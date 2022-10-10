@@ -9,7 +9,7 @@ export const useGetAssets = (client: S3Client, params: GetAssetArgs, rerun: stri
         try {
             console.log("[useGetAssets] Getting data ")
             const data = await getAssets(client, params)
-            const assets = S3TypeToInternalAdapter(data);
+            const assets = S3TypeToInternalAdapter(data, params);
             return assets;
         } catch (error) {
             console.log("[useGetAssets] Error : ", error)

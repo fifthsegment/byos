@@ -42,25 +42,18 @@ export const ListAssets = () => {
 
     const goBack = () => {
         const prefix = dataQuery.Prefix;
-
         if (prefix !== "") {
-            const index = prefix.replace("/", "").lastIndexOf("/");
-            if (index < 0) {
-                setPrefix("")
-            } else {
-                const newPrefix = prefix.substring(0, index)
-                console.log("New : ", newPrefix)
-                setPrefix(newPrefix)
-
-            }
+            const newPrefix = prefix.substring(0, prefix.substring(0, prefix.length - 1).lastIndexOf("/") + 1);
+            setPrefix(newPrefix)
         }
     }
 
     return <>
-            <Button onPress={() => { setRerun(`${(Math.random())}`) }} mode='outlined'>Reload</Button>
-            {dataQuery.Prefix?.length > 0 && <Button onPress={() => { goBack() }} mode='outlined'>Go back</Button>}
-            {isLoading && <ActivityIndicator animating={true}  />}
-            {isError && <Text variant="headlineSmall">Error </Text>}
-            {data && isLoading === false && <DataGrid assets={data} onPress={onPress} />}
+        <Text>Prefix : {dataQuery.Prefix}</Text>
+        <Button onPress={() => { setRerun(`${(Math.random())}`) }} mode='outlined'>Reload</Button>
+        {dataQuery.Prefix?.length > 0 && <Button onPress={() => { goBack() }} mode='outlined'>Go back</Button>}
+        {isLoading && <ActivityIndicator animating={true} />}
+        {isError && <Text variant="headlineSmall">Error </Text>}
+        {data && isLoading === false && <DataGrid assets={data} onPress={onPress} />}
     </>
 }
