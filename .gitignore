@@ -5,3 +5,4 @@ web-build
 dist
 ios
 android
+yarn-error.log
