@@ -1,6 +1,7 @@
 {
   "name": "byos-mobile",
   "version": "1.0.0",
+  "homepage": "./",
   "scripts": {
     "legacy-ssl": "export NODE_OPTIONS=--openssl-legacy-provider",
     "start": "expo start",
