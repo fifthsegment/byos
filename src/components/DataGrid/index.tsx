@@ -25,7 +25,7 @@ export const DataGrid = ({ assets }: DataGridProps) => {
     <DataTable >
       <DataTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
-          <DataTable.Row key={headerGroup.id}>
+          <>
             {headerGroup.headers.map(header => (
               <DataTable.Title key={header.id}>
                 {header.isPlaceholder
@@ -36,7 +36,7 @@ export const DataGrid = ({ assets }: DataGridProps) => {
                   )}
               </DataTable.Title>
             ))}
-          </DataTable.Row>
+          </>
         ))}
       </DataTable.Header>
       <ScrollView>
