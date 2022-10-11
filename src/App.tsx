@@ -20,7 +20,7 @@ import { setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
 import { PortalProvider } from '@gorhom/portal'
 
-function App() {
+function App (): JSX.Element {
   const [routingState] = React.useContext(RoutingContext)
   const { data: savedApplicationData, isLoaded } = useGetApplicationStateFromLs(initialData)
 
