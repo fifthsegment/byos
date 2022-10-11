@@ -1,8 +1,8 @@
-import { Text } from 'react-native-paper';
 import { SaveCredentialsForm } from '../SaveCredentialsForm'
+import React from 'react'
 
-export const ApiConfiguration = () =>{
-  return(
-    <SaveCredentialsForm/>
+export const ApiConfiguration: React.FC = () => {
+  return (
+    <SaveCredentialsForm />
   )
 }

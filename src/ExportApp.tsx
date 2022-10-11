@@ -1,14 +1,13 @@
-import React from 'react';
-import { Text } from 'react-native-paper';
+import React from 'react'
 import BAap from './App'
-import { Provider } from './providers/Provider';
+import { Provider } from './providers/Provider'
 
-const ExportApp = () => {
-    return (
+const ExportApp: React.FC = () => {
+  return (
     <Provider>
-        <BAap />
-    </Provider>    
-    )
+      <BAap />
+    </Provider>
+  )
 }
 
 export default ExportApp
