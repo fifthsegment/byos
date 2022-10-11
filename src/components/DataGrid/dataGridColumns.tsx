@@ -1,81 +1,73 @@
-import { ContextMenu } from '../ContextMenu';
-import { createColumnHelper } from '@tanstack/react-table';
-import { Asset } from '../../services/types';
-import prettyBytes from 'pretty-bytes';
-// @ts-ignore
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { AntDesign, Feather } from '@expo/vector-icons';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react'
+import { ContextMenu } from '../ContextMenu'
+import { createColumnHelper } from '@tanstack/react-table'
+import { Asset } from '../../services/types'
+import prettyBytes from 'pretty-bytes'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import { Platform, StyleSheet } from 'react-native'
 
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime)
 
-//icons for different file types or folders
-const iconType = (asset: Asset) => {
-  const re = /(?:\.([^.]+))?$/;
-  const internalType = asset.isFolder
-    ? 'folder'
-    : re.exec(asset.fileName)[1] || '';
+const styles = StyleSheet.create({
+  icon: {
+    marginRight: '6px'
+  }
+})
+
+// icons for different file types or folders
+const iconType = (asset: Asset): JSX.Element => {
+  const re = /(?:\.([^.]+))?$/
+  const internalType = asset.isFolder ? 'folder' : (re.exec(asset.fileName)[1] || '')
   switch (internalType) {
     case 'folder':
-      return <AntDesign style={styles.icon} name="folder1" size={24} />;
+      return <AntDesign name="folder1" size={24} style={styles.icon} />
     case 'txt':
-      return <Feather style={styles.icon} name="file-text" size={24} />;
+      return <Feather name="file-text" size={24} style={styles.icon} />
     default:
-      return <Feather style={styles.icon} name="file" size={24} />;
+      return <Feather name="file" size={24} style={styles.icon} />
   }
-};
+}
 
-export const DataGridColumns = () => {
-  const columnHelper = createColumnHelper<Asset>();
-  const columns = [
+export const DataGridColumns: any = () => {
+  const columnHelper = createColumnHelper<Asset>()
+  const columns: any = [
     // Dispaly file name with icon
     columnHelper.accessor('fileName', {
       id: 'fileName',
       header: 'Name',
-      cell: (info) => {
-        const row = info.row.original;
-        const fileName = row.isFolder
-          ? info.getValue().slice(0, -1)
-          : info.getValue();
-        return (
-          <>
-            {iconType(row)} {fileName}
-          </>
-        );
-      },
+      cell: info => {
+        const row = info.row.original
+        const fileName = row.isFolder ? info.getValue().slice(0, -1) : info.getValue()
+        return (<>{iconType(row)} {fileName}</>)
+      }
     }),
 
     // Display file size
     columnHelper.accessor('fileSize', {
       id: 'fileSize',
       header: 'Size',
-      cell: (info) =>
-        !info.row.original.isFolder && prettyBytes(info.getValue()),
+      cell: info => !info.row.original.isFolder && prettyBytes(info.getValue())
     }),
 
-    //Dispaly last modified
+    // Dispaly last modified
     columnHelper.accessor('updatedAt', {
       id: 'updatedAt',
       header: 'Last Modified',
-      cell: (info) => {
-        return !info.row.original.isFolder && dayjs(info.getValue()).fromNow();
-      },
+      cell: info => {
+        return !info.row.original.isFolder && dayjs(info.getValue()).fromNow()
+      }
     }),
 
-    //Display column size
+    // Display column size
     columnHelper.display({
       id: 'actions',
-      cell: () => <ContextMenu />,
-    }),
-  ].filter((item) => {
-    return Platform.OS !== 'web' ? item.id === 'fileName' : true;
-  });
-  return columns;
-};
-
-const styles = StyleSheet.create({
-  icon: {
-    marginRight: '6px',
-  },
-});
+      cell: () => <ContextMenu />
+    })
+  ]
+    .filter((item) => {
+      return Platform.OS !== 'web' ? item.id === 'fileName' : true
+    })
+  return columns
+}

@@ -1,27 +1,24 @@
-import React, { useEffect, useState } from 'react'
-//import { useLinkClickHandler } from 'react-router-dom'
-import { AppModal } from '../../components/AppModal'
+import React from 'react'
+// import { useLinkClickHandler } from 'react-router-dom'
 import { SaveCredentialsForm } from '../../components/SaveCredentialsForm'
-//import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
-export default function Credentials() {
-    // const [isOpen, setIsOpen] = useState(false)
-    // const navigate = useNavigate()
-    // const onClick = useLinkClickHandler('/credentials')
-    // useEffect(() => {
-    //     setIsOpen(true)
-    // }, [onClick, setIsOpen])
+export default function Credentials (): JSX.Element {
+  // const [isOpen, setIsOpen] = useState(false)
+  // const navigate = useNavigate()
+  // const onClick = useLinkClickHandler('/credentials')
+  // useEffect(() => {
+  //     setIsOpen(true)
+  // }, [onClick, setIsOpen])
 
-    // const handleClose = () => {
-    //     setIsOpen(false)
-    //     navigate('/')
-    // }
+  // const handleClose = () => {
+  //     setIsOpen(false)
+  //     navigate('/')
+  // }
 
-    return (
-        <>
-            <AppModal isOpen={false} handleClose={()=>{}}>
-                <SaveCredentialsForm />
-            </AppModal>
-        </>
-    )
+  return (
+    <>
+      <SaveCredentialsForm />
+    </>
+  )
 }

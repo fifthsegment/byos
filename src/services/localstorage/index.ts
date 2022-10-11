@@ -1,44 +1,46 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 export const ApplicationStorageKey = 'byos/application'
 export const DomainStorageKey = 'byos/domain'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const storeData = async (value: any) => {
-    try {
-        await AsyncStorage.setItem(ApplicationStorageKey, JSON.stringify(value))
-    } catch (e) {
-        // saving error
-    }
+const storeData: (value: any) => Promise<void> = async (value: any) => {
+  try {
+    await AsyncStorage.setItem(ApplicationStorageKey, JSON.stringify(value))
+  } catch (e) {
+    // saving error
+  }
 }
 
-const getData = async () => {
-    try {
-        const value = await AsyncStorage.getItem(ApplicationStorageKey)
-        if (value !== null) {
-            // value previously stored
-            return value;
-        }
-    } catch (e) {
-        // error reading value
+const getData: () => Promise<string> = async () => {
+  try {
+    const value = await AsyncStorage.getItem(ApplicationStorageKey)
+    if (value !== null) {
+      // value previously stored
+      return value
     }
-    return ""
+  } catch (e) {
+    // error reading value
+  }
+  return ''
 }
 
-const parseJson = (jsonString: string) => {
-    try {
-        return JSON.parse(jsonString)
-    } catch (error) {
-        return {}
-    }
+const parseJson: (jsonString: string) => any = (jsonString: string) => {
+  try {
+    return JSON.parse(jsonString)
+  } catch (error) {
+    return {}
+  }
 }
 
-export const getApplicationStateLS = async (defaultValue: string = '{}') => {
-    const value = await getData();
-    if (value) {
-        return parseJson(value)
-    }
-    return parseJson(defaultValue)
+export const getApplicationStateLS: (defaultValue: string) => Promise<any> = async (defaultValue: string = '{}') => {
+  const value = await getData()
+  if (value) {
+    return parseJson(value)
+  }
+  return parseJson(defaultValue)
 }
 
-export const setApplicationStateLS = (value: any) => {
-    storeData(value);
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+export const setApplicationStateLS: (value: Object) => void = async (value: any) => {
+  await storeData(value)
+  return null
 }

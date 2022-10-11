@@ -1,3 +1,3 @@
-import { createContext } from "react";
+import { createContext } from 'react'
 
-export const RoutingContext = createContext(Object.create(null));
+export const RoutingContext = createContext(Object.create(null))

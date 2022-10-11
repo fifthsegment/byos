@@ -1,7 +1,5 @@
-import React from 'react';
-
 const config = {
-    useAzureLogin: false
-};
+  useAzureLogin: false
+}
 
-export default config; 
+export default config
