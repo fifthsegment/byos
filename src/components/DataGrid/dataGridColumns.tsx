@@ -37,7 +37,7 @@ const iconType = (asset: Asset): JSX.Element => {
                 <Feather
                     name="file-text"
                     color="#6565d6"
-                    size={24}
+                    size={22}
                     style={styles.icon}
                 />
       )
@@ -46,7 +46,7 @@ const iconType = (asset: Asset): JSX.Element => {
                 <Feather
                     name="file"
                     color="#6565d6"
-                    size={24}
+                    size={22}
                     style={styles.icon}
                 />
       )
