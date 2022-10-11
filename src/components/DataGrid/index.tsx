@@ -1,34 +1,30 @@
-import React, { Fragment, useEffect } from "react";
-import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, } from '@tanstack/react-table'
-import { DataGridColumns } from "./dataGridColumns";
-import { Asset } from "../../services/types";
-import { DataTable, Text } from 'react-native-paper';
-import { ScrollView, View } from "react-native";
+import React, { Fragment, useEffect } from 'react'
+import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
+import { DataGridColumns } from './dataGridColumns'
+import { Asset } from '../../services/types'
+import { DataTable, Text } from 'react-native-paper'
 
-export type DataGridProps = {
-  assets: Asset[] | undefined,
+export interface DataGridProps {
+  assets: Asset[] | undefined
   onPress: (asset: Asset) => void
 }
 
-export const DataGrid = ({ assets, onPress }: DataGridProps) => {
-  const [data, setData] = React.useState(() => assets || [])
+export const DataGrid: (props: DataGridProps) => JSX.Element = ({ assets, onPress }: DataGridProps) => {
+  const [data, setData] = React.useState<Asset[]>(() => assets || [])
   useEffect(() => {
-    setData(assets || []);
+    setData(assets || [])
   }, [assets])
   const table = useReactTable({
     data,
     columns: DataGridColumns(),
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: getPaginationRowModel()
 
   })
 
   useEffect(() => {
-    table.setPageSize(20);
+    table.setPageSize(20)
   }, [])
-
-
-
 
   return (
     <DataTable >
@@ -70,6 +66,5 @@ export const DataGrid = ({ assets, onPress }: DataGridProps) => {
       />
     </DataTable>
 
-
-  );
+  )
 }
