@@ -77,54 +77,59 @@ export const ListAssets: React.FC = () => {
   }
 
   return (
-    <>
-
-      {s3Initialized
-        ? <>
-        <Portal hostName="Reloader">
-          <IconButton
-            animated={true}
-            icon="reload"
-            onPress={() => {
-              setRerun(`${Math.random()}`)
-            }}
-          />
-        </Portal>
-        <Portal hostName="Back">
-          {dataQuery.Prefix?.length > 0 && (
-            <IconButton
-              icon="arrow-left"
-              onPress={() => {
-                goBack()
-              }}
-            />
-
-          )}
-        </Portal>
-        <Text variant="bodyLarge" style={styles.path}>
-          {`Bucket Root /${dataQuery.Prefix}`}
-        </Text>
-        {isLoading && <ActivityIndicator animating={true} />}
-        {isError && <Text variant="headlineSmall">Error </Text>}
-        <AnimatedFAB
-          icon={'plus'}
-          label={'Label'}
-          extended={isExtended}
-          onPress={() => console.log('Pressed')}
-          visible={true}
-          animateFrom={'right'}
-          iconMode={'static'}
-          style={[styles.fabStyle]}
-        />
-        <ScrollView>
-          {(data != null) && !isLoading && (
-            <DataGrid assets={data} onPress={onPress} />
-          )}
-        </ScrollView>
-      </>
-        : <Card style={styles.errorMessage}>
-          <Text>S3 Client has not been initialized, please update your API Configuration first.</Text>
-        </Card>}
-    </>
+        <>
+            {s3Initialized
+              ? (
+                <>
+                    <Portal hostName="Reloader">
+                        <IconButton
+                            animated={true}
+                            icon="reload"
+                            onPress={() => {
+                              setRerun(`${Math.random()}`)
+                            }}
+                        />
+                    </Portal>
+                    <Portal hostName="Back">
+                        {dataQuery.Prefix?.length > 0 && (
+                            <IconButton
+                                icon="arrow-left"
+                                onPress={() => {
+                                  goBack()
+                                }}
+                            />
+                        )}
+                    </Portal>
+                    <Text variant="bodyLarge" style={styles.path}>
+                        {`Bucket Root /${dataQuery.Prefix}`}
+                    </Text>
+                    {isLoading && <ActivityIndicator animating={true} />}
+                    {isError && <Text variant="headlineSmall">Error </Text>}
+                    <AnimatedFAB
+                        icon={'plus'}
+                        label={'Label'}
+                        extended={isExtended}
+                        onPress={() => console.log('Pressed')}
+                        visible={true}
+                        animateFrom={'right'}
+                        iconMode={'static'}
+                        style={[styles.fabStyle]}
+                    />
+                    <ScrollView>
+                        {data != null && !isLoading && (
+                            <DataGrid assets={data} onPress={onPress} />
+                        )}
+                    </ScrollView>
+                </>
+                )
+              : (
+                <Card style={styles.errorMessage}>
+                    <Text>
+                        S3 Client has not been initialized, please update your
+                        API Configuration first.
+                    </Text>
+                </Card>
+                )}
+        </>
   )
 }
