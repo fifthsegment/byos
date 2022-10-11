@@ -7,12 +7,14 @@ import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client'
 import { DataGrid } from '../DataGrid'
 import { ScrollView, StyleSheet } from 'react-native'
+
 import {
   Text,
   ActivityIndicator,
-  AnimatedFAB
+  AnimatedFAB,
+  IconButton,
+  Card
 } from 'react-native-paper'
-import { Button } from '../Button'
 import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
 import { Portal } from '@gorhom/portal'
@@ -26,6 +28,10 @@ const styles = StyleSheet.create({
     right: 16,
     position: 'absolute',
     zIndex: 1
+  },
+  errorMessage: {
+    margin: 12,
+    padding: 10
   }
 })
 
@@ -41,7 +47,6 @@ export const ListAssets: React.FC = () => {
   })
   useEffect(() => {
     setDataQuery({ ...dataQuery, Bucket: appState.s3credentials.bucket })
-    console.log('Current app state= ', appState)
   }, [appState, s3client])
 
   const { data, isLoading, isError } = useGetAssets(
@@ -73,48 +78,53 @@ export const ListAssets: React.FC = () => {
 
   return (
     <>
-      <Portal hostName="Reloader">
-        <Button
-          onPress={() => {
-            setRerun(`${Math.random()}`)
-          }}
-          mode="outlined"
-        >
-          Reload
-        </Button>
-      </Portal>
-      <Portal hostName="Back">
-        {dataQuery.Prefix?.length > 0 && (
-          <Button
+
+      {s3Initialized
+        ? <>
+        <Portal hostName="Reloader">
+          <IconButton
+            animated={true}
+            icon="reload"
             onPress={() => {
-              goBack()
+              setRerun(`${Math.random()}`)
             }}
-            mode="outlined"
-          >
-            Go back
-          </Button>
-        )}
-      </Portal>
-      <Text variant="bodyLarge" style={styles.path}>
-        {`Bucket Root /${dataQuery.Prefix}`}
-      </Text>
-      {isLoading && <ActivityIndicator animating={true} />}
-      {isError && <Text variant="headlineSmall">Error </Text>}
-      <AnimatedFAB
-        icon={'plus'}
-        label={'Label'}
-        extended={isExtended}
-        onPress={() => console.log('Pressed')}
-        visible={true}
-        animateFrom={'right'}
-        iconMode={'static'}
-        style={[styles.fabStyle]}
-      />
-      <ScrollView>
-        {(data != null) && !isLoading && (
-          <DataGrid assets={data} onPress={onPress} />
-        )}
-      </ScrollView>
+          />
+        </Portal>
+        <Portal hostName="Back">
+          {dataQuery.Prefix?.length > 0 && (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => {
+                goBack()
+              }}
+            />
+
+          )}
+        </Portal>
+        <Text variant="bodyLarge" style={styles.path}>
+          {`Bucket Root /${dataQuery.Prefix}`}
+        </Text>
+        {isLoading && <ActivityIndicator animating={true} />}
+        {isError && <Text variant="headlineSmall">Error </Text>}
+        <AnimatedFAB
+          icon={'plus'}
+          label={'Label'}
+          extended={isExtended}
+          onPress={() => console.log('Pressed')}
+          visible={true}
+          animateFrom={'right'}
+          iconMode={'static'}
+          style={[styles.fabStyle]}
+        />
+        <ScrollView>
+          {(data != null) && !isLoading && (
+            <DataGrid assets={data} onPress={onPress} />
+          )}
+        </ScrollView>
+      </>
+        : <Card style={styles.errorMessage}>
+          <Text>S3 Client has not been initialized, please update your API Configuration first.</Text>
+        </Card>}
     </>
   )
 }

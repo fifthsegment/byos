@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-import { Text, Card, Surface, Snackbar } from 'react-native-paper'
+import { Text, Card, Snackbar } from 'react-native-paper'
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
-import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { S3Client } from '@aws-sdk/client-s3'
 
 export const SaveCredentialsForm: React.FC = () => {
@@ -34,8 +34,8 @@ export const SaveCredentialsForm: React.FC = () => {
       setSaved(false)
     }, 1000)
     /**
-     * Build the s3 client here
-     */
+         * Build the s3 client here
+         */
     const s3Client: S3Client = buildS3Client({
       credentials: {
         accessKeyId: data.apiKey,
@@ -81,71 +81,64 @@ export const SaveCredentialsForm: React.FC = () => {
   })
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-      >
-        <Surface style={styles.inner}>
-          <Card>
-            <Card.Content>
-              <Text variant="headlineSmall">API Configuration</Text>
-              <InputField
-                control={control}
-                name="apiKey"
-                label="API KEY"
-              />
-
-              <InputField
-                control={control}
-                name="apiSecret"
-                label="Api Secret"
-              />
-
-              <InputField
-                control={control}
-                name="endpoint"
-                label="Endpoint"
-              />
-
-              <InputField
-                control={control}
-                name="bucket"
-                label="Bucket"
-              />
-
-              <InputField
-                control={control}
-                name="region"
-                label="Region"
-              />
-
-            </Card.Content>
-            <Card.Actions>
-              <Button onPress={() => handleSubmit(onSubmit)}>Submit</Button>
-            </Card.Actions>
-          </Card>
-        </Surface>
-      </KeyboardAvoidingView>
-
-      <View style={styles.snackBarContainer}>
-        <Snackbar
-          visible={visible}
-          onDismiss={onDismissSnackBar}
-          action={{
-            label: 'Dismiss',
-            onPress: () => {
-              // Do something
-            }
-          }}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
         >
+            <Card>
+                <Card.Content>
+                    <Text variant="headlineSmall">API Configuration</Text>
+                    <InputField
+                        control={control}
+                        name="apiKey"
+                        label="API KEY"
+                    />
 
-          Credentials are saved!
+                    <InputField
+                        control={control}
+                        name="apiSecret"
+                        label="Api Secret"
+                    />
 
-          {/* {saved ? <Text>Credentials are saved!</Text> : <Text>Credentials not saved!</Text>} */}
-        </Snackbar>
-      </View>
+                    <InputField
+                        control={control}
+                        name="endpoint"
+                        label="Endpoint"
+                    />
 
-    </ScrollView>
+                    <InputField
+                        control={control}
+                        name="bucket"
+                        label="Bucket"
+                    />
+
+                    <InputField
+                        control={control}
+                        name="region"
+                        label="Region"
+                    />
+
+                </Card.Content>
+                <Card.Actions>
+                    <Button onPress={() => handleSubmit(onSubmit)}>Submit</Button>
+                </Card.Actions>
+            </Card>
+            <View style={styles.snackBarContainer}>
+                <Snackbar
+                    visible={visible}
+                    onDismiss={onDismissSnackBar}
+                    action={{
+                      label: 'Dismiss',
+                      onPress: () => {
+                        // Do something
+                      }
+                    }}
+                >
+
+                    Credentials are saved!
+
+                </Snackbar>
+            </View>
+        </KeyboardAvoidingView>
   )
 }
