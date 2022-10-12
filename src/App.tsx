@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 // import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InternalRouteDef } from './routes'
 // import { Link } from 'react-router-dom'
@@ -12,7 +11,6 @@ import {
     getApplicationStateLS,
     setApplicationStateLS,
 } from './services/localstorage' */
-
 import { Provider as PaperProvider } from 'react-native-paper'
 import Header from './components/Header'
 import MobileNavigation from './components/MobileNavigation'
@@ -55,7 +53,6 @@ function App (): JSX.Element {
                 null
               )
             })}
-
           <Header title="BYOS" />
           <MobileNavigation />
 

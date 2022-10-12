@@ -22,6 +22,7 @@ export const SaveCredentialsForm: React.FC = () => {
   const [, setSaved] = useState(false)
 
   const onSubmit = (): void => {
+    console.log('Submitting form')
     onToggleSnackBar()
     const data = getValues()
     setAppState({
@@ -81,64 +82,65 @@ export const SaveCredentialsForm: React.FC = () => {
   })
 
   return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <Card>
+        <Card.Content>
+          <Text variant="headlineSmall">API Configuration</Text>
+          <InputField
+            control={control}
+            name="apiKey"
+            label="API KEY"
+          />
+
+          <InputField
+            control={control}
+            name="apiSecret"
+            label="Api Secret"
+          />
+
+          <InputField
+            control={control}
+            name="endpoint"
+            label="Endpoint"
+          />
+
+          <InputField
+            control={control}
+            name="bucket"
+            label="Bucket"
+          />
+
+          <InputField
+            control={control}
+            name="region"
+            label="Region"
+          />
+
+        </Card.Content>
+        <Card.Actions>
+          {/* eslint-disable-next-line */}
+          <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+        </Card.Actions>
+      </Card>
+      <View style={styles.snackBarContainer}>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Dismiss',
+            onPress: () => {
+              // Do something
+            }
+          }}
         >
-            <Card>
-                <Card.Content>
-                    <Text variant="headlineSmall">API Configuration</Text>
-                    <InputField
-                        control={control}
-                        name="apiKey"
-                        label="API KEY"
-                    />
 
-                    <InputField
-                        control={control}
-                        name="apiSecret"
-                        label="Api Secret"
-                    />
+          Credentials are saved!
 
-                    <InputField
-                        control={control}
-                        name="endpoint"
-                        label="Endpoint"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="bucket"
-                        label="Bucket"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="region"
-                        label="Region"
-                    />
-
-                </Card.Content>
-                <Card.Actions>
-                    <Button onPress={() => handleSubmit(onSubmit)}>Submit</Button>
-                </Card.Actions>
-            </Card>
-            <View style={styles.snackBarContainer}>
-                <Snackbar
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                      label: 'Dismiss',
-                      onPress: () => {
-                        // Do something
-                      }
-                    }}
-                >
-
-                    Credentials are saved!
-
-                </Snackbar>
-            </View>
-        </KeyboardAvoidingView>
+        </Snackbar>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
