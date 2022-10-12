@@ -85,39 +85,38 @@ export const ListAssets: React.FC = () => {
 
             )}
           </Portal>
-          <ScrollView>
-            <View style={styles.root}>
+
+          <View style={styles.root}>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
               <View style={styles.section1}>
-                <ScrollView >
-                  <Text variant="bodyLarge" style={styles.path}>
-                    {`Bucket Root /${dataQuery.Prefix}`}
-                  </Text>
-                  {isLoading && <ActivityIndicator animating={true} />}
-                  {isError && <Text variant="headlineSmall">Error </Text>}
-                  <AnimatedFAB
-                    icon={'plus'}
-                    label={'Label'}
-                    extended={isExtended}
-                    onPress={() => console.log('Pressed')}
-                    visible={true}
-                    animateFrom={'right'}
-                    iconMode={'static'}
-                    style={[styles.fabStyle]}
-                  />
-                  {(data != null) && !isLoading && (
-                    <DataGrid assets={data} onPress={onPress} />
-                  )}
-                </ScrollView>
+                <Text variant="bodyLarge" style={styles.path}>
+                  {`Bucket Root /${dataQuery.Prefix}`}
+                </Text>
+                {isLoading && <ActivityIndicator animating={true} />}
+                {isError && <Text variant="headlineSmall">Error </Text>}
+                <AnimatedFAB
+                  icon={'plus'}
+                  label={'Label'}
+                  extended={isExtended}
+                  onPress={() => console.log('Pressed')}
+                  visible={true}
+                  animateFrom={'right'}
+                  iconMode={'static'}
+                  style={[styles.fabStyle]}
+                />
+                {(data != null) && !isLoading && (
+                  <DataGrid assets={data} onPress={onPress} />
+                )}
               </View>
-              <Block hidden={['xs', 'md']}>
-                <View style={styles.section2}>
-                  <Text variant="bodyLarge" style={styles.path}>
-                    {'Preview pane'}
-                  </Text>
-                </View>
-              </Block>
-            </View>
-          </ScrollView>
+            </ScrollView>
+            <Block hidden={['xs', 'md']}>
+              <View style={styles.section2}>
+                <Text variant="bodyLarge" style={styles.path}>
+                  {'Preview pane'}
+                </Text>
+              </View>
+            </Block>
+          </View>
 
         </>
         : <Card style={styles.errorMessage}>
@@ -144,16 +143,19 @@ const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
     display: 'flex',
+    flex: 1,
     flexGrow: 1
   },
   section1: {
     flex: 3,
     borderColor: 'gray',
-    borderRightWidth: 2
+    borderRightWidth: 2,
+    flexDirection: 'column'
   },
   section2: {
     minWidth: '30vw',
     flex: 1,
-    backgroundColor: 'skyblue'
+    backgroundColor: 'skyblue',
+    flexGrow: 1
   }
 })
