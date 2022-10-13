@@ -3,9 +3,9 @@ import { StyleSheet, View } from 'react-native'
 import {
   Text,
   ActivityIndicator,
-  AnimatedFAB,
   IconButton,
-  Card
+  Card,
+  FAB
 } from 'react-native-paper'
 import { Portal } from '@gorhom/portal'
 import {
@@ -19,9 +19,10 @@ import { DataGrid } from '../DataGrid'
 import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
 import { Block } from '../../services/rn-responsive-design'
+import AppModal from '../Modal'
 
 export const ListAssets: React.FC = () => {
-  const [isExtended] = React.useState(false)
+  const [isExtended, setIsExtended] = React.useState(false)
   const [rerun, setRerun] = useState('')
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
@@ -60,18 +61,17 @@ export const ListAssets: React.FC = () => {
       setPrefix(newPrefix)
     }
   }
-
-  return (
+  /* eslint-disable */
+    return (
         <>
-            {s3Initialized
-              ? (
+            {s3Initialized ? (
                 <>
                     <Portal hostName="Reloader">
                         <IconButton
                             animated
                             icon="reload"
                             onPress={() => {
-                              setRerun(`${Math.random()}`)
+                                setRerun(`${Math.random()}`)
                             }}
                         />
                     </Portal>
@@ -80,7 +80,7 @@ export const ListAssets: React.FC = () => {
                             <IconButton
                                 icon="arrow-left"
                                 onPress={() => {
-                                  goBack()
+                                    goBack()
                                 }}
                             />
                         )}
@@ -89,25 +89,30 @@ export const ListAssets: React.FC = () => {
                         <View style={styles.section1}>
                             <Text variant="bodyLarge" style={styles.path}>
                                 {`Bucket Root /${dataQuery.Prefix}`}
-                                <AnimatedFAB
-                                    icon="plus"
-                                    label="Label"
-                                    extended={isExtended}
-                                    onPress={() => console.log('Pressed')}
-                                    visible
-                                    animateFrom="right"
-                                    iconMode="static"
-                                    style={[styles.fabStyle]}
-                                />
                             </Text>
+
                             {isLoading && <ActivityIndicator animating />}
                             {isError && (
                                 <Text variant="headlineSmall">Error </Text>
                             )}
-
+                            <AppModal
+                                isVisible={isExtended}
+                                onClose={() => {
+                                    setIsExtended(false)
+                                }}
+                            >
+                                <Text>Upload files here</Text>
+                            </AppModal>
                             {data != null && !isLoading && (
                                 <DataGrid assets={data} onPress={onPress} />
                             )}
+                            <FAB
+                                icon="plus"
+                                onPress={() => setIsExtended(!isExtended)}
+                                visible
+                                style={[styles.fabStyle]}
+                            />
+  
                         </View>
                         <Block hidden={['xs', 'md']}>
                             <View style={styles.section2}>
@@ -118,16 +123,17 @@ export const ListAssets: React.FC = () => {
                         </Block>
                     </View>
                 </>
-                )
-              : (
+            ) : (
                 <Card style={styles.errorMessage}>
                     <Text>
                         S3 Client has not been initialized, please update your
                         API Configuration first.
                     </Text>
                 </Card>
-                )}
+
+            )}
         </>
+        /* eslint-enable */
   )
 }
 
@@ -138,8 +144,7 @@ const styles = StyleSheet.create({
   fabStyle: {
     bottom: 45,
     right: 25,
-    position: 'absolute',
-    zIndex: 1
+    position: 'absolute'
   },
   errorMessage: {
     margin: 12,
