@@ -62,7 +62,7 @@ export const ListAssets: React.FC = () => {
   }
 
   return (
-        <View>
+        <>
             {s3Initialized
               ? (
                 <>
@@ -127,7 +127,7 @@ export const ListAssets: React.FC = () => {
                     </Text>
                 </Card>
                 )}
-        </View>
+        </>
   )
 }
 
