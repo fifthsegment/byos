@@ -89,8 +89,6 @@ export const ListAssets: React.FC = () => {
                         <View style={styles.section1}>
                             <Text variant="bodyLarge" style={styles.path}>
                                 {`Bucket Root /${dataQuery.Prefix}`}
-
-                                {/**/}
                             </Text>
 
                             {isLoading && <ActivityIndicator animating />}
@@ -114,6 +112,7 @@ export const ListAssets: React.FC = () => {
                                 visible
                                 style={[styles.fabStyle]}
                             />
+  
                         </View>
                         <Block hidden={['xs', 'md']}>
                             <View style={styles.section2}>
@@ -131,6 +130,7 @@ export const ListAssets: React.FC = () => {
                         API Configuration first.
                     </Text>
                 </Card>
+
             )}
         </>
         /* eslint-enable */
