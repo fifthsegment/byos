@@ -1,4 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import {
+  Text,
+  ActivityIndicator,
+  IconButton,
+  Card,
+  FAB
+} from 'react-native-paper'
+import { Portal } from '@gorhom/portal'
 import {
   ApplicationContext,
   ApplicationContextType
@@ -6,31 +15,14 @@ import {
 import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client'
 import { DataGrid } from '../DataGrid'
-import { ScrollView, StyleSheet } from 'react-native'
-import {
-  Text,
-  ActivityIndicator,
-  AnimatedFAB
-} from 'react-native-paper'
-import { Button } from '../Button'
+
 import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
-import { Portal } from '@gorhom/portal'
-
-const styles = StyleSheet.create({
-  path: {
-    margin: 10
-  },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: 'absolute',
-    zIndex: 1
-  }
-})
+import { Block } from '../../services/rn-responsive-design'
+import AppModal from '../Modal'
 
 export const ListAssets: React.FC = () => {
-  const [isExtended] = React.useState(false)
+  const [isExtended, setIsExtended] = React.useState(false)
   const [rerun, setRerun] = useState('')
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
@@ -41,7 +33,6 @@ export const ListAssets: React.FC = () => {
   })
   useEffect(() => {
     setDataQuery({ ...dataQuery, Bucket: appState.s3credentials.bucket })
-    console.log('Current app state= ', appState)
   }, [appState, s3client])
 
   const { data, isLoading, isError } = useGetAssets(
@@ -70,51 +61,109 @@ export const ListAssets: React.FC = () => {
       setPrefix(newPrefix)
     }
   }
-
-  return (
-    <>
-      <Portal hostName="Reloader">
-        <Button
-          onPress={() => {
-            setRerun(`${Math.random()}`)
-          }}
-          mode="outlined"
-        >
-          Reload
-        </Button>
-      </Portal>
-      <Portal hostName="Back">
-        {dataQuery.Prefix?.length > 0 && (
-          <Button
-            onPress={() => {
-              goBack()
-            }}
-            mode="outlined"
-          >
-            Go back
-          </Button>
-        )}
-      </Portal>
-      <Text variant="bodyLarge" style={styles.path}>
-        {`Bucket Root /${dataQuery.Prefix}`}
-      </Text>
-      {isLoading && <ActivityIndicator animating={true} />}
-      {isError && <Text variant="headlineSmall">Error </Text>}
-      <AnimatedFAB
-        icon={'plus'}
-        label={'Label'}
-        extended={isExtended}
-        onPress={() => console.log('Pressed')}
-        visible={true}
-        animateFrom={'right'}
-        iconMode={'static'}
-        style={[styles.fabStyle]}
-      />
-      <ScrollView>
-        {(data != null) && !isLoading && (
-          <DataGrid assets={data} onPress={onPress} />
-        )}
-      </ScrollView>
-    </>
+  /* eslint-disable */
+    return (
+        <>
+            {s3Initialized ? (
+                <>
+                    <Portal hostName="Reloader">
+                        <IconButton
+                            animated
+                            icon="reload"
+                            onPress={() => {
+                                setRerun(`${Math.random()}`)
+                            }}
+                        />
+                    </Portal>
+                    <Portal hostName="Back">
+                        {dataQuery.Prefix?.length > 0 && (
+                            <IconButton
+                                icon="arrow-left"
+                                onPress={() => {
+                                    goBack()
+                                }}
+                            />
+                        )}
+                    </Portal>
+                    <View style={styles.root}>
+                        <View style={styles.section1}>
+                            <Text variant="bodyLarge" style={styles.path}>
+                                {`Bucket Root /${dataQuery.Prefix}`}
+                            </Text>
+                            {isLoading && <ActivityIndicator animating />}
+                            {isError && (
+                                <Text variant="headlineSmall">Error </Text>
+                            )}
+                            <AppModal
+                                isVisible={isExtended}
+                                onClose={() => {
+                                    setIsExtended(false)
+                                }}
+                            >
+                                <Text>Upload files here</Text>
+                            </AppModal>
+                            {data != null && !isLoading && (
+                                <DataGrid assets={data} onPress={onPress} />
+                            )}
+                            <FAB
+                                icon="plus"
+                                onPress={() => setIsExtended(!isExtended)}
+                                visible
+                                style={[styles.fabStyle]}
+                            />
+  
+                        </View>
+                        <Block hidden={['xs', 'md']}>
+                            <View style={styles.section2}>
+                                <Text variant="bodyLarge" style={styles.path}>
+                                    Preview pane
+                                </Text>
+                            </View>
+                        </Block>
+                    </View>
+                </>
+            ) : (
+                <Card style={styles.errorMessage}>
+                    <Text>
+                        S3 Client has not been initialized, please update your
+                        API Configuration first.
+                    </Text>
+                </Card>
+            )}
+        </>
+        /* eslint-enable */
   )
 }
+
+const styles = StyleSheet.create({
+  path: {
+    margin: 10
+  },
+  fabStyle: {
+    bottom: 45,
+    right: 25,
+    position: 'absolute'
+  },
+  errorMessage: {
+    margin: 12,
+    padding: 10
+  },
+  root: {
+    flexDirection: 'row',
+    display: 'flex',
+    flex: 1,
+    flexGrow: 1
+  },
+  section1: {
+    flex: 3,
+    borderColor: 'gray',
+    borderRightWidth: 2,
+    flexDirection: 'column'
+  },
+  section2: {
+    minWidth: '30vw',
+    flex: 1,
+    backgroundColor: 'skyblue',
+    flexGrow: 1
+  }
+})
