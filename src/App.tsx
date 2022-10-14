@@ -17,6 +17,7 @@ import MobileNavigation from './components/MobileNavigation'
 import { setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
 import { PortalProvider } from '@gorhom/portal'
+import { theme } from './theme'
 
 function App (): JSX.Element {
   const [routingState] = React.useContext(RoutingContext)
@@ -44,7 +45,7 @@ function App (): JSX.Element {
   }, [applicationStateData, isLoaded])
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <PortalProvider>
         <ApplicationContext.Provider value={applicationState}>
           {routingState.isReady &&
