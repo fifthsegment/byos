@@ -1,12 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import {
-  Text,
-  ActivityIndicator,
-  IconButton,
-  Card,
-  FAB
-} from 'react-native-paper'
+import { Ionicons } from '@expo/vector-icons'
+import { Text, IconButton, Card, FAB } from 'react-native-paper'
 import { Portal } from '@gorhom/portal'
 import {
   ApplicationContext,
@@ -20,6 +15,7 @@ import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
 import { Block } from '../../services/rn-responsive-design'
 import AppModal from '../Modal'
+import { TextLink } from '../TextLink'
 
 export const ListAssets: React.FC = () => {
   const [isExtended, setIsExtended] = React.useState(false)
@@ -61,6 +57,37 @@ export const ListAssets: React.FC = () => {
       setPrefix(newPrefix)
     }
   }
+
+  const goToPrefixByIndex = (index: number): void => {
+    const dirPathArray = dataQuery.Prefix?.split('/')
+    const newPrefix = `${dirPathArray.slice(0, index).join('/')}/`
+    setPrefix(newPrefix === '/' ? '' : newPrefix)
+  }
+
+  const dirPathArray = ['bucket', ...dataQuery.Prefix?.split('/')]
+  const dirPath = dirPathArray.map((item, index) => {
+    const isLastFragment = index === dirPathArray?.length - 1
+    return (
+            <TextLink
+                key={`dirPath${index}`}
+                isUnderlined={!isLastFragment}
+                onPress={() => {
+                  goToPrefixByIndex(index)
+                }}
+            >
+                /
+                {!isLastFragment && (
+                    <Ionicons
+                        name="folder-open-outline"
+                        color="#ffbd43"
+                        size={22}
+                    />
+                )}
+                {item}
+            </TextLink>
+    )
+  })
+
   /* eslint-disable */
     return (
         <>
@@ -87,14 +114,12 @@ export const ListAssets: React.FC = () => {
                     </Portal>
                     <View style={styles.root}>
                         <View style={styles.section1}>
-                            <Text variant="bodyLarge" style={styles.path}>
-                                {`Bucket Root /${dataQuery.Prefix}`}
-                            </Text>
-
-                            {isLoading && <ActivityIndicator animating />}
                             {isError && (
                                 <Text variant="headlineSmall">Error </Text>
                             )}
+                            <Text variant="bodyMedium" style={styles.path}>
+                                {dirPath}
+                            </Text>
                             <AppModal
                                 isVisible={isExtended}
                                 onClose={() => {
@@ -103,16 +128,19 @@ export const ListAssets: React.FC = () => {
                             >
                                 <Text>Upload files here</Text>
                             </AppModal>
-                            {data != null && !isLoading && (
-                                <DataGrid assets={data} onPress={onPress} />
-                            )}
+
+                            <DataGrid
+                                assets={data}
+                                onPress={onPress}
+                                isLoading={isLoading}
+                            />
+
                             <FAB
                                 icon="plus"
                                 onPress={() => setIsExtended(!isExtended)}
                                 visible
                                 style={[styles.fabStyle]}
                             />
-  
                         </View>
                         <Block hidden={['xs', 'md']}>
                             <View style={styles.section2}>
@@ -130,7 +158,6 @@ export const ListAssets: React.FC = () => {
                         API Configuration first.
                     </Text>
                 </Card>
-
             )}
         </>
         /* eslint-enable */

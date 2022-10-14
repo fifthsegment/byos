@@ -8,10 +8,8 @@ import { Asset } from '../services/types'
 export const useGetAssets = (client: S3Client, clientInitialized: boolean, params: GetAssetArgs, rerun: string = ''): UseQueryResult<Asset[], unknown> => {
   const queryResponse = useQuery(['getAssets', rerun, params.Bucket || '', params.Delimiter || '', params.Prefix || ''], async () => {
     try {
-      console.log('[useGetAssets] Getting data with params = ', params)
       const data = await getAssets(client, params)
       const assets = S3TypeToInternalAdapter(data, params)
-      console.log('[useGetAssets] Assets = ', assets)
       return assets
     } catch (error) {
       console.log('[useGetAssets] Error : ', error)

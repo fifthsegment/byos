@@ -11,6 +11,9 @@ const AppModal = ({
   onClose,
   children
 }: React.PropsWithChildren<ModalProps>): JSX.Element => {
+  if (!isVisible) {
+    return null
+  }
   return (
         <View style={styles.centeredView}>
             <Modal
