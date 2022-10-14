@@ -90,7 +90,6 @@ export const ListAssets: React.FC = () => {
                             <Text variant="bodyLarge" style={styles.path}>
                                 {`Bucket Root /${dataQuery.Prefix}`}
                             </Text>
-
                             {isLoading && <ActivityIndicator animating />}
                             {isError && (
                                 <Text variant="headlineSmall">Error </Text>
@@ -130,7 +129,6 @@ export const ListAssets: React.FC = () => {
                         API Configuration first.
                     </Text>
                 </Card>
-
             )}
         </>
         /* eslint-enable */
