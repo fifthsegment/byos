@@ -6,11 +6,9 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { DataTable, Text } from 'react-native-paper'
-import { ScrollView } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { DataGridColumns } from './dataGridColumns'
 import { Asset } from '../../services/types'
-import { DataTable, Text } from 'react-native-paper'
-import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   cell: {
@@ -56,7 +54,14 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                 {table.getHeaderGroups().map((headerGroup) => (
                     <Fragment key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
-                            <DataTable.Title key={header.id} style={index === 0 ? styles.cellFirstChild : styles.cell}>
+                            <DataTable.Title
+                                key={header.id}
+                                style={
+                                    index === 0
+                                      ? styles.cellFirstChild
+                                      : styles.cell
+                                }
+                            >
                                 <Text>
                                     {header.isPlaceholder
                                       ? null
@@ -80,7 +85,14 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                             }}
                         >
                             {row.getVisibleCells().map((cell) => (
-                                <DataTable.Cell key={cell.id} style={index === 0 ? styles.cellFirstChild : styles.cell}>
+                                <DataTable.Cell
+                                    key={cell.id}
+                                    style={
+                                        index === 0
+                                          ? styles.cellFirstChild
+                                          : styles.cell
+                                    }
+                                >
                                     <Text>
                                         {flexRender(
                                           cell.column.columnDef.cell,
