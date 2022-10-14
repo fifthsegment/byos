@@ -5,15 +5,15 @@ import { Asset } from '../../services/types'
 import prettyBytes from 'pretty-bytes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { MaterialIcons, Feather } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { Platform, StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
 
 dayjs.extend(relativeTime)
 
 const styles = StyleSheet.create({
-  icon: {
-    marginRight: '6px'
-  }
+  icon: {},
+  filename: {}
 })
 
 // icons for different file types or folders
@@ -22,13 +22,14 @@ const iconType = (asset: Asset): JSX.Element => {
   const internalType = asset.isFolder
     ? 'folder'
     : re.exec(asset.fileName)[1] || ''
+
   switch (internalType) {
     case 'folder':
       return (
-                <MaterialIcons
+                <Feather
                     name="folder"
                     color="#ffbd43"
-                    size={24}
+                    size={22}
                     style={styles.icon}
                 />
       )
@@ -67,7 +68,10 @@ export const DataGridColumns: any = () => {
           : info.getValue()
         return (
                     <>
-                        {iconType(row)} {fileName}
+                        <Text variant="bodyLarge" style={styles.filename}>
+                            {iconType(row)} &nbsp;
+                            {fileName}
+                        </Text>
                     </>
         )
       }
@@ -77,8 +81,12 @@ export const DataGridColumns: any = () => {
     columnHelper.accessor('fileSize', {
       id: 'fileSize',
       header: 'Size',
-      cell: (info) =>
-        !info.row.original.isFolder && prettyBytes(info.getValue())
+      cell: (info) => (
+                <Text>
+                    {!info.row.original.isFolder &&
+                        prettyBytes(info.getValue())}
+                </Text>
+      )
     }),
 
     // Dispaly last modified
@@ -87,8 +95,10 @@ export const DataGridColumns: any = () => {
       header: 'Last Modified',
       cell: (info) => {
         return (
-          !info.row.original.isFolder &&
-                    dayjs(info.getValue()).fromNow()
+                    <Text>
+                        {!info.row.original.isFolder &&
+                            dayjs(info.getValue()).fromNow()}
+                    </Text>
         )
       }
     }),

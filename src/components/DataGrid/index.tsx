@@ -93,12 +93,10 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                                           : styles.cell
                                     }
                                 >
-                                    <Text>
-                                        {flexRender(
-                                          cell.column.columnDef.cell,
-                                          cell.getContext()
-                                        )}
-                                    </Text>
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext()
+                                    )}
                                 </DataTable.Cell>
                             ))}
                         </DataTable.Row>
