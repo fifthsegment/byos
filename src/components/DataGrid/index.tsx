@@ -1,11 +1,11 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { DataTable, Text } from 'react-native-paper'
+import { ActivityIndicator, DataTable, Text } from 'react-native-paper'
 import { ScrollView, StyleSheet } from 'react-native'
 import { DataGridColumns } from './dataGridColumns'
 import { Asset } from '../../services/types'
@@ -27,15 +27,19 @@ const styles = StyleSheet.create({
 export interface DataGridProps {
   assets: Asset[] | undefined
   onPress: (asset: Asset) => void
+  isLoading: boolean
 }
 
 export const DataGrid: (props: DataGridProps) => JSX.Element = ({
   assets,
-  onPress
+  onPress,
+  isLoading
 }: DataGridProps) => {
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
+  const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
     setData(assets || [])
+    setCurrentPage(1)
   }, [assets])
   const table = useReactTable({
     data,
@@ -45,15 +49,29 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
   })
 
   useEffect(() => {
-    table.setPageSize(20)
-  }, [])
+    table.setPageSize(20 * currentPage)
+  }, [currentPage])
+
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }): boolean => {
+    const paddingToBottom = 20
+    return (
+    /* eslint-disable */
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom
+            /* eslint-enable */
+    )
+  }
 
   return (
         <>
             <DataTable.Header>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <Fragment key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => (
+                        {headerGroup.headers.map((header, index) => (
                             <DataTable.Title
                                 key={header.id}
                                 style={
@@ -75,8 +93,17 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                     </Fragment>
                 ))}
             </DataTable.Header>
-            <ScrollView>
+            <ScrollView
+                onScroll={({ nativeEvent }) => {
+                  if (isCloseToBottom(nativeEvent)) {
+                    console.log('[Scroll] Scroll close to bottom')
+                    setCurrentPage(currentPage + 1)
+                    // table.setPageSize(20 * 2)
+                  }
+                }}
+            >
                 <DataTable>
+                    {isLoading && <ActivityIndicator animating />}
                     {table.getRowModel().rows.map((row) => (
                         <DataTable.Row
                             key={row.id}
@@ -84,7 +111,7 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                               onPress(row.original)
                             }}
                         >
-                            {row.getVisibleCells().map((cell) => (
+                            {row.getVisibleCells().map((cell, index) => (
                                 <DataTable.Cell
                                     key={cell.id}
                                     style={
@@ -93,12 +120,10 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                                           : styles.cell
                                     }
                                 >
-                                    <Text>
-                                        {flexRender(
-                                          cell.column.columnDef.cell,
-                                          cell.getContext()
-                                        )}
-                                    </Text>
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext()
+                                    )}
                                 </DataTable.Cell>
                             ))}
                         </DataTable.Row>

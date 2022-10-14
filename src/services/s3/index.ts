@@ -38,11 +38,7 @@ export const getAssets: (
   client: S3Client,
   params: GetAssetArgs
 ) => Promise<Asset[] | undefined> = async (client, params) => {
-  console.log('[s3:getAssets] Making a List Objects command')
   const command = new ListObjectsCommand(params)
-  console.log('[s3:getAssets] Command ', command)
-  console.log('[s3:getAssets] Our s3 Client', client)
-  console.log('[s3:getAssets] Sending command using client.send')
 
   const response = await client.send(command)
   const folders: Asset[] =
