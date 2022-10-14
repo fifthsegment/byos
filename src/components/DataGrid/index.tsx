@@ -53,7 +53,7 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
             <DataTable.Header>
                 {table.getHeaderGroups().map((headerGroup) => (
                     <Fragment key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => (
+                        {headerGroup.headers.map((header, index) => (
                             <DataTable.Title
                                 key={header.id}
                                 style={
@@ -84,7 +84,7 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
                               onPress(row.original)
                             }}
                         >
-                            {row.getVisibleCells().map((cell) => (
+                            {row.getVisibleCells().map((cell, index) => (
                                 <DataTable.Cell
                                     key={cell.id}
                                     style={
