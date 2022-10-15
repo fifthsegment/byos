@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Platform } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -57,7 +57,7 @@ function App (): JSX.Element {
             <MobileView />
           </ApplicationContext.Provider>
         </PortalProvider>
-       </ThemeProvider>
+      </ThemeProvider>
     </ThemeContextInternal.Provider>
   )
 }
