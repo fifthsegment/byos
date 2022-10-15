@@ -13,7 +13,8 @@ import { Asset } from '../../services/types'
 const styles = StyleSheet.create({
   cell: {
     flexBasis: 'auto',
-    paddingRight: '30px'
+    minWidth: '105px',
+    paddingRight: '15px'
   },
   cellFirstChild: {
     flexBasis: '78%'
