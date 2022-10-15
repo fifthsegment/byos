@@ -13,9 +13,9 @@ import { DataGrid } from '../DataGrid'
 
 import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
-import { Block } from '../../services/rn-responsive-design'
 import AppModal from '../Modal'
 import { TextLink } from '../TextLink'
+import { Preview } from '../Preview'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
@@ -138,14 +138,10 @@ export const ListAssets: React.FC = () => {
               />
             </View>
             {selectedAsset && (
-              <Block hidden={['xs', 'md']}>
-                <View style={styles.section2}>
-                  <Text variant="bodyLarge" style={styles.path}>
-                    Preview pane
-                    {selectedAsset?.fileName}
-                  </Text>
-                </View>
-              </Block>
+              <Preview
+                onClose={() => setSelectedAsset(undefined)}
+                asset={selectedAsset}
+              />
             )}
           </View>
         </>
@@ -186,11 +182,5 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRightWidth: 2,
     flexDirection: 'column'
-  },
-  section2: {
-    minWidth: '30vw',
-    flex: 1,
-    backgroundColor: 'skyblue',
-    flexGrow: 1
   }
 })

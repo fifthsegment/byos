@@ -15,12 +15,12 @@ import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFrom
 import Dashboard from './pages/dashboard'
 import Credentials from './pages/credentials'
 import { theme } from './theme'
+import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 
 const Stack = createNativeStackNavigator()
 
 function App (): JSX.Element {
-  const [routingState] = React.useContext(RoutingContext)
-
+  const themeState = useState(theme)
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
 
@@ -58,6 +58,12 @@ function App (): JSX.Element {
       </PortalProvider>
     </PaperProvider>
   )
+}
+
+const ThemeProvider = ({ children }: React.PropsWithChildren): JSX.Element => {
+  const [theme] = useContext(ThemeContextInternal)
+  console.log('Current theme = ', theme)
+  return <PaperProvider theme={theme}>{children}</PaperProvider>
 }
 
 export default App
