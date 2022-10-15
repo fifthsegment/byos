@@ -16,7 +16,7 @@ export const buildS3Client = (initializationData: S3Initializer): S3Client => {
     (next, context) => async (args) => {
       // args.request.headers["Custom-Header"] = "value";
       // eslint-disable-next-line
-            // @ts-ignore
+      // @ts-ignore
       // delete args.request.headers["amz-sdk-request"];
       // delete args.request.headers["amz-sdk-invocation-id"];//x-amz-content-sha256
       // delete args.request.headers["x-amz-content-sha256"];
@@ -42,30 +42,36 @@ export const getAssets: (
 
   const response = await client.send(command)
   const folders: Asset[] =
-        (((response.CommonPrefixes?.map((item) => {
-          return {
-            prefix: item.Prefix,
-            etag: undefined,
-            name: item.Prefix,
-            lastModified: undefined,
-            size: 0
-          }
-        })))) || []
+    response.CommonPrefixes?.map((item) => {
+      return {
+        prefix: item.Prefix,
+        etag: undefined,
+        name: item.Prefix,
+        lastModified: undefined,
+        size: 0
+      }
+    }) || []
   const files: Asset[] =
-        (((response.Contents?.map((item) => {
-          return {
-            prefix: '',
-            etag: item.ETag,
-            name: item?.Key,
-            lastModified: item?.LastModified,
-            size: item?.Size
-          }
-        })))) || []
+    response.Contents?.map((item) => {
+      return {
+        prefix: '',
+        etag: item.ETag,
+        name: item?.Key,
+        lastModified: item?.LastModified,
+        size: item?.Size
+      }
+    }) || []
   return [...folders, ...files]
+}
+
+export const updateAsset: (assetId: string) => void = (_assetId) => {
+  /**
+   * Implementation here
+   */
 }
 
 export const deleteAsset: (assetId: string) => void = (_assetId) => {
   /**
-     * Implementation here
-     */
+   * Implementation here
+   */
 }

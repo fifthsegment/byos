@@ -43,10 +43,6 @@ function App (): JSX.Element {
 
   useEffect(() => {
     if (isLoaded) {
-      console.log(
-        '[App] Application state was updated = ',
-        applicationStateData
-      )
       setApplicationStateLS({ ...applicationStateData })
     }
   }, [applicationStateData, isLoaded])
@@ -101,7 +97,6 @@ function App (): JSX.Element {
 
 const ThemeProvider = ({ children }: React.PropsWithChildren): JSX.Element => {
   const [theme] = useContext(ThemeContextInternal)
-  console.log('Current theme = ', theme)
   return <PaperProvider theme={theme}>{children}</PaperProvider>
 }
 
