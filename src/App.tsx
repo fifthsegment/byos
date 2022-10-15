@@ -19,6 +19,8 @@ import { theme } from './theme'
 const Stack = createNativeStackNavigator()
 
 function App (): JSX.Element {
+  const [routingState] = React.useContext(RoutingContext)
+
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
 

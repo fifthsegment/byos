@@ -22,7 +22,7 @@ const getScreenType = (px: number): ScreenType => {
     return 'lg'
   } else if (px >= 992 && px < 1200) {
     return 'xl'
-  } else if (px >= 1400) {
+  } else if (px >= 1200) {
     return 'xxl'
   }
 }

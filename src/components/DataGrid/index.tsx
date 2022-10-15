@@ -59,85 +59,74 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
   }): boolean => {
     const paddingToBottom = 20
     return (
-    /* eslint-disable */
-            layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - paddingToBottom
-            /* eslint-enable */
+      /* eslint-disable */
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+      /* eslint-enable */
     )
   }
 
   return (
-        <>
-            <DataTable.Header>
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <Fragment key={headerGroup.id}>
-                        {headerGroup.headers.map((header, index) => (
-                            <DataTable.Title
-                                key={header.id}
-                                style={
-                                    index === 0
-                                      ? styles.cellFirstChild
-                                      : styles.cell
-                                }
-                            >
-                                <Text>
-                                    {header.isPlaceholder
-                                      ? null
-                                      : flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                      )}
-                                </Text>
-                            </DataTable.Title>
-                        ))}
-                    </Fragment>
-                ))}
-            </DataTable.Header>
-            <ScrollView
-                onScroll={({ nativeEvent }) => {
-                  if (isCloseToBottom(nativeEvent)) {
-                    console.log('[Scroll] Scroll close to bottom')
-                    setCurrentPage(currentPage + 1)
-                    // table.setPageSize(20 * 2)
-                  }
-                }}
+    <>
+      <DataTable.Header>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Fragment key={headerGroup.id}>
+            {headerGroup.headers.map((header, index) => (
+              <DataTable.Title
+                key={header.id}
+                style={index === 0 ? styles.cellFirstChild : styles.cell}
+              >
+                <Text>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                </Text>
+              </DataTable.Title>
+            ))}
+          </Fragment>
+        ))}
+      </DataTable.Header>
+      <ScrollView
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent)) {
+            console.log('[Scroll] Scroll close to bottom')
+            setCurrentPage(currentPage + 1)
+            // table.setPageSize(20 * 2)
+          }
+        }}
+      >
+        <DataTable>
+          {isLoading && <ActivityIndicator animating />}
+          {table.getRowModel().rows.map((row) => (
+            <DataTable.Row
+              key={row.id}
+              onPress={() => {
+                onPress(row.original)
+              }}
             >
-                <DataTable>
-                    {isLoading && <ActivityIndicator animating />}
-                    {table.getRowModel().rows.map((row) => (
-                        <DataTable.Row
-                            key={row.id}
-                            onPress={() => {
-                              onPress(row.original)
-                            }}
-                        >
-                            {row.getVisibleCells().map((cell, index) => (
-                                <DataTable.Cell
-                                    key={cell.id}
-                                    style={
-                                        index === 0
-                                          ? styles.cellFirstChild
-                                          : styles.cell
-                                    }
-                                >
-                                    {flexRender(
-                                      cell.column.columnDef.cell,
-                                      cell.getContext()
-                                    )}
-                                </DataTable.Cell>
-                            ))}
-                        </DataTable.Row>
-                    ))}
-                    <DataTable.Pagination
-                        page={table.getState().pagination.pageIndex + 1}
-                        numberOfPages={table.getPageCount()}
-                        onPageChange={(page) => table.setPageIndex(page - 1)}
-                        label={`${
-                            table.getState().pagination.pageIndex + 1
-                        } of ${table.getPageCount()}`}
-                    />
-                </DataTable>
-            </ScrollView>
-        </>
+              {row.getVisibleCells().map((cell, index) => (
+                <DataTable.Cell
+                  key={cell.id}
+                  style={index === 0 ? styles.cellFirstChild : styles.cell}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </DataTable.Cell>
+              ))}
+            </DataTable.Row>
+          ))}
+          <DataTable.Pagination
+            page={table.getState().pagination.pageIndex + 1}
+            numberOfPages={table.getPageCount()}
+            onPageChange={(page) => table.setPageIndex(page - 1)}
+            label={`${
+              table.getState().pagination.pageIndex + 1
+            } of ${table.getPageCount()}`}
+          />
+        </DataTable>
+      </ScrollView>
+    </>
   )
 }
