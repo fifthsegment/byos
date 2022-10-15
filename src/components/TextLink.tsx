@@ -11,7 +11,6 @@ export const TextLink = ({
   isUnderlined,
   ...args
 }: PropsWithChildren<TextLinkProps & TextProps>): JSX.Element => {
-  console.log('children', children)
   return (
         <Text {...args} style={isUnderlined ? [styles.underline] : []}>
             {children}
