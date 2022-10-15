@@ -1,41 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react'
-// import { HashRouter as Router, Routes, Route } from 'react-router-dom'
-import { InternalRouteDef } from './routes'
-// import { Link } from 'react-router-dom'
-import { RoutingContext } from './contexts/routing/RoutingContext'
+import React, { useEffect, useState } from 'react'
+import { Platform } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Provider as PaperProvider } from 'react-native-paper'
+import { PortalProvider } from '@gorhom/portal'
+
 import {
   ApplicationContext,
   initialData
 } from './contexts/application/ApplicationContext'
-/* import {
-    getApplicationStateLS,
-    setApplicationStateLS,
-} from './services/localstorage' */
-import { Provider as PaperProvider } from 'react-native-paper'
-import Header from './components/Header'
-import MobileNavigation from './components/MobileNavigation'
+import MobileView from './components/MobileView'
 import { setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
-import { PortalProvider } from '@gorhom/portal'
+import Dashboard from './pages/dashboard'
+import Credentials from './pages/credentials'
 import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 
+const Stack = createNativeStackNavigator()
+
 function App (): JSX.Element {
   const themeState = useState(theme)
-  const [routingState] = React.useContext(RoutingContext)
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
 
   const applicationState = useState(savedApplicationData)
-
-  /* useEffect(() => {
-        applicationState[1](savedApplicationData);
-    }, [savedApplicationData]) */
-
   const [applicationStateData, setApplicationStateData] = applicationState
 
   useEffect(() => {
-    // setApplicationStateLS({ ...applicationStateData })
     setApplicationStateData(savedApplicationData)
   }, [savedApplicationData])
 
@@ -45,7 +37,6 @@ function App (): JSX.Element {
         '[App] Application state was updated = ',
         applicationStateData
       )
-
       setApplicationStateLS({ ...applicationStateData })
     }
   }, [applicationStateData, isLoaded])
@@ -55,15 +46,18 @@ function App (): JSX.Element {
       <ThemeProvider>
         <PortalProvider>
           <ApplicationContext.Provider value={applicationState}>
-            {routingState.isReady &&
-              routingState.routes.map((route: InternalRouteDef) => {
-                return null
-              })}
-            <Header title="BYOS" />
-            <MobileNavigation />
+            {Platform.OS === 'web' && (
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen name="Home" component={Dashboard} />
+                  <Stack.Screen name="Credentials" component={Credentials} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            )}
+            <MobileView />
           </ApplicationContext.Provider>
         </PortalProvider>
-      </ThemeProvider>
+       </ThemeProvider>
     </ThemeContextInternal.Provider>
   )
 }
