@@ -18,6 +18,9 @@ import AppModal from '../Modal'
 import { TextLink } from '../TextLink'
 
 export const ListAssets: React.FC = () => {
+  const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
+    undefined
+  )
   const [isExtended, setIsExtended] = React.useState(false)
   const [rerun, setRerun] = useState('')
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
@@ -44,6 +47,8 @@ export const ListAssets: React.FC = () => {
   const onPress = (asset: Asset): void => {
     if (asset.isFolder) {
       setPrefix(asset.prefix)
+    } else {
+      setSelectedAsset(asset)
     }
   }
 
@@ -68,99 +73,92 @@ export const ListAssets: React.FC = () => {
   const dirPath = dirPathArray.map((item, index) => {
     const isLastFragment = index === dirPathArray?.length - 1
     return (
-            <TextLink
-                key={`dirPath${index}`}
-                isUnderlined={!isLastFragment}
-                onPress={() => {
-                  goToPrefixByIndex(index)
-                }}
-            >
-                /
-                {!isLastFragment && (
-                    <Ionicons
-                        name="folder-open-outline"
-                        color="#ffbd43"
-                        size={22}
-                    />
-                )}
-                {item}
-            </TextLink>
+      <TextLink
+        key={`dirPath${index}`}
+        isUnderlined={!isLastFragment}
+        onPress={() => {
+          goToPrefixByIndex(index)
+        }}
+      >
+        /
+        {!isLastFragment && (
+          <Ionicons name="folder-open-outline" color="#ffbd43" size={22} />
+        )}
+        {item}
+      </TextLink>
     )
   })
 
   /* eslint-disable */
-    return (
+  return (
+    <>
+      {s3Initialized ? (
         <>
-            {s3Initialized ? (
-                <>
-                    <Portal hostName="Reloader">
-                        <IconButton
-                            animated
-                            icon="reload"
-                            onPress={() => {
-                                setRerun(`${Math.random()}`)
-                            }}
-                        />
-                    </Portal>
-                    <Portal hostName="Back">
-                        {dataQuery.Prefix?.length > 0 && (
-                            <IconButton
-                                icon="arrow-left"
-                                onPress={() => {
-                                    goBack()
-                                }}
-                            />
-                        )}
-                    </Portal>
-                    <View style={styles.root}>
-                        <View style={styles.section1}>
-                            {isError && (
-                                <Text variant="headlineSmall">Error </Text>
-                            )}
-                            <Text variant="bodyMedium" style={styles.path}>
-                                {dirPath}
-                            </Text>
-                            <AppModal
-                                isVisible={isExtended}
-                                onClose={() => {
-                                    setIsExtended(false)
-                                }}
-                            >
-                                <Text>Upload files here</Text>
-                            </AppModal>
-
-                            <DataGrid
-                                assets={data}
-                                onPress={onPress}
-                                isLoading={isLoading}
-                            />
-
-                            <FAB
-                                icon="plus"
-                                onPress={() => setIsExtended(!isExtended)}
-                                visible
-                                style={[styles.fabStyle]}
-                            />
-                        </View>
-                        <Block hidden={['xs', 'md']}>
-                            <View style={styles.section2}>
-                                <Text variant="bodyLarge" style={styles.path}>
-                                    Preview pane
-                                </Text>
-                            </View>
-                        </Block>
-                    </View>
-                </>
-            ) : (
-                <Card style={styles.errorMessage}>
-                    <Text>
-                        S3 Client has not been initialized, please update your
-                        API Configuration first.
-                    </Text>
-                </Card>
+          <Portal hostName="Reloader">
+            <IconButton
+              animated
+              icon="reload"
+              onPress={() => {
+                setRerun(`${Math.random()}`)
+              }}
+            />
+          </Portal>
+          <Portal hostName="Back">
+            {dataQuery.Prefix?.length > 0 && (
+              <IconButton
+                icon="arrow-left"
+                onPress={() => {
+                  goBack()
+                }}
+              />
             )}
+          </Portal>
+          <View style={styles.root}>
+            <View style={styles.section1}>
+              {isError && <Text variant="headlineSmall">Error </Text>}
+              <Text variant="bodyMedium" style={styles.path}>
+                {dirPath}
+              </Text>
+              <AppModal
+                isVisible={isExtended}
+                onClose={() => {
+                  setIsExtended(false)
+                }}
+              >
+                <Text>Upload files here</Text>
+              </AppModal>
+
+              <DataGrid assets={data} onPress={onPress} isLoading={isLoading} />
+
+              <FAB
+                icon="plus"
+                onPress={() => setIsExtended(!isExtended)}
+                visible
+                style={[styles.fabStyle]}
+              />
+            </View>
+            {selectedAsset && (
+              <Block hidden={['xs', 'md']}>
+                <View style={styles.section2}>
+                  <Text variant="bodyLarge" style={styles.path}>
+                    Preview pane
+                    {selectedAsset?.fileName}
+                  </Text>
+                </View>
+              </Block>
+            )}
+          </View>
         </>
-        /* eslint-enable */
+      ) : (
+        <Card style={styles.errorMessage}>
+          <Text>
+            S3 Client has not been initialized, please update your API
+            Configuration first.
+          </Text>
+        </Card>
+      )}
+    </>
+    /* eslint-enable */
   )
 }
 

@@ -21,7 +21,8 @@ import { theme } from './theme'
 
 function App (): JSX.Element {
   const [routingState] = React.useContext(RoutingContext)
-  const { data: savedApplicationData, isLoaded } = useGetApplicationStateFromLs(initialData)
+  const { data: savedApplicationData, isLoaded } =
+    useGetApplicationStateFromLs(initialData)
 
   const applicationState = useState(savedApplicationData)
 
@@ -38,7 +39,10 @@ function App (): JSX.Element {
 
   useEffect(() => {
     if (isLoaded) {
-      console.log('[App] Application state was updated = ', applicationStateData)
+      console.log(
+        '[App] Application state was updated = ',
+        applicationStateData
+      )
 
       setApplicationStateLS({ ...applicationStateData })
     }
@@ -50,13 +54,10 @@ function App (): JSX.Element {
         <ApplicationContext.Provider value={applicationState}>
           {routingState.isReady &&
             routingState.routes.map((route: InternalRouteDef) => {
-              return (
-                null
-              )
+              return null
             })}
           <Header title="BYOS" />
           <MobileNavigation />
-
         </ApplicationContext.Provider>
       </PortalProvider>
     </PaperProvider>
