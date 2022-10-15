@@ -56,7 +56,6 @@ function App (): JSX.Element {
           <MobileView />
         </ApplicationContext.Provider>
       </PortalProvider>
-    </PaperProvider>
     </ThemeContextInternal.Provider>
   )
 }
