@@ -42,7 +42,7 @@ function App (): JSX.Element {
   }, [applicationStateData, isLoaded])
 
   return (
-    <PaperProvider theme={theme}>
+    <ThemeContextInternal.Provider value={themeState}>
       <PortalProvider>
         <ApplicationContext.Provider value={applicationState}>
           {Platform.OS === 'web' && (
@@ -57,6 +57,7 @@ function App (): JSX.Element {
         </ApplicationContext.Provider>
       </PortalProvider>
     </PaperProvider>
+    </ThemeContextInternal.Provider>
   )
 }
 
