@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import { Platform, View, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Provider as PaperProvider } from 'react-native-paper'
+import { Provider as PaperProvider, Text, IconButton } from 'react-native-paper'
 import { PortalProvider } from '@gorhom/portal'
 
 import {
@@ -18,6 +18,16 @@ import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 
 const Stack = createNativeStackNavigator()
+
+const styles = StyleSheet.create({
+  ButtonsWrapper: {
+    flexDirection: 'row'
+  },
+  Button: {
+    border: '1px',
+    borderStyle: 'solid'
+  }
+})
 
 function App (): JSX.Element {
   const themeState = useState(theme)
@@ -41,6 +51,25 @@ function App (): JSX.Element {
     }
   }, [applicationStateData, isLoaded])
 
+  const navigationButtons = ({ navigation }): any => ({
+    headerTitle: (props) => <Text>BYOS</Text>,
+    // Add a placeholder button without the `onPress` to avoid flicker
+    headerRight: () => (
+      <View style={styles.ButtonsWrapper}>
+        <IconButton
+          style={styles.Button}
+          icon="home"
+          onPress={() => navigation.navigate('Home')}
+        />
+        <IconButton
+          style={styles.Button}
+          icon="cogs"
+          onPress={() => navigation.navigate('Credentials')}
+        />
+      </View>
+    )
+  })
+
   return (
     <ThemeContextInternal.Provider value={themeState}>
       <ThemeProvider>
@@ -49,15 +78,23 @@ function App (): JSX.Element {
             {Platform.OS === 'web' && (
               <NavigationContainer>
                 <Stack.Navigator>
-                  <Stack.Screen name="Home" component={Dashboard} />
-                  <Stack.Screen name="Credentials" component={Credentials} />
+                  <Stack.Screen
+                    name="Home"
+                    component={Dashboard}
+                    options={navigationButtons}
+                  />
+                  <Stack.Screen
+                    name="Credentials"
+                    component={Credentials}
+                    options={navigationButtons}
+                  />
                 </Stack.Navigator>
               </NavigationContainer>
             )}
             <MobileView />
           </ApplicationContext.Provider>
         </PortalProvider>
-       </ThemeProvider>
+      </ThemeProvider>
     </ThemeContextInternal.Provider>
   )
 }
