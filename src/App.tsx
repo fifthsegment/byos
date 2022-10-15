@@ -43,19 +43,21 @@ function App (): JSX.Element {
 
   return (
     <ThemeContextInternal.Provider value={themeState}>
-      <PortalProvider>
-        <ApplicationContext.Provider value={applicationState}>
-          {Platform.OS === 'web' && (
-            <NavigationContainer>
-              <Stack.Navigator>
-                <Stack.Screen name="Home" component={Dashboard} />
-                <Stack.Screen name="Credentials" component={Credentials} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          )}
-          <MobileView />
-        </ApplicationContext.Provider>
-      </PortalProvider>
+      <ThemeProvider>
+        <PortalProvider>
+          <ApplicationContext.Provider value={applicationState}>
+            {Platform.OS === 'web' && (
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen name="Home" component={Dashboard} />
+                  <Stack.Screen name="Credentials" component={Credentials} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            )}
+            <MobileView />
+          </ApplicationContext.Provider>
+        </PortalProvider>
+       </ThemeProvider>
     </ThemeContextInternal.Provider>
   )
 }
