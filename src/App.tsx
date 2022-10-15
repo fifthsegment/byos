@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import { HashRouter as Router, Routes, Route } from 'react-router-dom'
 import { InternalRouteDef } from './routes'
 // import { Link } from 'react-router-dom'
@@ -18,8 +18,10 @@ import { setApplicationStateLS } from './services/localstorage'
 import { useGetApplicationStateFromLs } from './hooks/useGetApplicationStateFromLS'
 import { PortalProvider } from '@gorhom/portal'
 import { theme } from './theme'
+import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 
 function App (): JSX.Element {
+  const themeState = useState(theme)
   const [routingState] = React.useContext(RoutingContext)
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
@@ -49,19 +51,27 @@ function App (): JSX.Element {
   }, [applicationStateData, isLoaded])
 
   return (
-    <PaperProvider theme={theme}>
-      <PortalProvider>
-        <ApplicationContext.Provider value={applicationState}>
-          {routingState.isReady &&
-            routingState.routes.map((route: InternalRouteDef) => {
-              return null
-            })}
-          <Header title="BYOS" />
-          <MobileNavigation />
-        </ApplicationContext.Provider>
-      </PortalProvider>
-    </PaperProvider>
+    <ThemeContextInternal.Provider value={themeState}>
+      <ThemeProvider>
+        <PortalProvider>
+          <ApplicationContext.Provider value={applicationState}>
+            {routingState.isReady &&
+              routingState.routes.map((route: InternalRouteDef) => {
+                return null
+              })}
+            <Header title="BYOS" />
+            <MobileNavigation />
+          </ApplicationContext.Provider>
+        </PortalProvider>
+      </ThemeProvider>
+    </ThemeContextInternal.Provider>
   )
+}
+
+const ThemeProvider = ({ children }: React.PropsWithChildren): JSX.Element => {
+  const [theme] = useContext(ThemeContextInternal)
+  console.log('Current theme = ', theme)
+  return <PaperProvider theme={theme}>{children}</PaperProvider>
 }
 
 export default App
