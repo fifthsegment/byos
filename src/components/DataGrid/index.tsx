@@ -1,14 +1,19 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
-  flexRender,
+  createColumnHelper,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { ActivityIndicator, DataTable, Text } from 'react-native-paper'
-import { ScrollView, StyleSheet } from 'react-native'
-import { DataGridColumns } from './dataGridColumns'
+import { ActivityIndicator } from 'react-native-paper'
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native'
 import { Asset } from '../../services/types'
+import { GridItemPreview } from '../GridItemPreview'
+import {
+  ApplicationContext,
+  ApplicationContextType
+} from '../../contexts/application/ApplicationContext'
+import { useS3Client } from '../../hooks/useS3Client'
 
 const styles = StyleSheet.create({
   cell: {
@@ -22,20 +27,25 @@ const styles = StyleSheet.create({
   title: {
     display: 'flex',
     alignItems: 'center'
+  },
+  columnWrapperStyle: {
+    display: 'flex'
   }
 })
 
-export interface DataGridProps {
+export interface DataTableProps {
   assets: Asset[] | undefined
   onPress: (asset: Asset) => void
   isLoading: boolean
 }
 
-export const DataGrid: (props: DataGridProps) => JSX.Element = ({
+export const DataGrid: (props: DataTableProps) => JSX.Element = ({
   assets,
   onPress,
   isLoading
-}: DataGridProps) => {
+}: DataTableProps) => {
+  const [appState] = useContext<ApplicationContextType>(ApplicationContext)
+  const [s3client, s3Initialized] = useS3Client(appState)
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
   const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
@@ -48,6 +58,8 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel()
   })
+
+  const items = table.getRowModel().flatRows.map((item) => item.original)
 
   useEffect(() => {
     table.setPageSize(20 * currentPage)
@@ -69,65 +81,49 @@ export const DataGrid: (props: DataGridProps) => JSX.Element = ({
 
   return (
     <>
-      <DataTable.Header>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Fragment key={headerGroup.id}>
-            {headerGroup.headers.map((header, index) => (
-              <DataTable.Title
-                key={header.id}
-                style={index === 0 ? styles.cellFirstChild : styles.cell}
-              >
-                <Text>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                </Text>
-              </DataTable.Title>
-            ))}
-          </Fragment>
-        ))}
-      </DataTable.Header>
       <ScrollView
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
             console.log('[Scroll] Scroll close to bottom')
             setCurrentPage(currentPage + 1)
-            // table.setPageSize(20 * 2)
           }
         }}
       >
-        <DataTable>
-          {isLoading && <ActivityIndicator animating />}
-          {table.getRowModel().rows.map((row) => (
-            <DataTable.Row
-              key={row.id}
-              onPress={() => {
-                onPress(row.original)
-              }}
-            >
-              {row.getVisibleCells().map((cell, index) => (
-                <DataTable.Cell
-                  key={cell.id}
-                  style={index === 0 ? styles.cellFirstChild : styles.cell}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </DataTable.Cell>
-              ))}
-            </DataTable.Row>
-          ))}
-          <DataTable.Pagination
-            page={table.getState().pagination.pageIndex + 1}
-            numberOfPages={table.getPageCount()}
-            onPageChange={(page) => table.setPageIndex(page - 1)}
-            label={`${
-              table.getState().pagination.pageIndex + 1
-            } of ${table.getPageCount()}`}
-          />
-        </DataTable>
+        {isLoading && <ActivityIndicator animating />}
+
+        <View>
+          <FlatList
+            columnWrapperStyle={styles.columnWrapperStyle}
+            numColumns={4}
+            data={items}
+            renderItem={({ item }: { item: Asset }) => {
+              return (
+                <GridItemPreview
+                  item={item}
+                  onPress={onPress}
+                  s3client={s3client}
+                  s3Initialized={s3Initialized}
+                  appState={appState}
+                />
+              )
+            }}
+            keyExtractor={(item: Asset) => item.fileName}
+          ></FlatList>
+          <></>
+        </View>
       </ScrollView>
     </>
   )
+}
+
+export const DataGridColumns: any = () => {
+  const columnHelper = createColumnHelper<Asset>()
+  const columns: any = [
+    columnHelper.accessor('fileName', {
+      id: 'fileName',
+      header: 'Name',
+      cell: (info) => <></>
+    })
+  ]
+  return columns
 }
