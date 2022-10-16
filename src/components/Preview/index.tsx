@@ -30,6 +30,8 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
     deleteAsset()
   } */
 
+  const handleDelete = (): void => {}
+
   return (
     <>
       <Block hidden={['xs', 'md']}>
