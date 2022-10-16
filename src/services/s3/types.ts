@@ -15,6 +15,7 @@ export interface Asset {
   name: string | undefined
   size: number | undefined
   lastModified: Date | undefined
+  key: string | undefined
 }
 
 export interface GetAssetArgs {

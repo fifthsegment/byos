@@ -7,4 +7,6 @@ export interface Asset {
   fileSize?: number
   isFolder: boolean
   prefix?: string
+  etag?: string
+  key?: string
 }

@@ -9,7 +9,9 @@ export const S3TypeToInternalAdapter = (assets: Asset[], params: GetAssetArgs): 
       fileSize: asset.size,
       updatedAt: asset.lastModified,
       isFolder: asset.prefix?.length > 0,
-      prefix: asset.prefix
+      prefix: asset.prefix,
+      etag: asset.etag,
+      key: asset.key
     }
     return appAsset
   })
