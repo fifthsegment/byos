@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { Platform, View, StyleSheet } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { Platform , View, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Provider as PaperProvider, Text, IconButton } from 'react-native-paper'
