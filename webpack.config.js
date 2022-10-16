@@ -5,7 +5,7 @@ module.exports = async function (env, argv) {
     const config = await createExpoWebpackConfigAsync({
         ...env,
         babel: {
-            dangerouslyAddModulePathsToTranspile: ['@tanstack/react-table']
+            dangerouslyAddModulePathsToTranspile: ['@tanstack/react-table', 'rn-fetch-blob']
         }
     }, argv);
 

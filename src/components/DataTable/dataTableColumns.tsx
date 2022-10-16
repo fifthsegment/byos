@@ -8,6 +8,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { Feather } from '@expo/vector-icons'
 import { Platform, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'
+import { fileToIcon } from '../../services/file-icon-service'
 
 dayjs.extend(relativeTime)
 
@@ -22,34 +23,21 @@ const iconType = (asset: Asset): JSX.Element => {
   const internalType = asset.isFolder
     ? 'folder'
     : re.exec(asset.fileName)[1] || ''
+  const fileExtension = asset.fileName.split('.').pop()
 
   switch (internalType) {
     case 'folder':
       return (
-                <Feather
-                    name="folder"
-                    color="#ffbd43"
-                    size={22}
-                    style={styles.icon}
-                />
-      )
-    case 'txt':
-      return (
-                <Feather
-                    name="file-text"
-                    color="#6565d6"
-                    size={22}
-                    style={styles.icon}
-                />
+        <Feather name="folder" color="#ffbd43" size={22} style={styles.icon} />
       )
     default:
       return (
-                <Feather
-                    name="file"
-                    color="#6565d6"
-                    size={22}
-                    style={styles.icon}
-                />
+        <Feather
+          name={fileToIcon(fileExtension) as any}
+          color="#6565d6"
+          size={22}
+          style={styles.icon}
+        />
       )
   }
 }
@@ -67,12 +55,12 @@ export const DataGridColumns: any = () => {
           ? info.getValue().slice(0, -1)
           : info.getValue()
         return (
-                    <>
-                        <Text variant="bodyLarge" style={styles.filename}>
-                            {iconType(row)} &nbsp;
-                            {fileName}
-                        </Text>
-                    </>
+          <>
+            <Text variant="bodyLarge" style={styles.filename}>
+              {iconType(row)} &nbsp;
+              {fileName}
+            </Text>
+          </>
         )
       }
     }),
@@ -82,10 +70,9 @@ export const DataGridColumns: any = () => {
       id: 'fileSize',
       header: 'Size',
       cell: (info) => (
-                <Text>
-                    {!info.row.original.isFolder &&
-                        prettyBytes(info.getValue())}
-                </Text>
+        <Text>
+          {!info.row.original.isFolder && prettyBytes(info.getValue())}
+        </Text>
       )
     }),
 
@@ -95,10 +82,9 @@ export const DataGridColumns: any = () => {
       header: 'Last Modified',
       cell: (info) => {
         return (
-                    <Text>
-                        {!info.row.original.isFolder &&
-                            dayjs(info.getValue()).fromNow()}
-                    </Text>
+          <Text>
+            {!info.row.original.isFolder && dayjs(info.getValue()).fromNow()}
+          </Text>
         )
       }
     }),

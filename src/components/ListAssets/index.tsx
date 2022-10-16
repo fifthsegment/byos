@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { Text, IconButton, Card, FAB } from 'react-native-paper'
+import { Text, IconButton, Card, FAB, ToggleButton } from 'react-native-paper'
 import { Portal } from '@gorhom/portal'
 import {
   ApplicationContext,
@@ -9,13 +9,14 @@ import {
 } from '../../contexts/application/ApplicationContext'
 import { useGetAssets } from '../../hooks/useGetAssets'
 import { useS3Client } from '../../hooks/useS3Client'
-import { DataGrid } from '../DataGrid'
+import { DataTable } from '../DataTable'
 
 import { Asset } from '../../services/types'
 import { GetAssetArgs } from '../../services/s3/types'
 import AppModal from '../Modal'
 import { TextLink } from '../TextLink'
 import { Preview } from '../Preview'
+import { DataGrid } from '../DataGrid'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
@@ -25,6 +26,8 @@ export const ListAssets: React.FC = () => {
   const [rerun, setRerun] = useState('')
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
+  const [isTableView, setIsTableView] = React.useState(true)
+
   const [dataQuery, setDataQuery] = useState<GetAssetArgs>({
     Bucket: appState.s3credentials.bucket,
     Prefix: '',
@@ -116,9 +119,26 @@ export const ListAssets: React.FC = () => {
           <View style={styles.root}>
             <View style={styles.section1}>
               {isError && <Text variant="headlineSmall">Error </Text>}
-              <Text variant="bodyMedium" style={styles.path}>
-                {dirPath}
-              </Text>
+              <View style={styles.actionBarContainer}>
+                <Text variant="bodyMedium" style={styles.path}>
+                  {dirPath}
+                </Text>
+                <View style={styles.buttonGroup}>
+                  <ToggleButton
+                    icon="dots-grid"
+                    value="grid"
+                    status={isTableView === false ? 'checked' : 'unchecked'}
+                    onPress={() => setIsTableView(false)}
+                  />
+                  <ToggleButton
+                    icon="table"
+                    value="table"
+                    status={isTableView === true ? 'checked' : 'unchecked'}
+                    onPress={() => setIsTableView(true)}
+                  />
+                </View>
+              </View>
+
               <AppModal
                 isVisible={isExtended}
                 onClose={() => {
@@ -128,7 +148,19 @@ export const ListAssets: React.FC = () => {
                 <Text>Upload files here</Text>
               </AppModal>
 
-              <DataGrid assets={data} onPress={onPress} isLoading={isLoading} />
+              {isTableView ? (
+                <DataTable
+                  assets={data}
+                  onPress={onPress}
+                  isLoading={isLoading}
+                />
+              ) : (
+                <DataGrid
+                  assets={data}
+                  onPress={onPress}
+                  isLoading={isLoading}
+                />
+              )}
 
               <FAB
                 icon="plus"
@@ -160,7 +192,9 @@ export const ListAssets: React.FC = () => {
 
 const styles = StyleSheet.create({
   path: {
-    margin: 10
+    display: 'flex',
+    margin: 10,
+    flex: 1
   },
   fabStyle: {
     bottom: 45,
@@ -182,5 +216,13 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRightWidth: 2,
     flexDirection: 'column'
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  actionBarContainer: {
+    display: 'flex',
+    flexDirection: 'row'
   }
 })

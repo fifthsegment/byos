@@ -1,4 +1,4 @@
-import { S3Client, ListObjectsCommand } from '@aws-sdk/client-s3'
+import { S3Client, ListObjectsCommand, GetObjectCommand, GetObjectCommandInput, GetObjectCommandOutput } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
@@ -48,7 +48,8 @@ export const getAssets: (
             etag: undefined,
             name: item.Prefix,
             lastModified: undefined,
-            size: 0
+            size: 0,
+            key: item.Prefix
           }
         })))) || []
   const files: Asset[] =
@@ -58,7 +59,8 @@ export const getAssets: (
             etag: item.ETag,
             name: item?.Key,
             lastModified: item?.LastModified,
-            size: item?.Size
+            size: item?.Size,
+            key: item.Key
           }
         })))) || []
   return [...folders, ...files]
@@ -68,4 +70,70 @@ export const deleteAsset: (assetId: string) => void = (_assetId) => {
   /**
      * Implementation here
      */
+}
+
+export const getAsset: (
+  client: S3Client,
+  params: GetObjectCommandInput
+) => Promise<any> = async (client, params) => {
+  const command = new GetObjectCommand(params)
+
+  const response: GetObjectCommandOutput = await client.send(command)
+  return response
+}
+
+/* eslint-disable */
+export const getAssetV2: (
+  client: S3Client,
+  params: GetObjectCommandInput
+) => Promise<any> = async (client, params) => {
+  const command = new GetObjectCommand(params)
+  const endpoint = await client.config.endpoint()
+  command.middlewareStack.add(
+    (next,) => async (args : any) => {
+      // @ts-ignore 
+      const {headers, path } = args.request;
+      const {hostname, protocol} = endpoint;
+      fetch(`${protocol}//${hostname}/${params.Bucket}${path}`, {headers: headers})
+      .then(response => {
+        console.log("Response = ", response)
+      })
+
+      return new Promise((_resolve, reject) => reject(new Error("Intentional Failure")) )
+    },
+    {
+      step: 'finalizeRequest',
+      name: 'rH'
+    }
+  )
+  try {
+    await client.send(command)
+  }catch(error ) {
+
+  }
+  /* eslint-enable */
+
+  /* return new Promise((resolve, reject) => {
+    RNFetchBlob.fetch("GET", "http://www.example.com/images/img1.png", {
+      Authorization: "Bearer access-token...",
+      // more headers  ..
+    })
+      .then((res) => {
+        let status = res.info().status;
+
+        if (status == 200) {
+          // the conversion is done in native code
+          let base64Str = res.base64();
+          // the following conversions are done in js, it's SYNC
+          let text = res.text();
+          let json = res.json();
+        } else {
+          // handle other status codes
+        }
+      })
+      // Something went wrong:
+      .catch((errorMessage, statusCode) => {
+        // error handling
+      });
+  }) */
 }
