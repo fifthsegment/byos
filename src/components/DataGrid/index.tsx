@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table'
 import { ActivityIndicator } from 'react-native-paper'
 import { FlatList, ScrollView, StyleSheet, View } from 'react-native'
+
 import { Asset } from '../../services/types'
 import { GridItemPreview } from '../GridItemPreview'
 import {
@@ -16,6 +17,18 @@ import {
 import { useS3Client } from '../../hooks/useS3Client'
 
 const styles = StyleSheet.create({
+  cell: {
+    flexBasis: 'auto',
+    minWidth: '105px',
+    paddingRight: '15px'
+  },
+  cellFirstChild: {
+    flexBasis: '78%'
+  },
+  title: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   columnWrapperStyle: {
     display: 'flex'
   }

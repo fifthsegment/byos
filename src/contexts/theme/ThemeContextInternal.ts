@@ -5,9 +5,7 @@
 
 import React, { createContext } from 'react'
 
-export const initialData: Object = {
-
-}
+export const initialData: Object = {}
 
 export type ThemeContextType = [
   Object,
