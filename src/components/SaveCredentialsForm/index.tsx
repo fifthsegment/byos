@@ -7,6 +7,7 @@ import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { S3Client } from '@aws-sdk/client-s3'
+import { isBackblaze } from '../../services/backblaze/backblaze'
 
 export const SaveCredentialsForm: React.FC = () => {
   const [appState, setAppState] = useContext(ApplicationContext)
@@ -21,22 +22,34 @@ export const SaveCredentialsForm: React.FC = () => {
 
   const [, setSaved] = useState(false)
 
-  const onSubmit = (): void => {
+  const onSubmit = async (): void => {
     console.log('Submitting form')
     onToggleSnackBar()
     const data = getValues()
-    setAppState({
-      ...appState,
-      s3credentials: data as any,
-      s3client: undefined
-    })
+
+    if (isBackblaze(data?.endpoint)) {
+      // const token = getAuthorizationToken(data.apiKey, data.apiSecret)
+      // const _backblazeData = await authorizeAccount(token)
+      setAppState({
+        ...appState,
+        s3credentials: data as any,
+        s3client: undefined,
+        backblaze: undefined
+      })
+    } else {
+      setAppState({
+        ...appState,
+        s3credentials: data as any,
+        s3client: undefined
+      })
+    }
     setSaved(true)
     setTimeout(() => {
       setSaved(false)
     }, 1000)
     /**
-         * Build the s3 client here
-         */
+     * Build the s3 client here
+     */
     const s3Client: S3Client = buildS3Client({
       credentials: {
         accessKeyId: data.apiKey,
@@ -82,62 +95,42 @@ export const SaveCredentialsForm: React.FC = () => {
   })
 
   return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <Card>
+        <Card.Content>
+          <Text variant="headlineSmall">API Configuration</Text>
+          <InputField control={control} name="apiKey" label="API KEY" />
+
+          <InputField control={control} name="apiSecret" label="Api Secret" />
+
+          <InputField control={control} name="endpoint" label="Endpoint" />
+
+          <InputField control={control} name="bucket" label="Bucket" />
+
+          <InputField control={control} name="region" label="Region" />
+        </Card.Content>
+        <Card.Actions>
+          {/* eslint-disable-next-line */}
+          <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
+        </Card.Actions>
+      </Card>
+      <View style={styles.snackBarContainer}>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Dismiss',
+            onPress: () => {
+              // Do something
+            }
+          }}
         >
-            <Card>
-                <Card.Content>
-                    <Text variant="headlineSmall">API Configuration</Text>
-                    <InputField
-                        control={control}
-                        name="apiKey"
-                        label="API KEY"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="apiSecret"
-                        label="Api Secret"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="endpoint"
-                        label="Endpoint"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="bucket"
-                        label="Bucket"
-                    />
-
-                    <InputField
-                        control={control}
-                        name="region"
-                        label="Region"
-                    />
-                </Card.Content>
-                <Card.Actions>
-                    {/* eslint-disable-next-line */}
-                    <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-                </Card.Actions>
-            </Card>
-            <View style={styles.snackBarContainer}>
-                <Snackbar
-                    visible={visible}
-                    onDismiss={onDismissSnackBar}
-                    action={{
-                      label: 'Dismiss',
-                      onPress: () => {
-                        // Do something
-                      }
-                    }}
-                >
-                    Credentials are saved!
-                </Snackbar>
-            </View>
-        </KeyboardAvoidingView>
+          Credentials are saved!
+        </Snackbar>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
