@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { BackblazeB2Config } from '../types'
 
 export const getBaseUrl = (): string => 'https://api.backblazeb2.com/b2api/v2/'
 
@@ -27,4 +28,13 @@ export const authorizeAccount = async (
 
 export const isBackblaze = (endpoint: string): boolean => {
   return endpoint.toLowerCase().includes('backblazeb2')
+}
+
+export const getDownloadUrl = (
+  config: BackblazeB2Config,
+  bucket: string,
+  fileKey: string
+): string => {
+  const { downloadUrl } = config
+  return `${downloadUrl}/file/${bucket}/${fileKey}?Authorization=${config.authorizationToken}`
 }

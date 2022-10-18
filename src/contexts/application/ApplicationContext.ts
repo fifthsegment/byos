@@ -5,12 +5,7 @@
 
 import { S3Client } from '@aws-sdk/client-s3'
 import React, { createContext } from 'react'
-
-export interface BackblazeB2Config {
-  authorizationToken: string | undefined
-  downloadUrl: string | undefined
-  s3ApiUrl: string | undefined
-}
+import { BackblazeB2Config } from '../../services/types'
 
 export interface ApplicationState {
   s3credentials: {
