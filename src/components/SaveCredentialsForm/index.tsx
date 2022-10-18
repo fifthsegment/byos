@@ -7,7 +7,11 @@ import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { S3Client } from '@aws-sdk/client-s3'
-import { isBackblaze } from '../../services/backblaze/backblaze'
+import {
+  authorizeAccount,
+  getAuthorizationToken,
+  isBackblaze
+} from '../../services/backblaze/backblaze'
 
 export const SaveCredentialsForm: React.FC = () => {
   const [appState, setAppState] = useContext(ApplicationContext)
@@ -28,13 +32,18 @@ export const SaveCredentialsForm: React.FC = () => {
     const data = getValues()
 
     if (isBackblaze(data?.endpoint)) {
-      // const token = getAuthorizationToken(data.apiKey, data.apiSecret)
-      // const _backblazeData = await authorizeAccount(token)
+      const token = getAuthorizationToken(data.apiKey, data.apiSecret)
+      const backblazeData = await authorizeAccount(token)
+      console.log('backblaze', backblazeData)
       setAppState({
         ...appState,
         s3credentials: data as any,
         s3client: undefined,
-        backblaze: undefined
+        backblaze: {
+          authorizationToken: backblazeData.authorizationToken,
+          downloadUrl: backblazeData.downloadUrl,
+          s3ApiUrl: backblazeData.s3ApiUrl
+        }
       })
     } else {
       setAppState({
