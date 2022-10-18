@@ -41,7 +41,8 @@ export const ListAssets: React.FC = () => {
     s3client,
     s3Initialized,
     dataQuery,
-    rerun
+    rerun,
+    appState.mutatedAt
   )
 
   const setPrefix = (prefix: string): void => {

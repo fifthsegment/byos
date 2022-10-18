@@ -16,6 +16,7 @@ export interface ApplicationState {
   }
   otherStuff: string
   s3client: S3Client | undefined
+  mutatedAt: Date | undefined
 }
 
 export const initialData: ApplicationState = {
@@ -27,7 +28,8 @@ export const initialData: ApplicationState = {
     bucket: undefined
   },
   s3client: undefined,
-  otherStuff: ''
+  otherStuff: '',
+  mutatedAt: undefined
 }
 
 export type ApplicationContextType = [

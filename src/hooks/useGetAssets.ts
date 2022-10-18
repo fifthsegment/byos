@@ -5,19 +5,36 @@ import { getAssets } from '../services/s3'
 import { GetAssetArgs } from '../services/s3/types'
 import { Asset } from '../services/types'
 
-export const useGetAssets = (client: S3Client, clientInitialized: boolean, params: GetAssetArgs, rerun: string = ''): UseQueryResult<Asset[], unknown> => {
-  const queryResponse = useQuery(['getAssets', rerun, params.Bucket || '', params.Delimiter || '', params.Prefix || ''], async () => {
-    try {
-      const data = await getAssets(client, params)
-      const assets = S3TypeToInternalAdapter(data, params)
-      return assets
-    } catch (error) {
-      console.log('[useGetAssets] Error : ', error)
+export const useGetAssets = (
+  client: S3Client,
+  clientInitialized: boolean,
+  params: GetAssetArgs,
+  rerun: string = '',
+  mutatedAt: Date | undefined
+): UseQueryResult<Asset[], unknown> => {
+  const queryResponse = useQuery(
+    [
+      'getAssets',
+      rerun,
+      params.Bucket || '',
+      params.Delimiter || '',
+      params.Prefix || '',
+      mutatedAt || ''
+    ],
+    async () => {
+      try {
+        const data = await getAssets(client, params)
+        const assets = S3TypeToInternalAdapter(data, params)
+        return assets
+      } catch (error) {
+        console.log('[useGetAssets] Error : ', error)
+      }
+      return []
+    },
+    {
+      enabled: clientInitialized,
+      refetchOnWindowFocus: false
     }
-    return []
-  }, {
-    enabled: clientInitialized,
-    refetchOnWindowFocus: false
-  })
+  )
   return queryResponse
 }

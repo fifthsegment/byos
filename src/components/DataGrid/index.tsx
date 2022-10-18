@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table'
 import { ActivityIndicator } from 'react-native-paper'
 import { FlatList, ScrollView, StyleSheet, View } from 'react-native'
+
 import { Asset } from '../../services/types'
 import { GridItemPreview } from '../GridItemPreview'
 import {

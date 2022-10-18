@@ -1,4 +1,14 @@
-import { S3Client, ListObjectsCommand, GetObjectCommand, GetObjectCommandInput, GetObjectCommandOutput } from '@aws-sdk/client-s3'
+import {
+  S3Client,
+  ListObjectsCommand,
+  GetObjectCommand,
+  GetObjectCommandInput,
+  GetObjectCommandOutput,
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
+  CopyObjectCommandInput,
+  CopyObjectCommand
+} from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
@@ -42,40 +52,53 @@ export const getAssets: (
 
   const response = await client.send(command)
   const folders: Asset[] =
-        (((response.CommonPrefixes?.map((item) => {
-          return {
-            prefix: item.Prefix,
-            etag: undefined,
-            name: item.Prefix,
-            lastModified: undefined,
-            size: 0,
-            key: item.Prefix
-          }
-        })))) || []
+    response.CommonPrefixes?.map((item) => {
+      return {
+        prefix: item.Prefix,
+        etag: undefined,
+        name: item.Prefix,
+        lastModified: undefined,
+        size: 0,
+        key: item.Prefix
+      }
+    }) || []
   const files: Asset[] =
-        (((response.Contents?.map((item) => {
-          return {
-            prefix: '',
-            etag: item.ETag,
-            name: item?.Key,
-            lastModified: item?.LastModified,
-            size: item?.Size,
-            key: item.Key
-          }
-        })))) || []
+    response.Contents?.map((item) => {
+      return {
+        prefix: '',
+        etag: item.ETag,
+        name: item?.Key,
+        lastModified: item?.LastModified,
+        size: item?.Size,
+        key: item.Key
+      }
+    }) || []
   return [...folders, ...files]
 }
 
-export const updateAsset: (assetId: string) => void = (_assetId) => {
-  /**
-   * Implementation here
-   */
+export const updateAsset: (
+  client: S3Client,
+  params: CopyObjectCommandInput
+) => Promise<any> = async (client, params) => {
+  try {
+    const data = await client.send(new CopyObjectCommand(params))
+    console.log('updated asset', data)
+    return data // For unit tests.
+  } catch (err) {
+    console.log('Error', err)
+  }
 }
 
-export const deleteAsset: (assetId: string) => void = (_assetId) => {
-  /**
-   * Implementation here
-   */
+export const deleteAsset: (
+  client: S3Client,
+  params: DeleteObjectCommandInput
+) => Promise<any> = async (client, params) => {
+  try {
+    const data = await client.send(new DeleteObjectCommand(params))
+    return data // For unit tests.
+  } catch (err) {
+    console.log('Error', err)
+  }
 }
 
 export const getAsset: (
@@ -96,27 +119,28 @@ export const getAssetV2: (
   const command = new GetObjectCommand(params)
   const endpoint = await client.config.endpoint()
   command.middlewareStack.add(
-    (next,) => async (args : any) => {
-      // @ts-ignore 
-      const {headers, path } = args.request;
-      const {hostname, protocol} = endpoint;
-      fetch(`${protocol}//${hostname}/${params.Bucket}${path}`, {headers: headers})
-      .then(response => {
-        console.log("Response = ", response)
+    (next) => async (args: any) => {
+      // @ts-ignore
+      const { headers, path } = args.request
+      const { hostname, protocol } = endpoint
+      fetch(`${protocol}//${hostname}/${params.Bucket}${path}`, {
+        headers: headers,
+      }).then((response) => {
+        console.log('Response = ', response)
       })
 
-      return new Promise((_resolve, reject) => reject(new Error("Intentional Failure")) )
+      return new Promise((_resolve, reject) =>
+        reject(new Error('Intentional Failure'))
+      )
     },
     {
       step: 'finalizeRequest',
-      name: 'rH'
+      name: 'rH',
     }
   )
   try {
     await client.send(command)
-  }catch(error ) {
-
-  }
+  } catch (error) {}
   /* eslint-enable */
 
   /* return new Promise((resolve, reject) => {
