@@ -23,6 +23,7 @@ export interface ApplicationState {
   backblaze: BackblazeB2Config | undefined
   otherStuff: string | undefined
   s3client: S3Client | undefined
+  mutatedAt: Date | undefined
 }
 
 export const initialData: ApplicationState = {
@@ -39,7 +40,8 @@ export const initialData: ApplicationState = {
     s3ApiUrl: ''
   },
   s3client: undefined,
-  otherStuff: ''
+  otherStuff: '',
+  mutatedAt: undefined
 }
 
 export type ApplicationContextType = [

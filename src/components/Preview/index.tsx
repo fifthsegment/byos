@@ -1,10 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { Feather } from '@expo/vector-icons'
 import { StyleSheet, View } from 'react-native'
-import { IconButton, Text } from 'react-native-paper'
+import { IconButton, Text, TextInput } from 'react-native-paper'
+
 import { Block } from '../../services/rn-responsive-design'
 import { Asset } from '../../services/types'
 import { ThemeContextInternal } from '../../contexts/theme/ThemeContextInternal'
+import { ApplicationContext } from '../../contexts/application/ApplicationContext'
+import { updateAsset as s3UpdateAsset, deleteAsset } from '../../services/s3'
+import { useS3Client } from '../../hooks/useS3Client'
 
 export interface PreviewPropsType {
   asset: Asset
@@ -12,8 +16,39 @@ export interface PreviewPropsType {
 }
 
 const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
-  const [theme] = useContext(ThemeContextInternal)
+  const [appState, setAppState] = useContext(ApplicationContext)
+  const { s3credentials } = appState
 
+  const [theme] = useContext(ThemeContextInternal)
+  const [isEditing, setIsEditing] = useState(false)
+  const [updateAsset, setUpdateAsset] = useState(asset)
+  const [text, setText] = useState(asset.fileName)
+  const [s3Client] = useS3Client(appState)
+
+  const handleSave = async (): Promise<void> => {
+    setIsEditing(false)
+    setUpdateAsset((asset) => ({
+      ...asset,
+      fileName: text
+    }))
+    await s3UpdateAsset(s3Client, {
+      Bucket: s3credentials.bucket,
+      Key: s3credentials.bucket + '/' + asset.key.replace(asset.fileName, text),
+      CopySource: s3credentials.bucket + '/' + asset.key
+    })
+    setAppState({ ...appState, mutatedAt: new Date() })
+  }
+
+  const handleDelete = async (): Promise<void> => {
+    const deleteParams = {
+      Bucket: s3credentials.bucket,
+      Key: updateAsset.key
+    }
+    await deleteAsset(s3Client, deleteParams)
+    setAppState({ ...appState, mutatedAt: new Date() })
+  }
+
+  /* eslint-disable */
   return (
     <>
       <Block hidden={['xs', 'md']}>
@@ -32,11 +67,30 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
               <Feather theme={theme} name="file" size={100} />
             </Text>
             <Text variant="headlineSmall" style={styles.textCenter}>
-              {asset?.fileName}
+              {isEditing ? (
+                <TextInput
+                  value={isEditing ? text : updateAsset?.fileName}
+                  onChangeText={(text) => setText(text)}
+                />
+              ) : (
+                updateAsset?.fileName
+              )}
             </Text>
             <View style={[styles.centered, styles.horizontal]}>
-              <IconButton theme={theme} icon="pencil" onPress={onClose} />
-              <IconButton theme={theme} icon="trash-can" onPress={onClose} />
+              {isEditing ? (
+                <IconButton theme={theme} icon="check" onPress={handleSave} />
+              ) : (
+                <IconButton
+                  theme={theme}
+                  icon="pencil"
+                  onPress={() => setIsEditing(true)}
+                />
+              )}
+              <IconButton
+                theme={theme}
+                icon="trash-can"
+                onPress={handleDelete}
+              />
             </View>
           </View>
         </View>
@@ -44,6 +98,7 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
     </>
   )
 }
+/* eslint-enable */
 
 const styles = StyleSheet.create({
   main: {
