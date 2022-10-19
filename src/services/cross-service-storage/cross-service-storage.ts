@@ -12,4 +12,7 @@ export const getDownloadLinkByKey = async (
       key
     )
   }
+  return await new Promise((resolve) => {
+    resolve('')
+  })
 }
