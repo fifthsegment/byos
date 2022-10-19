@@ -10,11 +10,12 @@ import {
   CopyObjectCommand
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
 // eslint-disable-next-line
 import { v4 as uuidv4 } from 'uuid'
+// eslint-disable-next-line
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
 export const buildS3Client = (initializationData: S3Initializer): S3Client => {
   const { credentials, region, endpoint } = initializationData
