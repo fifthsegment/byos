@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.186.0",
+    "@aws-sdk/s3-request-presigner": "^3.190.0",
     "@aws-sdk/types": "^3.188.0",
     "@aws-sdk/util-base64-browser": "^3.188.0",
     "@azure/msal-browser": "^2.29.0",

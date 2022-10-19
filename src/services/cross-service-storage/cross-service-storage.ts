@@ -11,11 +11,10 @@ export const getDownloadLinkByKey = async (
       appState.s3credentials.bucket,
       key
     )
+  } else {
+    return getDownloadLink(appState.s3Client, {
+      Key: key,
+      Bucket: appState.s3credentials.bucket
+    })
   }
-  return await new Promise((resolve) => {
-    /**
-     * @todo https://github.com/fifthsegment/byos/issues/76
-     */
-    resolve('')
-  })
 }

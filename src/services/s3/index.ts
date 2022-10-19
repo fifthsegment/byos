@@ -10,6 +10,7 @@ import {
   CopyObjectCommand
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
 // eslint-disable-next-line
@@ -109,6 +110,15 @@ export const getAsset: (
 
   const response: GetObjectCommandOutput = await client.send(command)
   return response
+}
+
+export const getDownloadLink = async (
+  s3Client: s3Client,
+  params: GetObjectCommandInput
+): Promise<string> => {
+  const command = new GetObjectCommand(params)
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
+  return url
 }
 
 /* eslint-disable */
