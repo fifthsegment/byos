@@ -5,6 +5,7 @@
 
 import { S3Client } from '@aws-sdk/client-s3'
 import React, { createContext } from 'react'
+import { BackblazeB2Config } from '../../services/types'
 
 export interface ApplicationState {
   s3credentials: {
@@ -14,7 +15,8 @@ export interface ApplicationState {
     endpoint: string | undefined
     bucket: string | undefined
   }
-  otherStuff: string
+  backblaze: BackblazeB2Config | undefined
+  otherStuff: string | undefined
   s3client: S3Client | undefined
   mutatedAt: Date | undefined
 }
@@ -26,6 +28,11 @@ export const initialData: ApplicationState = {
     region: undefined,
     endpoint: undefined,
     bucket: undefined
+  },
+  backblaze: {
+    authorizationToken: '',
+    downloadUrl: '',
+    s3ApiUrl: ''
   },
   s3client: undefined,
   otherStuff: '',

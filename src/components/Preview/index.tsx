@@ -9,6 +9,7 @@ import { ThemeContextInternal } from '../../contexts/theme/ThemeContextInternal'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { updateAsset as s3UpdateAsset, deleteAsset } from '../../services/s3'
 import { useS3Client } from '../../hooks/useS3Client'
+import { getDownloadLinkByKey } from '../../services/cross-service-storage/cross-service-storage'
 
 export interface PreviewPropsType {
   asset: Asset
@@ -46,6 +47,17 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
     }
     await deleteAsset(s3Client, deleteParams)
     setAppState({ ...appState, mutatedAt: new Date() })
+  }
+
+  const handleDownload = async (): Promise<void> => {
+    const link = await getDownloadLinkByKey(appState, asset.key)
+    const a = document.createElement('a')
+    a.href = link
+    a.download = asset.key
+    a.style.display = 'none'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
   }
 
   /* eslint-disable */
@@ -90,6 +102,11 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
                 theme={theme}
                 icon="trash-can"
                 onPress={handleDelete}
+              />
+              <IconButton
+                theme={theme}
+                icon="download"
+                onPress={handleDownload}
               />
             </View>
           </View>

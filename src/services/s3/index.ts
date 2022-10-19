@@ -14,6 +14,8 @@ import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
 // eslint-disable-next-line
 import { v4 as uuidv4 } from 'uuid'
+// eslint-disable-next-line
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
 export const buildS3Client = (initializationData: S3Initializer): S3Client => {
   const { credentials, region, endpoint } = initializationData
@@ -109,6 +111,15 @@ export const getAsset: (
 
   const response: GetObjectCommandOutput = await client.send(command)
   return response
+}
+
+export const getDownloadLink = async (
+  s3Client: s3Client,
+  params: GetObjectCommandInput
+): Promise<string> => {
+  const command = new GetObjectCommand(params)
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
+  return url
 }
 
 /* eslint-disable */

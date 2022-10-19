@@ -1,15 +1,15 @@
 {
-    "setupTasks": [
-        {
-            "name": "Installing Dependencies",
-            "command": "yarn "
-        },
-        {
-            "name": "Run web builder",
-            "command": "yarn web",
-            "preview": {
-                "port": 19006
-            }
-        }
-    ]
+  "setupTasks": [
+    {
+      "name": "Installing Dependencies",
+      "command": "yarn "
+    },
+    {
+      "name": "Run web builder",
+      "command": "yarn web",
+      "preview": {
+        "port": 19006
+      }
+    }
+  ]
 }
