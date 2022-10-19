@@ -3,18 +3,29 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable
 } from '@tanstack/react-table'
 import {
   ActivityIndicator,
   DataTable as ReactPaperDataTable,
-  Text
+  Text,
+  Button
 } from 'react-native-paper'
 import { ScrollView, StyleSheet } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
+
 import { DataGridColumns } from './dataTableColumns'
 import { Asset } from '../../services/types'
 
 const styles = StyleSheet.create({
+  tableHead: {
+    height: 'auto'
+  },
+  sorterIcon: {
+    marginLeft: '10px'
+  },
   cell: {
     flexBasis: 'auto',
     paddingRight: '30px'
@@ -40,6 +51,7 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
   isLoading
 }: DataTableProps) => {
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
+  const [sorting, setSorting] = React.useState<SortingState>([])
   const [currentPage, setCurrentPage] = useState(1)
   useEffect(() => {
     setData(assets || [])
@@ -48,7 +60,12 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
   const table = useReactTable({
     data,
     columns: DataGridColumns(),
+    state: {
+      sorting
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel()
   })
 
@@ -72,7 +89,7 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
 
   return (
     <>
-      <ReactPaperDataTable.Header>
+      <ReactPaperDataTable.Header style={styles.tableHead}>
         {table.getHeaderGroups().map((headerGroup) => (
           <Fragment key={headerGroup.id}>
             {headerGroup.headers.map((header, index) => (
@@ -80,14 +97,33 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
                 key={header.id}
                 style={index === 0 ? styles.cellFirstChild : styles.cell}
               >
-                <Text>
+                <Button>
                   {header.isPlaceholder
                     ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                </Text>
+                    : (
+                    <Text
+                      {...{
+                        onClick: header.column.getToggleSortingHandler()
+                      }}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {{
+                        asc: (
+                          <AntDesign name="arrowup" style={styles.sorterIcon} />
+                        ),
+                        desc: (
+                          <AntDesign
+                            name="arrowdown"
+                            style={styles.sorterIcon}
+                          />
+                        )
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </Text>
+                      )}
+                </Button>
               </ReactPaperDataTable.Title>
             ))}
           </Fragment>

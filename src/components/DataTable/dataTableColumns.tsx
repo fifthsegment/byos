@@ -1,13 +1,14 @@
 import React from 'react'
-import { ContextMenu } from '../ContextMenu'
 import { createColumnHelper } from '@tanstack/react-table'
-import { Asset } from '../../services/types'
 import prettyBytes from 'pretty-bytes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Feather } from '@expo/vector-icons'
 import { Platform, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'
+
+import { ContextMenu } from '../ContextMenu'
+import { Asset } from '../../services/types'
 import { fileToIcon } from '../../services/file-icon-service'
 
 dayjs.extend(relativeTime)
