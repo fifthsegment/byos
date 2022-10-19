@@ -1,5 +1,6 @@
 import { ApplicationState } from '../../contexts/application/ApplicationContext'
 import { getDownloadUrl, isBackblaze } from '../backblaze/backblaze'
+import { getDownloadLink as S3GetDownloadUrl } from '../s3'
 
 export const getDownloadLinkByKey = async (
   appState: ApplicationState,
@@ -12,7 +13,7 @@ export const getDownloadLinkByKey = async (
       key
     )
   } else {
-    return getDownloadLink(appState.s3Client, {
+    return await S3GetDownloadUrl(appState.s3Client, {
       Key: key,
       Bucket: appState.s3credentials.bucket
     })
