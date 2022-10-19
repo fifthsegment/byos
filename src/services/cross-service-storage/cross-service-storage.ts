@@ -13,6 +13,9 @@ export const getDownloadLinkByKey = async (
     )
   }
   return await new Promise((resolve) => {
+    /**
+     * @todo https://github.com/fifthsegment/byos/issues/76
+     */
     resolve('')
   })
 }
