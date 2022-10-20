@@ -22,7 +22,6 @@ export const authorizeAccount = async (
       Authorization: `Basic ${authorizationToken}`
     }
   })
-  console.log('backblaze response ', response)
   return response.data
 }
 

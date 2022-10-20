@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
+import { BackblazeB2AuthToLocalAdapter } from '../../adapters/backblaze'
 import { Text, Card, Snackbar } from 'react-native-paper'
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
@@ -33,18 +34,23 @@ export const SaveCredentialsForm: React.FC = () => {
 
     if (isBackblaze(data?.endpoint)) {
       const token = getAuthorizationToken(data.apiKey, data.apiSecret)
-      const backblazeData = await authorizeAccount(token)
-      console.log('backblaze', backblazeData)
-      setAppState({
-        ...appState,
-        s3credentials: data as any,
-        s3client: undefined,
-        backblaze: {
-          authorizationToken: backblazeData.authorizationToken,
-          downloadUrl: backblazeData.downloadUrl,
-          s3ApiUrl: backblazeData.s3ApiUrl
-        }
-      })
+      try {
+        const backblazeData = await authorizeAccount(token)
+
+        setAppState({
+          ...appState,
+          s3credentials: data as any,
+          s3client: undefined,
+          backblaze: BackblazeB2AuthToLocalAdapter(backblazeData)
+        })
+      } catch (error) {
+        setAppState({
+          ...appState,
+          s3credentials: data as any,
+          s3client: undefined,
+          backblaze: undefined
+        })
+      }
     } else {
       setAppState({
         ...appState,
