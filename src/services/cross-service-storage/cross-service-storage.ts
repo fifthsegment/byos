@@ -1,10 +1,11 @@
+import { S3Client } from '@aws-sdk/client-s3'
 import { ApplicationState } from '../../contexts/application/ApplicationContext'
 import {
   authorizeAccount,
   getAuthorizationToken,
   isBackblaze
 } from '../backblaze/backblaze'
-import { getDownloadLink, getDownloadLink as S3GetDownloadUrl } from '../s3'
+import { getDownloadLink as S3GetDownloadUrl } from '../s3'
 
 export const getBackblazeB2Data = async (
   appState: ApplicationState
@@ -27,6 +28,7 @@ export const isBackblazeB2TokenValid = (
 export const getDownloadLinkByKey = async (
   appState: ApplicationState,
   setAppState: React.Dispatch<React.SetStateAction<ApplicationState>>,
+  s3Client: S3Client,
   key: string
 ): Promise<string> => {
   if (isBackblaze(appState.s3credentials.endpoint)) {
@@ -39,14 +41,11 @@ export const getDownloadLinkByKey = async (
       appState.s3credentials.bucket,
       key
     ) */
-    const dllink = await getDownloadLink(appState.s3client, {
-      Bucket: appState.s3credentials.bucket,
-      Key: key
+    return await S3GetDownloadUrl(s3Client, {
+      Key: key,
+      Bucket: appState.s3credentials.bucket
     })
-    console.log('aws', dllink)
-    return await new Promise((resolve) => {
-      resolve('fail')
-    })
+
     /* if (isBackblazeB2TokenValid(appState)) {
       return getDownloadUrl(
         appState.backblaze,
@@ -60,7 +59,7 @@ export const getDownloadLinkByKey = async (
       return getDownloadUrl(b2Data, appState.s3credentials.bucket, key)
     } */
   } else {
-    return await S3GetDownloadUrl(appState.s3Client, {
+    return await S3GetDownloadUrl(appState.s3client, {
       Key: key,
       Bucket: appState.s3credentials.bucket
     })
