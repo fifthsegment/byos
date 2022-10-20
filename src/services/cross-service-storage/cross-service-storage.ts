@@ -1,5 +1,11 @@
+import { BackblazeB2AuthToLocalAdapter } from '../../adapters/backblaze'
 import { ApplicationState } from '../../contexts/application/ApplicationContext'
-import { getDownloadUrl, isBackblaze } from '../backblaze/backblaze'
+import {
+  authorizeAccount,
+  getAuthorizationToken,
+  getDownloadUrl,
+  isBackblaze
+} from '../backblaze/backblaze'
 import { getDownloadLink as S3GetDownloadUrl } from '../s3'
 
 export const getBackblazeB2Data = async (
@@ -33,13 +39,10 @@ export const getDownloadLinkByKey = async (
         key
       )
     } else {
-      /* const backblazeData = await getBackblazeB2Data(appState) */
-
-      return getDownloadUrl(
-        appState.backblaze,
-        appState.s3credentials.bucket,
-        key
-      )
+      const backblazeData = await getBackblazeB2Data(appState)
+      const b2Data = BackblazeB2AuthToLocalAdapter(backblazeData)
+      setAppState({ ...appState, backblaze: b2Data })
+      return getDownloadUrl(b2Data, appState.s3credentials.bucket, key)
     }
   } else {
     return await S3GetDownloadUrl(appState.s3Client, {
