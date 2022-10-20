@@ -5,7 +5,7 @@ import {
   getDownloadToken,
   isBackblaze
 } from '../backblaze/backblaze'
-import { getDownloadLink as S3GetDownloadUrl } from '../s3'
+import { getDownloadLink, getDownloadLink as S3GetDownloadUrl } from '../s3'
 
 export const getBackblazeB2Data = async (
   appState: ApplicationState
@@ -40,7 +40,12 @@ export const getDownloadLinkByKey = async (
       appState.s3credentials.bucket,
       key
     )
+    const dllink = await getDownloadLink(appState.s3client, {
+      Bucket: appState.s3credentials.bucket,
+      Key: key
+    })
     console.log(authToken)
+    console.log('aws', dllink)
     return await new Promise((resolve) => {
       resolve('fail')
     })

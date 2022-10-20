@@ -37,7 +37,7 @@ export const getDownloadToken = async (
       Accept: 'application/json',
       Authorization: `Basic ${authorizationToken}`
     },
-    body: {
+    data: {
       bucketId: bucket,
       fileNamePrefix: key,
       validDurationInSeconds: 86400
