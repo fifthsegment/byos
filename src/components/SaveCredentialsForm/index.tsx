@@ -2,17 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
-import { BackblazeB2AuthToLocalAdapter } from '../../adapters/backblaze'
 import { Text, Card, Snackbar } from 'react-native-paper'
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { S3Client } from '@aws-sdk/client-s3'
-import {
-  authorizeAccount,
-  getAuthorizationToken,
-  isBackblaze
-} from '../../services/backblaze/backblaze'
 
 export const SaveCredentialsForm: React.FC = () => {
   const [appState, setAppState] = useContext(ApplicationContext)
@@ -28,36 +22,15 @@ export const SaveCredentialsForm: React.FC = () => {
   const [, setSaved] = useState(false)
 
   const onSubmit = async (): void => {
-    console.log('Submitting form')
     onToggleSnackBar()
     const data = getValues()
 
-    if (isBackblaze(data?.endpoint)) {
-      const token = getAuthorizationToken(data.apiKey, data.apiSecret)
-      try {
-        const backblazeData = await authorizeAccount(token)
+    setAppState({
+      ...appState,
+      s3credentials: data as any,
+      s3client: undefined
+    })
 
-        setAppState({
-          ...appState,
-          s3credentials: data as any,
-          s3client: undefined,
-          backblaze: BackblazeB2AuthToLocalAdapter(backblazeData)
-        })
-      } catch (error) {
-        setAppState({
-          ...appState,
-          s3credentials: data as any,
-          s3client: undefined,
-          backblaze: undefined
-        })
-      }
-    } else {
-      setAppState({
-        ...appState,
-        s3credentials: data as any,
-        s3client: undefined
-      })
-    }
     setSaved(true)
     setTimeout(() => {
       setSaved(false)
