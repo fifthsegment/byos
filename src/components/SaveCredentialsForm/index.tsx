@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { buildS3Client, getAssets } from '../../services/s3'
+import { BackblazeB2AuthToLocalAdapter } from '../../adapters/backblaze'
 import { Text, Card, Snackbar } from 'react-native-paper'
 import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
@@ -38,12 +39,7 @@ export const SaveCredentialsForm: React.FC = () => {
         ...appState,
         s3credentials: data as any,
         s3client: undefined,
-        backblaze: {
-          authorizationToken: backblazeData.authorizationToken,
-          downloadUrl: backblazeData.downloadUrl,
-          s3ApiUrl: backblazeData.s3ApiUrl,
-          updatedAt: new Date()
-        }
+        backblaze: BackblazeB2AuthToLocalAdapter(backblazeData)
       })
     } else {
       setAppState({

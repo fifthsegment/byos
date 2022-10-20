@@ -50,7 +50,7 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
   }
 
   const handleDownload = async (): Promise<void> => {
-    const link = await getDownloadLinkByKey(appState, asset.key)
+    const link = await getDownloadLinkByKey(appState, setAppState, asset.key)
     const a = document.createElement('a')
     a.href = link
     a.download = asset.key
