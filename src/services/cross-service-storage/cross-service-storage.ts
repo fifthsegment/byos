@@ -2,7 +2,6 @@ import { ApplicationState } from '../../contexts/application/ApplicationContext'
 import {
   authorizeAccount,
   getAuthorizationToken,
-  getDownloadToken,
   isBackblaze
 } from '../backblaze/backblaze'
 import { getDownloadLink, getDownloadLink as S3GetDownloadUrl } from '../s3'
@@ -31,20 +30,19 @@ export const getDownloadLinkByKey = async (
   key: string
 ): Promise<string> => {
   if (isBackblaze(appState.s3credentials.endpoint)) {
-    const token = getAuthorizationToken(
+    /* const token = getAuthorizationToken(
       appState.s3credentials.apiKey,
       appState.s3credentials.apiSecret
-    )
-    const authToken = await getDownloadToken(
+    ) */
+    /* const authToken = await getDownloadToken(
       token,
       appState.s3credentials.bucket,
       key
-    )
+    ) */
     const dllink = await getDownloadLink(appState.s3client, {
       Bucket: appState.s3credentials.bucket,
       Key: key
     })
-    console.log(authToken)
     console.log('aws', dllink)
     return await new Promise((resolve) => {
       resolve('fail')
