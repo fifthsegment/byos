@@ -34,7 +34,6 @@ export const SaveCredentialsForm: React.FC = () => {
     if (isBackblaze(data?.endpoint)) {
       const token = getAuthorizationToken(data.apiKey, data.apiSecret)
       const backblazeData = await authorizeAccount(token)
-      console.log('backblaze', backblazeData)
       setAppState({
         ...appState,
         s3credentials: data as any,
@@ -42,7 +41,8 @@ export const SaveCredentialsForm: React.FC = () => {
         backblaze: {
           authorizationToken: backblazeData.authorizationToken,
           downloadUrl: backblazeData.downloadUrl,
-          s3ApiUrl: backblazeData.s3ApiUrl
+          s3ApiUrl: backblazeData.s3ApiUrl,
+          updatedAt: new Date()
         }
       })
     } else {
