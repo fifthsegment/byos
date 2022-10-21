@@ -148,7 +148,7 @@ export const ListAssets: React.FC = () => {
                   setIsExtended(false)
                 }}
               >
-                <UploadFile />
+                <UploadFile appState={appState} />
               </AppModal>
 
               {isTableView ? (
