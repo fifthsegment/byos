@@ -3,6 +3,7 @@ import {
   PutObjectCommandInput,
   S3Client
 } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import * as _DocumentPicker from 'expo-document-picker'
 import {
   IconButton,
@@ -12,7 +13,7 @@ import {
 } from 'react-native-paper'
 import { buildS3Client } from '../../services/s3'
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { ApplicationContextType } from '../../contexts/application/ApplicationContext'
 
 /* eslint-disable */
@@ -69,12 +70,24 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
             const selectFile = await _DocumentPicker.getDocumentAsync({})
             console.log(selectFile)
             setIsLoading(true)
+            let toUpload = selectFile?.file
+            if (Platform.OS === 'ios') {
+              const resp = await fetch(selectFile.uri)
+              const blob = await resp.blob()
+              toUpload = blob
+              /*StreamingUploader(
+                s3client,
+                s3credentials.bucket,
+                selectFile.name,
+                blob
+              )*/
+            }
 
             const result = uploadFileS3(
               s3client,
               selectFile.name,
               s3credentials.bucket,
-              selectFile.file
+              toUpload
             )
             result.then(() => {
               setIsRejected(false)
@@ -144,4 +157,33 @@ export const uploadFileS3 = async (
   const cmd = new PutObjectCommand(input)
   const response = await s3Client.send(cmd)
   return response
+}
+
+export const StreamingUploader = async (
+  s3Client: S3Client,
+  Bucket: string,
+  Key: string,
+  Body: any
+) => {
+  try {
+    const parallelUploads3 = new Upload({
+      client: s3Client,
+      params: { Bucket, Key, Body },
+
+      tags: [
+        /*...*/
+      ], // optional tags
+      queueSize: 4, // optional concurrency configuration
+      partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB
+      leavePartsOnError: false, // optional manually handle dropped parts
+    })
+
+    parallelUploads3.on('httpUploadProgress', (progress) => {
+      console.log(progress)
+    })
+
+    await parallelUploads3.done()
+  } catch (e) {
+    console.log(e)
+  }
 }

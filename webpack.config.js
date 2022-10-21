@@ -12,6 +12,7 @@ module.exports = async function (env, argv) {
           '@aws-sdk/s3-request-presigner',
           '@aws-sdk/signature-v4/',
           '@aws-sdk/middleware-endpoint',
+          '@aws-sdk/lib-storage',
         ],
       },
     },
