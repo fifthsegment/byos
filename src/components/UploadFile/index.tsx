@@ -29,7 +29,10 @@ export const UploadFile = () => {
     // snackbar
     const [visible, setVisible] = React.useState<boolean>(false)
     const onToggleSnackBar: () => void = () => setVisible(!visible)
-    const onDismissSnackBar: () => void = () => setVisible(false)
+    const onDismissSnackBar: () => void = () => {
+        setVisible(false)
+        setIsLoading(false)
+    }
 
     const styles = StyleSheet.create({
         snackbarcontainer: {
@@ -40,7 +43,7 @@ export const UploadFile = () => {
             // padding: 10,
             backgroundColor: 'grey',
             width: 250,
-            height: 40,
+            height: 50,
         },
         snackbartext: {
             color: 'white'
@@ -69,9 +72,12 @@ export const UploadFile = () => {
                         const result = uploadFileS3(client, selectFile.name, s3credentials.bucket, selectFile.file)
                         result.then(() => {
                             setIsRejected(false)
+                            onToggleSnackBar()
                         })
-                        setIsLoading(false)
-                        onToggleSnackBar()
+                        result.catch(() => {
+                            onToggleSnackBar()
+                        })
+
                     }}
                 />
 
