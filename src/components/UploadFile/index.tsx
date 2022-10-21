@@ -15,8 +15,8 @@ export const UploadFile = () => {
 
     const s3credentials = {
         region: "us-west-004",
-        apiKey: "004633294d448950000000002",
-        apiSecret: "K0041YcLOjyja085RwUbIGUbQIWth5E",
+        apiKey: "",
+        apiSecret: "",
         endPoint: "https://s3.us-west-004.backblazeb2.com/",
         bucket: "testinghumza"
     }
