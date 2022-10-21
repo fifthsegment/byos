@@ -13,13 +13,34 @@ export interface authorizationType {
 
 export const authorizeAccount = async (
   authorizationToken: string
-): Promise<authorizationType> => {
+): Promise<{ [key: string]: string }> => {
   const response = await axios({
     method: 'GET',
     url: `${getBaseUrl()}b2_authorize_account`,
     headers: {
       Accept: 'application/json',
       Authorization: `Basic ${authorizationToken}`
+    }
+  })
+  return response.data
+}
+
+export const getDownloadToken = async (
+  authorizationToken: string,
+  bucket: string,
+  key: string
+): Promise<authorizationType> => {
+  const response = await axios({
+    method: 'POST',
+    url: `${getBaseUrl()}b2_get_download_authorization`,
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Basic ${authorizationToken}`
+    },
+    data: {
+      bucketId: bucket,
+      fileNamePrefix: key,
+      validDurationInSeconds: 86400
     }
   })
   return response.data
