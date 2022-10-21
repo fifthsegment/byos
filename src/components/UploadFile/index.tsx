@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
 
 type Props = {
   appState: ApplicationContextType
+  s3client: S3Client
 }
 
-export const UploadFile = ({ appState }): JSX.Element => {
+export const UploadFile = ({ appState, s3client }): JSX.Element => {
   const { s3credentials } = appState
 
   const [isLoading, setIsLoading] = useState(false)
@@ -68,14 +69,9 @@ export const UploadFile = ({ appState }): JSX.Element => {
             const selectFile = await _DocumentPicker.getDocumentAsync({})
             console.log(selectFile)
             setIsLoading(true)
-            const client = buildClient(
-              s3credentials.region,
-              s3credentials.apiKey,
-              s3credentials.apiSecret,
-              s3credentials.endPoint
-            )
+
             const result = uploadFileS3(
-              client,
+              s3client,
               selectFile.name,
               s3credentials.bucket,
               selectFile.file

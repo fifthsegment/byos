@@ -148,7 +148,7 @@ export const ListAssets: React.FC = () => {
                   setIsExtended(false)
                 }}
               >
-                <UploadFile appState={appState} />
+                <UploadFile appState={appState} s3client={s3client} />
               </AppModal>
 
               {isTableView ? (
