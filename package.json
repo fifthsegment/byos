@@ -38,6 +38,7 @@
     "dayjs": "^1.11.5",
     "events": "^3.3.0",
     "expo": "~46.0.13",
+    "expo-document-picker": "~10.3.0",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "pretty-bytes": "^6.0.0",
