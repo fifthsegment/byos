@@ -24,6 +24,7 @@
     "index.html": "./index.html",
     "manifest.json": "./manifest.json",
     "serve.json": "./serve.json",
+    "service-worker.js.map": "./service-worker.js.map",
     "static/js/2.2016e540.chunk.js.LICENSE.txt": "./static/js/2.2016e540.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
