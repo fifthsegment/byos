@@ -7,7 +7,11 @@ import {
   DeleteObjectCommand,
   DeleteObjectCommandInput,
   CopyObjectCommandInput,
-  CopyObjectCommand
+  CopyObjectCommand,
+  HeadObjectCommandInput,
+  HeadObjectCommand,
+  PutObjectCommandInput,
+  PutObjectCommand
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
@@ -151,7 +155,7 @@ export const getAssetV2: (
   )
   try {
     await client.send(command)
-  } catch (error) {}
+  } catch (error) { }
   /* eslint-enable */
 
   /* return new Promise((resolve, reject) => {
@@ -177,4 +181,51 @@ export const getAssetV2: (
         // error handling
       });
   }) */
+}
+
+/* eslint-disable */
+export const buildClient = (
+  region: string,
+  apiKey: string,
+  apiSecret: string,
+  endpoint: string
+) => {
+  return buildS3Client({
+    region,
+    credentials: {
+      accessKeyId: apiKey,
+      secretAccessKey: apiSecret,
+    },
+    endpoint,
+  })
+}
+
+export const uploadFileS3 = async (
+  s3Client: S3Client,
+  filename: string,
+  bucket: string,
+  file: File
+) => {
+  const input = {
+    Body: file,
+    Key: filename,
+    Bucket: bucket,
+  } as PutObjectCommandInput
+  const cmd = new PutObjectCommand(input)
+  const response = await s3Client.send(cmd)
+  return response
+}
+
+export const checkFileExists = async (
+  s3Client: S3Client,
+  fileKey: string,
+  bucket: string,
+) => {
+  const input = {
+    Key: fileKey,
+    Bucket: bucket,
+  } as HeadObjectCommandInput
+  const cmd = new HeadObjectCommand(input)
+  const response = await s3Client.send(cmd)
+  return response
 }

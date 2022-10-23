@@ -1,20 +1,16 @@
-import {
-  PutObjectCommand,
-  PutObjectCommandInput,
-  S3Client
-} from '@aws-sdk/client-s3'
-import { Upload } from '@aws-sdk/lib-storage'
+import { S3Client } from '@aws-sdk/client-s3'
+// import { Upload } from '@aws-sdk/lib-storage'
 import * as _DocumentPicker from 'expo-document-picker'
 import {
   IconButton,
   Snackbar,
-  Text,
-  ActivityIndicator
+  Text
 } from 'react-native-paper'
-import { buildS3Client } from '../../services/s3'
+import { checkFileExists, uploadFileS3 } from '../../services/s3'
 import React, { useState } from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
 import { ApplicationContextType } from '../../contexts/application/ApplicationContext'
+import { Dialog_ } from './Dialog'
 
 /* eslint-disable */
 const styles = StyleSheet.create({
@@ -38,11 +34,20 @@ const styles = StyleSheet.create({
     activityindicator: {
         marginLeft: 5,
     },
+    dialog: {
+        width: 250,
+        left: '39%'
+    }
 })
 
 type Props = {
     appState: ApplicationContextType
     s3client: S3Client
+}
+
+interface uploadFileConset {
+    overwrite: boolean,
+    file: File
 }
 
 export const UploadFile = ({ appState, s3client }): JSX.Element => {
@@ -51,16 +56,24 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
     const [isLoading, setIsLoading] = useState(false)
     const [isRejected, setIsRejected] = useState(true)
 
+    //array to hold files requireing consent to overwrite
+    const filesOverwriteInitial: uploadFileConset[] = []
+    const [filesOverwrite, setFilesOverwrite] = React.useState(filesOverwriteInitial)
+    const processingOverwriteInitial: uploadFileConset = { overwrite: false, file: null }
+    const [porcessingOverwrite, setProcessingOverwrite] = React.useState(processingOverwriteInitial)
+
     // snackbar
-    const [visible, setVisible] = React.useState<boolean>(false)
-    const onToggleSnackBar: () => void = () => setVisible(!visible)
+    const [visibleSnackbar, setVisibleSnackbar] = React.useState<boolean>(false)
+    const onToggleSnackBar: () => void = () => setVisibleSnackbar(!visibleSnackbar)
     const onDismissSnackBar: () => void = () => {
-        setVisible(false)
+        setVisibleSnackbar(false)
         setIsLoading(false)
     }
 
     return (
         <>
+            <Dialog_ filesOverwrite={filesOverwrite} porcessingOverwrite={porcessingOverwrite} setProcessingOverwrite={setProcessingOverwrite} setFilesOverwrite={setFilesOverwrite} s3credentials={s3credentials} s3client={s3client} />
+
             <Text>Click on the button below to select & upload file</Text>
 
             <View style={styles.uploadcontainer}>
@@ -84,32 +97,40 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
                         }
 
                         for (const file of toUpload) {
-                            const result = uploadFileS3(
-                                s3client,
-                                file.name,
-                                s3credentials.bucket,
-                                file
-                            )
-                            result.then(() => {
-                                setIsRejected(false)
-                                onToggleSnackBar()
+                            const resultFileExists = checkFileExists(s3client, file.name, s3credentials.bucket)
+                            console.log(resultFileExists)
+                            resultFileExists.then((x) => {
+                                // console.log('file exists')
+                                setFilesOverwrite(current => [...current, { overwrite: false, file: file }])
+                                // showDialog()
                             })
-                            result.catch(() => {
-                                onToggleSnackBar()
+                            resultFileExists.catch(() => {
+                                // console.log('file does not exist, uploading')
+                                const resultUploadFile = uploadFileS3(
+                                    s3client,
+                                    file.name,
+                                    s3credentials.bucket,
+                                    file
+                                )
+                                resultUploadFile.then(() => {
+                                    setIsRejected(false)
+                                    onToggleSnackBar()
+                                })
+                                resultUploadFile.catch(() => {
+                                    onToggleSnackBar()
+                                })
                             })
+
                         }
                     }}
                 />
 
-                {isLoading && (
-                    <ActivityIndicator style={styles.activityindicator} animating />
-                )}
             </View>
 
             <View style={styles.snackbarcontainer}>
                 <Snackbar
                     style={styles.snackbarinner}
-                    visible={visible}
+                    visible={visibleSnackbar}
                     onDismiss={onDismissSnackBar}
                     action={{
                         label: 'Dismiss',
@@ -129,63 +150,32 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
     )
 }
 
-export const buildClient = (
-    region: string,
-    apiKey: string,
-    apiSecret: string,
-    endpoint: string
-) => {
-    return buildS3Client({
-        region,
-        credentials: {
-            accessKeyId: apiKey,
-            secretAccessKey: apiSecret,
-        },
-        endpoint,
-    })
-}
 
-export const uploadFileS3 = async (
-    s3Client: S3Client,
-    filename: string,
-    bucket: string,
-    file: File
-) => {
-    const input = {
-        Body: file,
-        Key: filename,
-        Bucket: bucket,
-    } as PutObjectCommandInput
-    const cmd = new PutObjectCommand(input)
-    const response = await s3Client.send(cmd)
-    return response
-}
+// export const StreamingUploader = async (
+//     s3Client: S3Client,
+//     Bucket: string,
+//     Key: string,
+//     Body: any
+// ) => {
+//     try {
+//         const parallelUploads3 = new Upload({
+//             client: s3Client,
+//             params: { Bucket, Key, Body },
 
-export const StreamingUploader = async (
-    s3Client: S3Client,
-    Bucket: string,
-    Key: string,
-    Body: any
-) => {
-    try {
-        const parallelUploads3 = new Upload({
-            client: s3Client,
-            params: { Bucket, Key, Body },
+//             tags: [
+//                 /*...*/
+//             ], // optional tags
+//             queueSize: 4, // optional concurrency configuration
+//             partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB
+//             leavePartsOnError: false, // optional manually handle dropped parts
+//         })
 
-            tags: [
-                /*...*/
-            ], // optional tags
-            queueSize: 4, // optional concurrency configuration
-            partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB
-            leavePartsOnError: false, // optional manually handle dropped parts
-        })
+//         parallelUploads3.on('httpUploadProgress', (progress) => {
+//             console.log(progress)
+//         })
 
-        parallelUploads3.on('httpUploadProgress', (progress) => {
-            console.log(progress)
-        })
-
-        await parallelUploads3.done()
-    } catch (e) {
-        console.log(e)
-    }
-}
+//         await parallelUploads3.done()
+//     } catch (e) {
+//         console.log(e)
+//     }
+// }
