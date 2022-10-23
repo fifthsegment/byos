@@ -5,3 +5,6 @@ src/services/azure/**
 src/reportWebVItals.ts
 src/react-app-env.d.ts
 src/generators/**
+src/serviceWorkerRegistration.native.js 
+src/service-worker.js
+src/serviceWorkerRegistration.js
