@@ -10,7 +10,8 @@ import {
   CopyObjectCommand,
   PutBucketCorsCommandInput,
   PutBucketCorsCommand,
-  CORSRule
+  CORSRule,
+  PutBucketCorsCommandOutput
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
@@ -185,7 +186,7 @@ export const getAssetV2: (
 export const updateCors = async (
   s3Client: S3Client,
   params: PutBucketCorsCommandInput
-): Promise<string> => {
+): Promise<PutBucketCorsCommandOutput> => {
   const rule: CORSRule = {
     ID: 'allaccess',
     AllowedHeaders: [''],
@@ -196,6 +197,6 @@ export const updateCors = async (
   }
   params.CORSConfiguration.CORSRules.push(rule)
   const command = new PutBucketCorsCommand(params)
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
-  return url
+  const response: PutBucketCorsCommandOutput = await s3Client.send(command)
+  return response
 }
