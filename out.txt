@@ -1,2 +1,4 @@
 yarn run v1.22.19
-$ npx eslint "src/**" --fix
+$ KEY=003a0eba6272a67000000000d SECRET=K003vfoAio3l2rV08+IGmKyDUA8b4Po BUCKET=testingbyos node src/scripts/backblaze-cors.js
+undefined
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

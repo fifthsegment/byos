@@ -23,10 +23,13 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
 export const buildS3Client = (initializationData: S3Initializer): S3Client => {
   const { credentials, region, endpoint } = initializationData
+
   const client = new S3Client({
     region,
     credentials,
-    endpoint
+    endpoint,
+    bucketEndpoint: false,
+    forcePathStyle: true
   })
   client.middlewareStack.add(
     (next, context) => async (args) => {
@@ -197,6 +200,7 @@ export const updateCors = async (
   }
   params.CORSConfiguration.CORSRules.push(rule)
   const command = new PutBucketCorsCommand(params)
+
   const response: PutBucketCorsCommandOutput = await s3Client.send(command)
   return response
 }
