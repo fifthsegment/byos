@@ -8,3 +8,4 @@ src/generators/**
 src/serviceWorkerRegistration.native.js 
 src/service-worker.js
 src/serviceWorkerRegistration.js
+src/scripts/**
