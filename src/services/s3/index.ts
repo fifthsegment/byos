@@ -7,7 +7,10 @@ import {
   DeleteObjectCommand,
   DeleteObjectCommandInput,
   CopyObjectCommandInput,
-  CopyObjectCommand
+  CopyObjectCommand,
+  PutBucketCorsCommandInput,
+  PutBucketCorsCommand,
+  CORSRule
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
@@ -177,4 +180,22 @@ export const getAssetV2: (
         // error handling
       });
   }) */
+}
+
+export const updateCors = async (
+  s3Client: S3Client,
+  params: PutBucketCorsCommandInput
+): Promise<string> => {
+  const rule: CORSRule = {
+    ID: 'allaccess',
+    AllowedHeaders: [''],
+    AllowedMethods: [''],
+    AllowedOrigins: [''],
+    MaxAgeSeconds: 3600,
+    ExposeHeaders: ['x-bz-content-sha1']
+  }
+  params.CORSConfiguration.CORSRules.push(rule)
+  const command = new PutBucketCorsCommand(params)
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
+  return url
 }
