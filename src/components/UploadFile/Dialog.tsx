@@ -42,7 +42,7 @@ export const Dialog_ = ({ filesOverwrite, porcessingOverwrite, setProcessingOver
 
     return (<>
         <Portal>
-            <Dialog visible={visibleDialog} onDismiss={hideDialog} style={styles.dialog}>
+            <Dialog visible={visibleDialog} style={styles.dialog} dismissable={false}>
                 <Dialog.Title>Alert</Dialog.Title>
                 <Dialog.Content>
                     <Text><>File "{porcessingOverwrite?.file?.name}" already exists, do you want to overwrite</></Text>
