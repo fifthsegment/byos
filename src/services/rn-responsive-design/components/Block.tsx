@@ -6,25 +6,10 @@ import {
   EmitterSubscription
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-
-export type ScreenType = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+import { getScreenType, ScreenType } from '../constants'
 
 export interface BlockType {
   hidden?: ScreenType[]
-}
-
-const getScreenType = (px: number): ScreenType => {
-  if (px < 576) {
-    return 'xs'
-  } else if (px >= 576 && px < 768) {
-    return 'md'
-  } else if (px >= 768 && px < 992) {
-    return 'lg'
-  } else if (px >= 992 && px < 1200) {
-    return 'xl'
-  } else if (px >= 1200) {
-    return 'xxl'
-  }
 }
 
 const window = Dimensions.get('window')

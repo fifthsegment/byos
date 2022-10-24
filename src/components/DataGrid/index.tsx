@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -15,6 +15,7 @@ import {
   ApplicationContextType
 } from '../../contexts/application/ApplicationContext'
 import { useS3Client } from '../../hooks/useS3Client'
+import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
 
 const styles = StyleSheet.create({
   cell: {
@@ -49,6 +50,13 @@ export const DataGrid: (props: DataTableProps) => JSX.Element = ({
   const [s3client, s3Initialized] = useS3Client(appState)
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
   const [currentPage, setCurrentPage] = useState(1)
+  const [numColumns, setNumColumns] = useState(4)
+  const screenSize = useScreenSize()
+
+  useMemo(() => {
+    ;['xs', 'md'].includes(screenSize) ? setNumColumns(3) : setNumColumns(4)
+  }, [screenSize])
+
   useEffect(() => {
     setData(assets || [])
     setCurrentPage(1)
@@ -94,8 +102,9 @@ export const DataGrid: (props: DataTableProps) => JSX.Element = ({
 
         <View>
           <FlatList
+            key={`flatlistassets-${numColumns}`}
             columnWrapperStyle={styles.columnWrapperStyle}
-            numColumns={4}
+            numColumns={numColumns}
             data={items}
             renderItem={({ item }: { item: Asset }) => {
               return (

@@ -964,7 +964,7 @@
     "@aws-sdk/types" "3.190.0"
     tslib "^2.3.1"
 
-"@aws-sdk/url-parser@^3.193.0":
+"@aws-sdk/url-parser@3.193.0", "@aws-sdk/url-parser@^3.193.0":
   version "3.193.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/url-parser/-/url-parser-3.193.0.tgz#0a833c2e0648d699abf7133ee5564e8fee9ead35"
   integrity sha512-hwD1koJlOu2a6GvaSbNbdo7I6a3tmrsNTZr8bCjAcbqpc5pDThcpnl/Uaz3zHmMPs92U8I6BvWoK6pH8By06qw==

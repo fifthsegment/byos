@@ -3,7 +3,7 @@ import { Platform, View, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Provider as PaperProvider, Text, IconButton } from 'react-native-paper'
-import { PortalProvider } from '@gorhom/portal'
+import { PortalHost, PortalProvider } from '@gorhom/portal'
 
 import {
   ApplicationContext,
@@ -53,6 +53,7 @@ function App (): JSX.Element {
     // Add a placeholder button without the `onPress` to avoid flicker
     headerRight: () => (
       <View style={styles.ButtonsWrapper}>
+        <PortalHost name="Reloader" />
         <IconButton
           style={styles.Button}
           icon="home"

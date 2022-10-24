@@ -3,13 +3,13 @@ import { Feather } from '@expo/vector-icons'
 import { StyleSheet, View } from 'react-native'
 import { IconButton, Text, TextInput } from 'react-native-paper'
 
-import { Block } from '../../services/rn-responsive-design'
 import { Asset } from '../../services/types'
 import { ThemeContextInternal } from '../../contexts/theme/ThemeContextInternal'
 import { ApplicationContext } from '../../contexts/application/ApplicationContext'
 import { updateAsset as s3UpdateAsset, deleteAsset } from '../../services/s3'
 import { useS3Client } from '../../hooks/useS3Client'
 import { getDownloadLinkByKey } from '../../services/cross-service-storage/cross-service-storage'
+import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
 
 export interface PreviewPropsType {
   asset: Asset
@@ -25,6 +25,7 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
   const [updateAsset, setUpdateAsset] = useState(asset)
   const [text, setText] = useState(asset.fileName)
   const [s3Client] = useS3Client(appState)
+  const screenSize = useScreenSize()
 
   const handleSave = async (): Promise<void> => {
     setIsEditing(false)
@@ -68,61 +69,70 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
   /* eslint-disable */
   return (
     <>
-      <Block hidden={['xs', 'md']}>
-        <View style={styles.main}>
-          <IconButton
-            theme={theme}
-            icon="close"
-            onPress={onClose}
-            style={styles.closeButton}
-          />
-          <View style={[styles.section2, styles.centered]}>
-            <Text
-              variant="headlineSmall"
-              style={[styles.textCenter, styles.marginBottom]}
-            >
-              <Feather theme={theme} name="file" size={100} />
-            </Text>
-            <Text variant="headlineSmall" style={styles.textCenter}>
-              {isEditing ? (
-                <TextInput
-                  value={isEditing ? text : updateAsset?.fileName}
-                  onChangeText={(text) => setText(text)}
-                />
-              ) : (
-                updateAsset?.fileName
-              )}
-            </Text>
-            <View style={[styles.centered, styles.horizontal]}>
-              {isEditing ? (
-                <IconButton theme={theme} icon="check" onPress={handleSave} />
-              ) : (
-                <IconButton
-                  theme={theme}
-                  icon="pencil"
-                  onPress={() => setIsEditing(true)}
-                />
-              )}
+      <View
+        style={
+          ['xs', 'md'].includes(screenSize)
+            ? [styles.mainMobile]
+            : [styles.main]
+        }
+      >
+        <IconButton
+          theme={theme}
+          icon="close"
+          onPress={onClose}
+          style={styles.closeButton}
+        />
+        <View
+          style={
+            ['xs', 'md'].includes(screenSize)
+              ? [styles.section2Mobile, styles.centered]
+              : [styles.section2, styles.centered]
+          }
+        >
+          <Text
+            variant="headlineSmall"
+            style={[styles.textCenter, styles.marginBottom]}
+          >
+            <Feather theme={theme} name="file" size={100} />
+          </Text>
+          <Text variant="headlineSmall" style={styles.textCenter}>
+            {isEditing ? (
+              <TextInput
+                value={isEditing ? text : updateAsset?.fileName}
+                onChangeText={(text) => setText(text)}
+              />
+            ) : (
+              updateAsset?.fileName
+            )}
+          </Text>
+          <View style={[styles.centered, styles.horizontal]}>
+            {isEditing ? (
+              <IconButton theme={theme} icon="check" onPress={handleSave} />
+            ) : (
               <IconButton
                 theme={theme}
-                icon="trash-can"
-                onPress={handleDelete}
+                icon="pencil"
+                onPress={() => setIsEditing(true)}
               />
-              <IconButton
-                theme={theme}
-                icon="download"
-                onPress={handleDownload}
-              />
-            </View>
+            )}
+            <IconButton theme={theme} icon="trash-can" onPress={handleDelete} />
+            <IconButton
+              theme={theme}
+              icon="download"
+              onPress={handleDownload}
+            />
           </View>
         </View>
-      </Block>
+      </View>
     </>
   )
 }
 /* eslint-enable */
 
 const styles = StyleSheet.create({
+  mainMobile: {
+    backgroundColor: 'rgb(242, 242, 242)'
+  },
   main: {
     display: 'flex',
     flexGrow: 1
@@ -147,6 +157,13 @@ const styles = StyleSheet.create({
   },
   section2: {
     minWidth: '30vw',
+    flex: 1,
+    flexGrow: 1,
+    margin: 20
+  },
+  section2Mobile: {
+    backgroundColor: 'rgb(242, 242, 242)',
+    minWidth: '100vw',
     flex: 1,
     flexGrow: 1,
     margin: 20
