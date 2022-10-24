@@ -16,6 +16,7 @@ import Dashboard from './pages/dashboard'
 import Credentials from './pages/credentials'
 import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Stack = createNativeStackNavigator()
 
@@ -101,3 +102,5 @@ const ThemeProvider = ({ children }: React.PropsWithChildren): JSX.Element => {
 }
 
 export default App
+
+serviceWorkerRegistration.register()

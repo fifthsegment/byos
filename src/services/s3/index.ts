@@ -12,6 +12,10 @@ import {
   HeadObjectCommand,
   PutObjectCommandInput,
   PutObjectCommand
+  PutBucketCorsCommandInput,
+  PutBucketCorsCommand,
+  CORSRule,
+  PutBucketCorsCommandOutput
 } from '@aws-sdk/client-s3'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
@@ -23,10 +27,13 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 
 export const buildS3Client = (initializationData: S3Initializer): S3Client => {
   const { credentials, region, endpoint } = initializationData
+
   const client = new S3Client({
     region,
     credentials,
-    endpoint
+    endpoint,
+    bucketEndpoint: false,
+    forcePathStyle: true
   })
   client.middlewareStack.add(
     (next, context) => async (args) => {
@@ -227,5 +234,24 @@ export const checkFileExists = async (
   } as HeadObjectCommandInput
   const cmd = new HeadObjectCommand(input)
   const response = await s3Client.send(cmd)
+  return response
+}
+
+export const updateCors = async (
+  s3Client: S3Client,
+  params: PutBucketCorsCommandInput
+): Promise<PutBucketCorsCommandOutput> => {
+  const rule: CORSRule = {
+    ID: 'allaccess',
+    AllowedHeaders: [''],
+    AllowedMethods: [''],
+    AllowedOrigins: [''],
+    MaxAgeSeconds: 3600,
+    ExposeHeaders: ['x-bz-content-sha1']
+  }
+  params.CORSConfiguration.CORSRules.push(rule)
+  const command = new PutBucketCorsCommand(params)
+
+  const response: PutBucketCorsCommandOutput = await s3Client.send(command)
   return response
 }
