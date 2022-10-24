@@ -18,6 +18,8 @@ import { TextLink } from '../TextLink'
 import { Preview } from '../Preview'
 import { DataGrid } from '../DataGrid'
 
+import { UploadFile } from '../UploadFile'
+
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
     undefined
@@ -146,7 +148,7 @@ export const ListAssets: React.FC = () => {
                   setIsExtended(false)
                 }}
               >
-                <Text>Upload files here</Text>
+                <UploadFile appState={appState} s3client={s3client} />
               </AppModal>
 
               {isTableView ? (
