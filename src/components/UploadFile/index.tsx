@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 type Props = {
   appState: ApplicationContextType
   s3client: S3Client
+  prefix: string
 }
 
 interface uploadFileConset {
@@ -46,7 +47,7 @@ interface uploadFileConset {
   file: File
 }
 
-export const UploadFile = ({ appState, s3client }): JSX.Element => {
+export const UploadFile = ({ appState, s3client, prefix }): JSX.Element => {
   const { s3credentials } = appState
 
   const [isLoading, setIsLoading] = useState(false)
@@ -85,9 +86,10 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
         s3client={s3client}
       />
 
-      <Text>Click on the button below to select & upload file</Text>
+      <Text>Upload location : {prefix}</Text>
 
       <View style={styles.uploadcontainer}>
+        {isLoading && 'Uploading'}
         <IconButton
           icon="cloud-upload"
           onPress={async () => {
@@ -128,7 +130,7 @@ export const UploadFile = ({ appState, s3client }): JSX.Element => {
                 // console.log('file does not exist, uploading')
                 const resultUploadFile = uploadFileS3(
                   s3client,
-                  file.name,
+                  prefix + file.name,
                   s3credentials.bucket,
                   file
                 )
