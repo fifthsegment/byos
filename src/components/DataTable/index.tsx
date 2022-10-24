@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -18,6 +18,8 @@ import { AntDesign } from '@expo/vector-icons'
 
 import { DataGridColumns } from './dataTableColumns'
 import { Asset } from '../../services/types'
+import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
+import { isMobile } from '../../services/rn-responsive-design/utils'
 
 const styles = StyleSheet.create({
   tableHead: {
@@ -52,14 +54,23 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
 }: DataTableProps) => {
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columns, setColumns] = useState(DataGridColumns())
   const [currentPage, setCurrentPage] = useState(1)
+  const screenType = useScreenSize()
+  useMemo(() => {
+    if (isMobile()) {
+      setColumns(DataGridColumns().filter((column) => column.id === 'fileName'))
+    } else {
+      setColumns(DataGridColumns())
+    }
+  }, [screenType])
   useEffect(() => {
     setData(assets || [])
     setCurrentPage(1)
   }, [assets])
   const table = useReactTable({
     data,
-    columns: DataGridColumns(),
+    columns,
     state: {
       sorting
     },

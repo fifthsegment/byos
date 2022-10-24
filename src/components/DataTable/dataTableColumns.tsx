@@ -1,5 +1,5 @@
 import React from 'react'
-import { createColumnHelper } from '@tanstack/react-table'
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import prettyBytes from 'pretty-bytes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -43,9 +43,9 @@ const iconType = (asset: Asset): JSX.Element => {
   }
 }
 
-export const DataGridColumns: any = () => {
+export const DataGridColumns = (): Array<ColumnDef<Asset, any>> => {
   const columnHelper = createColumnHelper<Asset>()
-  const columns: any = [
+  const columns: Array<ColumnDef<Asset, any>> = [
     // Dispaly file name with icon
     columnHelper.accessor('fileName', {
       id: 'fileName',
