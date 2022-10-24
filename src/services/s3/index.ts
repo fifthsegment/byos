@@ -11,7 +11,7 @@ import {
   HeadObjectCommandInput,
   HeadObjectCommand,
   PutObjectCommandInput,
-  PutObjectCommand
+  PutObjectCommand,
   PutBucketCorsCommandInput,
   PutBucketCorsCommand,
   CORSRule,
