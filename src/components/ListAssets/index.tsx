@@ -19,12 +19,17 @@ import { Preview } from '../Preview'
 import { DataGrid } from '../DataGrid'
 
 import { UploadFile } from '../UploadFile'
+import { CreateFolder } from '../CreateFolder/CreateFolder'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
     undefined
   )
   const [isExtended, setIsExtended] = React.useState(false)
+  const [uploadModalVisible, setUploadModalVisible] = React.useState(false)
+  const [createFolderModalVisible, setCreateFolderModalVisible] =
+    React.useState(false)
+
   const [rerun, setRerun] = useState('')
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
@@ -95,6 +100,10 @@ export const ListAssets: React.FC = () => {
     )
   })
 
+  const doReload = (): void => {
+    setRerun(`${Math.random()}`)
+  }
+
   /* eslint-disable */
   return (
     <>
@@ -105,7 +114,7 @@ export const ListAssets: React.FC = () => {
               animated
               icon="reload"
               onPress={() => {
-                setRerun(`${Math.random()}`)
+                doReload()
               }}
             />
           </Portal>
@@ -143,15 +152,36 @@ export const ListAssets: React.FC = () => {
               </View>
 
               <AppModal
-                isVisible={isExtended}
+                isVisible={uploadModalVisible}
                 onClose={() => {
-                  setIsExtended(false)
+                  setUploadModalVisible(false)
                 }}
               >
                 <UploadFile
                   appState={appState}
                   s3client={s3client}
                   prefix={dataQuery.Prefix}
+                  doReload={doReload}
+                  doCloseModal={() => {
+                    setUploadModalVisible(false)
+                  }}
+                />
+              </AppModal>
+
+              <AppModal
+                isVisible={createFolderModalVisible}
+                onClose={() => {
+                  setCreateFolderModalVisible(false)
+                }}
+              >
+                <CreateFolder
+                  appState={appState}
+                  s3client={s3client}
+                  prefix={dataQuery.Prefix}
+                  doReload={doReload}
+                  doCloseModal={() => {
+                    setCreateFolderModalVisible(false)
+                  }}
                 />
               </AppModal>
 
@@ -169,11 +199,28 @@ export const ListAssets: React.FC = () => {
                 />
               )}
 
-              <FAB
+              <FAB.Group
+                backdropColor="none"
                 icon="plus"
+                onStateChange={({ open }) => {
+                  setIsExtended(open)
+                }}
+                open={isExtended}
                 onPress={() => setIsExtended(!isExtended)}
                 visible
                 style={[styles.fabStyle]}
+                actions={[
+                  {
+                    icon: 'plus',
+                    label: 'Upload',
+                    onPress: () => setUploadModalVisible(true),
+                  },
+                  {
+                    icon: 'folder',
+                    label: 'New Folder',
+                    onPress: () => setCreateFolderModalVisible(true),
+                  },
+                ]}
               />
             </View>
             {selectedAsset && (

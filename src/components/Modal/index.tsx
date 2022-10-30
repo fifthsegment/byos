@@ -1,9 +1,8 @@
 /* eslint-disable */
 import React from 'react'
-import { Alert, StyleSheet, Pressable, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import { Modal, Text, Portal } from 'react-native-paper';
-
+import { Modal, Portal } from 'react-native-paper'
 
 export interface ModalProps {
   isVisible: boolean
@@ -13,7 +12,7 @@ export interface ModalProps {
 const AppModal = ({
   isVisible,
   onClose,
-  children
+  children,
 }: React.PropsWithChildren<ModalProps>): JSX.Element => {
   if (!isVisible) {
     return null
@@ -38,7 +37,6 @@ const AppModal = ({
               style={[styles.button, styles.buttonClose]}
               onPress={() => onClose()}
             > */}
-            <Text style={styles.textStyle}>Tap below to dismiss</Text>
             {/* </Pressable> */}
           </View>
         </View>
@@ -74,13 +72,13 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF'
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3'
+    backgroundColor: '#2196F3',
   },
   textStyle: {
     // color: 'white',
@@ -90,8 +88,8 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 })
 
 export default AppModal

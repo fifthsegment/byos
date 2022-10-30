@@ -125,7 +125,7 @@ export const getAsset: (
 }
 
 export const getDownloadLink = async (
-  s3Client: s3Client,
+  s3Client: S3Client,
   params: GetObjectCommandInput
 ): Promise<string> => {
   const command = new GetObjectCommand(params)
@@ -211,13 +211,15 @@ export const uploadFileS3 = async (
   s3Client: S3Client,
   filename: string,
   bucket: string,
-  file: File
+  file?: File
 ) => {
-  const input = {
-    Body: file,
+  let input = {
     Key: filename,
     Bucket: bucket,
   } as PutObjectCommandInput
+  if (file) {
+    input.Body = file;
+  }
   const cmd = new PutObjectCommand(input)
   const response = await s3Client.send(cmd)
   return response

@@ -47,7 +47,13 @@ interface uploadFileConset {
   file: File
 }
 
-export const UploadFile = ({ appState, s3client, prefix }): JSX.Element => {
+export const UploadFile = ({
+  appState,
+  s3client,
+  prefix,
+  doReload,
+  doCloseModal,
+}): JSX.Element => {
   const { s3credentials } = appState
 
   const [isLoading, setIsLoading] = useState(false)
@@ -98,7 +104,6 @@ export const UploadFile = ({ appState, s3client, prefix }): JSX.Element => {
             })
             setIsLoading(true)
             let toUpload = selectFile?.output
-            console.log(toUpload)
             if (Platform.OS === 'ios') {
               const resp = await fetch(selectFile.uri)
               const blob = await resp.blob()
@@ -114,7 +119,7 @@ export const UploadFile = ({ appState, s3client, prefix }): JSX.Element => {
             for (const file of toUpload) {
               const resultFileExists = checkFileExists(
                 s3client,
-                file.name,
+                prefix + file.name,
                 s3credentials.bucket
               )
               console.log(resultFileExists)
@@ -137,6 +142,8 @@ export const UploadFile = ({ appState, s3client, prefix }): JSX.Element => {
                 resultUploadFile.then(() => {
                   setIsRejected(false)
                   onToggleSnackBar()
+                  doReload()
+                  doCloseModal()
                 })
                 resultUploadFile.catch(() => {
                   onToggleSnackBar()
