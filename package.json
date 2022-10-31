@@ -16,7 +16,7 @@
     "lint": "npx eslint \"src/**\"",
     "prepare": "husky install",
     "updateb2cors": "tsc src/scripts/backblaze-cors.ts && node src/scripts/backblaze-cors.js",
-    "runupdateb2cors": "KEY=633294d44895 SECRET=004e4c9c7291108d64bda1ded66515d8a4a33a3507 BUCKET=testinghumza node src/scripts/backblaze-cors.js",
+    "runupdateb2cors": "KEY=your-key SECRET=your-secret BUCKET=your-bucket node src/scripts/backblaze-cors.js",
     "plop": "plop --plopfile src/scripts/plopfile.mjs -- keyId=003a0eba6272a67000000000e"
   },
   "dependencies": {
