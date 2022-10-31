@@ -76,7 +76,7 @@ var updateBucket = function (url, authorizationToken, data) { return __awaiter(v
         switch (_a.label) {
             case 0:
                 genurl = "".concat(url, "/b2api/v2/b2_update_bucket");
-                console.log("Calling url = ", genurl);
+                console.log('Calling url = ', genurl);
                 return [4 /*yield*/, axios({
                         method: 'post',
                         url: genurl,
@@ -99,7 +99,7 @@ var listBuckets = function (url, accountId, authorizationToken) { return __await
         switch (_a.label) {
             case 0:
                 genurl = "".concat((0, exports.getBaseUrl)(), "b2_list_buckets");
-                console.log("Calling url = ", genurl);
+                console.log('Calling url = ', genurl);
                 return [4 /*yield*/, axios({
                         method: 'post',
                         url: genurl,
@@ -126,7 +126,7 @@ var listBuckets2 = function (key, secret, bucket) { return __awaiter(void 0, voi
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, b2.authorize()];
+                        return [4 /*yield*/, b2.authorize()]; // must authorize first (authorization lasts 24 hrs)
                     case 1:
                         _a.sent(); // must authorize first (authorization lasts 24 hrs)
                         return [4 /*yield*/, b2.getBucket({ bucketName: bucket })];
@@ -148,7 +148,7 @@ var listBuckets2 = function (key, secret, bucket) { return __awaiter(void 0, voi
             case 0:
                 b2 = new B2({
                     applicationKeyId: key,
-                    applicationKey: secret // or masterApplicationKey
+                    applicationKey: secret
                 });
                 return [4 /*yield*/, GetBucket()];
             case 1: return [2 /*return*/, _a.sent()];
@@ -165,26 +165,34 @@ var updateCors = function (key, secret, bucket) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         token = (0, exports.getAuthorizationToken)(key, secret);
-                        return [4 /*yield*/, (0, exports.authorizeAccount)(token)];
+                        return [4 /*yield*/, (0, exports.authorizeAccount)(token)]; // must authorize first (authorization lasts 24 hrs)
                     case 1:
-                        authorized = _a.sent();
+                        authorized = _a.sent() // must authorize first (authorization lasts 24 hrs)
+                        ;
                         return [4 /*yield*/, (0, exports.listBuckets2)(key, secret, bucket)];
                     case 2:
                         bucketData = _a.sent();
-                        console.log("bucketData", bucketData);
+                        console.log('bucketData', bucketData);
                         bucketId = bucketData.buckets[0].bucketId;
                         bucketUpdateData = {
                             accountId: authorized.accountId,
                             bucketId: bucketId,
                             corsRules: [
                                 {
-                                    "corsRuleName": "allAccessbyos",
-                                    "allowedOrigins": ["byosapp.netlifyapp.com", "localhost"],
-                                    "allowedHeaders": ["*"],
-                                    "allowedOperations": ["s3_delete", "s3_get", "s3_head", "s3_post", "s3_put"],
-                                    "exposeHeaders": ["x-bz-content-sha1"],
-                                    "maxAgeSeconds": 3600
-                                }
+                                    corsRuleName: 'allAccessbyos',
+                                    allowedOrigins: ['*'],
+                                    allowedHeaders: ['*'],
+                                    allowedOperations: [
+                                        's3_delete',
+                                        's3_get',
+                                        's3_head',
+                                        's3_post',
+                                        's3_put',
+                                        's3_copy',
+                                    ],
+                                    exposeHeaders: ['x-bz-content-sha1'],
+                                    maxAgeSeconds: 3600
+                                },
                             ]
                         };
                         return [4 /*yield*/, (0, exports.updateBucket)(authorized.apiUrl, authorized.authorizationToken, bucketUpdateData)];
