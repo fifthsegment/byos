@@ -10,6 +10,7 @@ import { updateAsset as s3UpdateAsset, deleteAsset } from '../../services/s3'
 import { useS3Client } from '../../hooks/useS3Client'
 import { getDownloadLinkByKey } from '../../services/cross-service-storage/cross-service-storage'
 import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
+import prettyBytes from 'pretty-bytes'
 
 export interface PreviewPropsType {
   asset: Asset
@@ -36,8 +37,12 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
     }))
     await s3UpdateAsset(s3Client, {
       Bucket: s3credentials.bucket,
-      Key: prefix + asset.key.replace(asset.fileName, text),
-      CopySource: prefix + asset.key
+      Key: asset.key.replace(asset.fileName, text),
+      CopySource: s3credentials.bucket + '/' + asset.key
+    })
+    await deleteAsset(s3Client, {
+      Key: asset.key,
+      Bucket: s3credentials.bucket
     })
     setAppState({ ...appState, mutatedAt: new Date() })
   }
@@ -106,6 +111,7 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
               updateAsset?.fileName
             )}
           </Text>
+          <Text>{prettyBytes(asset.fileSize)}</Text>
           <View style={[styles.centered, styles.horizontal]}>
             {isEditing ? (
               <IconButton theme={theme} icon="check" onPress={handleSave} />
