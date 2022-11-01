@@ -225,6 +225,7 @@ export const ListAssets: React.FC = () => {
             </View>
             {selectedAsset && (
               <Preview
+                prefix={dataQuery.Prefix}
                 onClose={() => setSelectedAsset(undefined)}
                 asset={selectedAsset}
               />

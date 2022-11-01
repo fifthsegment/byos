@@ -13,10 +13,11 @@ import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize
 
 export interface PreviewPropsType {
   asset: Asset
+  prefix: string
   onClose: () => void
 }
 
-const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
+const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
   const [appState, setAppState] = useContext(ApplicationContext)
   const { s3credentials } = appState
 
@@ -35,8 +36,8 @@ const Preview = ({ asset, onClose }: PreviewPropsType): JSX.Element => {
     }))
     await s3UpdateAsset(s3Client, {
       Bucket: s3credentials.bucket,
-      Key: s3credentials.bucket + '/' + asset.key.replace(asset.fileName, text),
-      CopySource: s3credentials.bucket + '/' + asset.key
+      Key: prefix + asset.key.replace(asset.fileName, text),
+      CopySource: prefix + asset.key
     })
     setAppState({ ...appState, mutatedAt: new Date() })
   }

@@ -16,8 +16,8 @@
     "lint": "npx eslint \"src/**\"",
     "prepare": "husky install",
     "updateb2cors": "tsc src/scripts/backblaze-cors.ts && node src/scripts/backblaze-cors.js",
-    "runupdateb2cors": "KEY=<key-here> SECRET=<secret-here> BUCKET=<bucket-here> node src/scripts/backblaze-cors.js",
-    "plop" : "plop --plopfile src/scripts/plopfile.mjs -- keyId=003a0eba6272a67000000000e"
+    "runupdateb2cors": "KEY=your-key SECRET=your-secret BUCKET=your-bucket node src/scripts/backblaze-cors.js",
+    "plop": "plop --plopfile src/scripts/plopfile.mjs -- keyId=003a0eba6272a67000000000e"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.186.0",
