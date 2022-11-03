@@ -21,6 +21,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 const Stack = createNativeStackNavigator()
 
 const styles = StyleSheet.create({
+  navContainer: { backgroundColor: 'blue' },
   ButtonsWrapper: {
     flexDirection: 'row'
   },
@@ -74,7 +75,7 @@ function App (): JSX.Element {
         <PortalProvider>
           <ApplicationContext.Provider value={applicationState}>
             {Platform.OS === 'web' && (
-              <NavigationContainer>
+              <NavigationContainer theme={theme}>
                 <Stack.Navigator>
                   <Stack.Screen
                     name="Home"

@@ -70,6 +70,9 @@ export const SaveCredentialsForm: React.FC = () => {
       fontSize: 36,
       marginBottom: 48
     },
+    textInputWrapper: {
+      backgroundColor: '#fff'
+    },
     textInput: {
       height: 40,
       borderColor: '#000000',
@@ -87,7 +90,7 @@ export const SaveCredentialsForm: React.FC = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <Card>
+      <Card style={styles.textInputWrapper}>
         <Card.Content>
           <Text variant="headlineSmall">API Configuration</Text>
           <InputField control={control} name="apiKey" label="API KEY" />
