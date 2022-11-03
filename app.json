@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "usesIcloudStorage": true
@@ -35,7 +33,8 @@
         "include": [
           "@aws-sdk/s3-request-presigner",
           "@aws-sdk/signature-v4",
-          "rn-fetch-blob"
+          "rn-fetch-blob",
+          "@aws-sdk/xhr-http-handler"
         ]
       }
     },
@@ -44,7 +43,8 @@
         "include": [
           "@aws-sdk/s3-request-presigner",
           "@aws-sdk/signature-v4",
-          "rn-fetch-blob"
+          "rn-fetch-blob",
+          "@aws-sdk/xhr-http-handler"
         ]
       }
     }

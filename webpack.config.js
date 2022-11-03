@@ -1,14 +1,18 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config')
-const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
-const path = require("path");
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
+const path = require('path')
 // Expo CLI will await this method so you can optionally return a promise.
 module.exports = async function (env, argv) {
+  const isEnvProduction = env.mode === 'production'
 
-  const isEnvProduction = env.mode === "production";
-  
   const config = await createExpoWebpackConfigAsync(
     {
       ...env,
+      node: {
+        console: false,
+        global: true,
+        process: true,
+      },
       babel: {
         dangerouslyAddModulePathsToTranspile: [
           '@tanstack/react-table',
@@ -17,7 +21,8 @@ module.exports = async function (env, argv) {
           '@aws-sdk/signature-v4/',
           '@aws-sdk/middleware-endpoint',
           '@aws-sdk/lib-storage',
-          '@aws-sdk/url-parser'
+          '@aws-sdk/url-parser',
+          '@aws-sdk/xhr-http-handler',
         ],
       },
     },
@@ -29,7 +34,7 @@ module.exports = async function (env, argv) {
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       new WorkboxWebpackPlugin.InjectManifest({
-        swSrc: path.resolve(__dirname, "src/service-worker.js"),
+        swSrc: path.resolve(__dirname, 'src/service-worker.js'),
         dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
         exclude: [
           /\.map$/,
@@ -44,7 +49,7 @@ module.exports = async function (env, argv) {
         // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       })
-    );
+    )
   }
 
   // Finally return the new config for the CLI to use.
