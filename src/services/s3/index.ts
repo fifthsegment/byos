@@ -17,9 +17,11 @@ import {
   CORSRule,
   PutBucketCorsCommandOutput
 } from '@aws-sdk/client-s3'
+import { XhrHttpHandler } from '@aws-sdk/xhr-http-handler'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
 import 'react-native-url-polyfill/auto'
 import 'react-native-get-random-values'
+import { Upload } from '@aws-sdk/lib-storage'
 // eslint-disable-next-line
 import { v4 as uuidv4 } from 'uuid'
 // eslint-disable-next-line
@@ -39,7 +41,8 @@ export const buildS3Client = (initializationData: S3Initializer): S3Client => {
     (next, context) => async (args) => {
       // args.request.headers["Custom-Header"] = "value";
       // eslint-disable-next-line
-      // @ts-ignore
+      //
+      // @ts-expect-error
       // delete args.request.headers["amz-sdk-request"];
       // delete args.request.headers["amz-sdk-invocation-id"];//x-amz-content-sha256
       // delete args.request.headers["x-amz-content-sha256"];
@@ -162,7 +165,7 @@ export const getAssetV2: (
   )
   try {
     await client.send(command)
-  } catch (error) { }
+  } catch (error) {}
   /* eslint-enable */
 
   /* return new Promise((resolve, reject) => {
@@ -207,7 +210,7 @@ export const buildClient = (
   })
 }
 
-export const uploadFileS3 = async (
+export const uploadFileS3Original = async (
   s3Client: S3Client,
   filename: string,
   bucket: string,
@@ -218,17 +221,88 @@ export const uploadFileS3 = async (
     Bucket: bucket,
   } as PutObjectCommandInput
   if (file) {
-    input.Body = file;
+    input.Body = file
   }
+
+  const newS3Client = new S3Client({
+    credentials: s3Client.config.credentials,
+    region: s3Client.config.region,
+    endpoint: s3Client.config.endpoint,
+    bucketEndpoint: s3Client.config.bucketEndpoint,
+    forcePathStyle: s3Client.config.forcePathStyle,
+  })
   const cmd = new PutObjectCommand(input)
-  const response = await s3Client.send(cmd)
+
+  const response = await newS3Client.send(cmd)
   return response
+}
+export const uploadFileS3 = async (
+  s3Client: S3Client,
+  filename: string,
+  bucket: string,
+  uploadProgress: (progressPercent: number) => void,
+  file?: File
+) => {
+  let input = {
+    Key: filename,
+    Bucket: bucket,
+  } as PutObjectCommandInput
+  if (file) {
+    input.Body = file
+  }
+  const handler = new XhrHttpHandler({})
+
+  const newS3Client = new S3Client({
+    credentials: s3Client.config.credentials,
+    region: s3Client.config.region,
+    endpoint: s3Client.config.endpoint,
+    bucketEndpoint: s3Client.config.bucketEndpoint,
+    forcePathStyle: s3Client.config.forcePathStyle,
+    requestHandler: handler,
+  })
+
+  const cmd = new PutObjectCommand(input)
+
+  handler.on('xhr.upload.progress', (progress) => {
+    uploadProgress(Math.round((progress.loaded / progress.total) * 100))
+  })
+  const response = await newS3Client.send(cmd)
+
+  return response
+}
+
+export const uploadFileS3V2 = async (
+  s3Client: S3Client,
+  filename: string,
+  bucket: string,
+  file?: File
+) => {
+  try {
+    console.log('Uploading file with progress')
+    const parallelUploads3 = new Upload({
+      client: s3Client,
+      params: { Bucket: bucket, Key: filename, Body: file },
+
+      tags: [
+        /*...*/
+      ], // optional tags
+      leavePartsOnError: false, // optional manually handle dropped parts
+    })
+
+    parallelUploads3.on('httpUploadProgress', (progress) => {
+      console.log('Progress = ', progress)
+    })
+
+    await parallelUploads3.done()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const checkFileExists = async (
   s3Client: S3Client,
   fileKey: string,
-  bucket: string,
+  bucket: string
 ) => {
   const input = {
     Key: fileKey,
@@ -249,7 +323,7 @@ export const updateCors = async (
     AllowedMethods: [''],
     AllowedOrigins: [''],
     MaxAgeSeconds: 3600,
-    ExposeHeaders: ['x-bz-content-sha1']
+    ExposeHeaders: ['x-bz-content-sha1'],
   }
   params.CORSConfiguration.CORSRules.push(rule)
   const command = new PutBucketCorsCommand(params)

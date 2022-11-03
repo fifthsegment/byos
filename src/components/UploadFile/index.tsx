@@ -71,7 +71,7 @@ export const UploadFile = ({
   const [porcessingOverwrite, setProcessingOverwrite] = React.useState(
     processingOverwriteInitial
   )
-
+  const [uploadProgress, setUploadProgress] = useState(0)
   // snackbar
   const [visibleSnackbar, setVisibleSnackbar] = React.useState<boolean>(false)
   const onToggleSnackBar: () => void = () =>
@@ -95,7 +95,7 @@ export const UploadFile = ({
       <Text>Upload location : {prefix}</Text>
 
       <View style={styles.uploadcontainer}>
-        {isLoading && 'Uploading'}
+        <Text>{isLoading && 'Uploading : ' + uploadProgress + '%'}</Text>
         <IconButton
           icon="cloud-upload"
           onPress={async () => {
@@ -122,7 +122,6 @@ export const UploadFile = ({
                 prefix + file.name,
                 s3credentials.bucket
               )
-              console.log(resultFileExists)
               resultFileExists.then((x) => {
                 // console.log('file exists')
                 setFilesOverwrite((current) => [
@@ -137,6 +136,10 @@ export const UploadFile = ({
                   s3client,
                   prefix + file.name,
                   s3credentials.bucket,
+                  (progress) => {
+                    setUploadProgress(progress)
+                    console.log('File upload progress ', progress)
+                  },
                   file
                 )
                 resultUploadFile.then(() => {
