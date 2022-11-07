@@ -1,12 +1,11 @@
 import { S3Client } from '@aws-sdk/client-s3'
 // import { Upload } from '@aws-sdk/lib-storage'
 import * as _DocumentPicker from 'expo-document-picker'
-import { IconButton, Snackbar, Text } from 'react-native-paper'
-import { checkFileExists, uploadFileS3 } from '../../services/s3'
+import { IconButton, Text } from 'react-native-paper'
 import React, { useState } from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
-import { ApplicationContextType } from '../../contexts/application/ApplicationContext'
-import { Dialog_ } from './Dialog'
+import { ApplicationState } from '../../contexts/application/ApplicationContext'
+import { FileUploadProgress } from '../FileUploadProgress'
 
 /* eslint-disable */
 const styles = StyleSheet.create({
@@ -37,14 +36,11 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-  appState: ApplicationContextType
+  appState: ApplicationState
   s3client: S3Client
   prefix: string
-}
-
-interface uploadFileConset {
-  overwrite: boolean
-  file: File
+  doReload: () => void
+  doCloseModal: () => void
 }
 
 export const UploadFile = ({
@@ -53,49 +49,33 @@ export const UploadFile = ({
   prefix,
   doReload,
   doCloseModal,
-}): JSX.Element => {
+}: Props): JSX.Element => {
   const { s3credentials } = appState
 
-  const [isLoading, setIsLoading] = useState(false)
-  const [isRejected, setIsRejected] = useState(true)
-
-  //array to hold files requireing consent to overwrite
-  const filesOverwriteInitial: uploadFileConset[] = []
-  const [filesOverwrite, setFilesOverwrite] = React.useState(
-    filesOverwriteInitial
+  const [, setIsLoading] = useState(false)
+  const [filesToUpload, setFilesToUpload] = useState<FileList | undefined>(
+    undefined
   )
-  const processingOverwriteInitial: uploadFileConset = {
-    overwrite: false,
-    file: null,
-  }
-  const [porcessingOverwrite, setProcessingOverwrite] = React.useState(
-    processingOverwriteInitial
-  )
-  const [uploadProgress, setUploadProgress] = useState(0)
-  // snackbar
-  const [visibleSnackbar, setVisibleSnackbar] = React.useState<boolean>(false)
-  const onToggleSnackBar: () => void = () =>
-    setVisibleSnackbar(!visibleSnackbar)
-  const onDismissSnackBar: () => void = () => {
-    setVisibleSnackbar(false)
-    setIsLoading(false)
-  }
 
   return (
     <>
-      <Dialog_
-        filesOverwrite={filesOverwrite}
-        porcessingOverwrite={porcessingOverwrite}
-        setProcessingOverwrite={setProcessingOverwrite}
-        setFilesOverwrite={setFilesOverwrite}
-        s3credentials={s3credentials}
-        s3client={s3client}
-      />
-
       <Text>Upload location : {prefix}</Text>
 
       <View style={styles.uploadcontainer}>
-        <Text>{isLoading && 'Uploading : ' + uploadProgress + '%'}</Text>
+        {filesToUpload &&
+          Array.from(filesToUpload).map((file) => (
+            <FileUploadProgress
+              prefix={prefix}
+              file={file}
+              s3credentials={s3credentials}
+              s3client={s3client}
+              onSuccess={() => {
+                doReload()
+                doCloseModal()
+              }}
+              onError={() => {}}
+            />
+          ))}
         <IconButton
           icon="cloud-upload"
           onPress={async () => {
@@ -103,78 +83,21 @@ export const UploadFile = ({
               multiple: true,
             })
             setIsLoading(true)
-            let toUpload = selectFile?.output
+            let toUpload: FileList = selectFile?.output
+            setFilesToUpload(toUpload)
             if (Platform.OS === 'ios') {
               const resp = await fetch(selectFile.uri)
               const blob = await resp.blob()
               toUpload = [blob]
               /*StreamingUploader(
-                              s3client,
-                              s3credentials.bucket,
-                              selectFile.name,
-                              blob
-                            )*/
-            }
-
-            for (const file of toUpload) {
-              const resultFileExists = checkFileExists(
-                s3client,
-                prefix + file.name,
-                s3credentials.bucket
-              )
-              resultFileExists.then((x) => {
-                // console.log('file exists')
-                setFilesOverwrite((current) => [
-                  ...current,
-                  { overwrite: false, file: file },
-                ])
-                // showDialog()
-              })
-              resultFileExists.catch(() => {
-                // console.log('file does not exist, uploading')
-                const resultUploadFile = uploadFileS3(
                   s3client,
-                  prefix + file.name,
                   s3credentials.bucket,
-                  (progress) => {
-                    setUploadProgress(progress)
-                    console.log('File upload progress ', progress)
-                  },
-                  file
-                )
-                resultUploadFile.then(() => {
-                  setIsRejected(false)
-                  onToggleSnackBar()
-                  doReload()
-                  doCloseModal()
-                })
-                resultUploadFile.catch(() => {
-                  onToggleSnackBar()
-                })
-              })
+                  selectFile.name,
+                  blob
+                )*/
             }
           }}
         />
-      </View>
-
-      <View style={styles.snackbarcontainer}>
-        <Snackbar
-          style={styles.snackbarinner}
-          visible={visibleSnackbar}
-          onDismiss={onDismissSnackBar}
-          action={{
-            label: 'Dismiss',
-            onPress: () => {
-              // Do something
-            },
-          }}
-        >
-          {isRejected ? (
-            <Text style={styles.snackbartext}>Failed to upload file</Text>
-          ) : (
-            <Text style={styles.snackbartext}>File upload successfull</Text>
-          )}
-        </Snackbar>
       </View>
     </>
   )
