@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Feather } from '@expo/vector-icons'
-import { StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { IconButton, Text, TextInput } from 'react-native-paper'
 
 import { Asset } from '../../services/types'
@@ -10,6 +10,7 @@ import { updateAsset as s3UpdateAsset, deleteAsset } from '../../services/s3'
 import { useS3Client } from '../../hooks/useS3Client'
 import { getDownloadLinkByKey } from '../../services/cross-service-storage/cross-service-storage'
 import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
+
 import prettyBytes from 'pretty-bytes'
 
 export interface PreviewPropsType {
@@ -28,8 +29,10 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
   const [text, setText] = useState(asset.fileName)
   const [s3Client] = useS3Client(appState)
   const screenSize = useScreenSize()
+  const [performingAction, setPerformingAction] = useState(false)
 
   const handleSave = async (): Promise<void> => {
+    setPerformingAction(true)
     setIsEditing(false)
     setUpdateAsset((asset) => ({
       ...asset,
@@ -49,6 +52,7 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
   }
 
   const handleDelete = async (): Promise<void> => {
+    setPerformingAction(true)
     const deleteParams = {
       Bucket: s3credentials.bucket,
       Key: updateAsset.key
@@ -130,6 +134,7 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
               icon="download"
               onPress={handleDownload}
             />
+            {performingAction && <ActivityIndicator />}
           </View>
         </View>
       </View>
