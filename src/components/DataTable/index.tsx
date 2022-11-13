@@ -98,12 +98,21 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
     )
   }
 
-  const getStyle = (id: string): React.CSSProperties => {
+  const getStyle = (
+    id: string,
+    isHeader: boolean = false
+  ): React.CSSProperties => {
     switch (id) {
       case 'fileSize': {
-        return {
-          justifyContent: 'end',
-          marginRight: 30
+        if (isHeader) {
+          return {
+            justifyContent: 'end'
+          }
+        } else {
+          return {
+            justifyContent: 'end',
+            marginRight: 30
+          }
         }
       }
       default: {
@@ -121,7 +130,9 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
               <ReactPaperDataTable.Title
                 key={header.id}
                 style={
-                  index === 0 ? styles.cellFirstChild : getStyle(header.id)
+                  index === 0
+                    ? styles.cellFirstChild
+                    : getStyle(header.id, true)
                 }
               >
                 <Button>
