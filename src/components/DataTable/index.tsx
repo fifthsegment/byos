@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
     marginLeft: '10px'
   },
   cell: {
-    flexBasis: 'auto',
-    paddingRight: '30px'
+    // flexBasis: 'auto',
+    // paddingRight: '30px',
   },
   cellFirstChild: {
-    flexBasis: '78%'
+    flexBasis: '50%'
   },
   title: {
     display: 'flex',
@@ -98,6 +98,20 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
     )
   }
 
+  const getStyle = (id: string): React.CSSProperties => {
+    switch (id) {
+      case 'fileSize': {
+        return {
+          justifyContent: 'end',
+          marginRight: 30
+        }
+      }
+      default: {
+        return {}
+      }
+    }
+  }
+
   return (
     <>
       <ReactPaperDataTable.Header style={styles.tableHead}>
@@ -106,7 +120,9 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
             {headerGroup.headers.map((header, index) => (
               <ReactPaperDataTable.Title
                 key={header.id}
-                style={index === 0 ? styles.cellFirstChild : styles.cell}
+                style={
+                  index === 0 ? styles.cellFirstChild : getStyle(header.id)
+                }
               >
                 <Button>
                   {header.isPlaceholder
@@ -161,7 +177,11 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
               {row.getVisibleCells().map((cell, index) => (
                 <ReactPaperDataTable.Cell
                   key={cell.id}
-                  style={index === 0 ? styles.cellFirstChild : styles.cell}
+                  style={
+                    index === 0
+                      ? styles.cellFirstChild
+                      : getStyle(cell.column.id)
+                  }
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </ReactPaperDataTable.Cell>

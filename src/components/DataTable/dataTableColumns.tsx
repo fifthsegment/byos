@@ -57,7 +57,7 @@ export const DataGridColumns = (): Array<ColumnDef<Asset, any>> => {
           : info.getValue()
         return (
           <>
-            <Text variant="bodyLarge" style={styles.filename}>
+            <Text style={styles.filename}>
               {iconType(row)} &nbsp;
               {fileName}
             </Text>
@@ -93,6 +93,7 @@ export const DataGridColumns = (): Array<ColumnDef<Asset, any>> => {
     // Display column size
     columnHelper.display({
       id: 'actions',
+
       cell: () => <ContextMenu />
     })
   ].filter((item) => {
