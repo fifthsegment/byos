@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Feather } from '@expo/vector-icons'
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { IconButton, Text, TextInput } from 'react-native-paper'
@@ -30,6 +30,10 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
   const [s3Client] = useS3Client(appState)
   const screenSize = useScreenSize()
   const [performingAction, setPerformingAction] = useState(false)
+
+  useEffect(() => {
+    setUpdateAsset(asset)
+  }, [asset])
 
   const handleSave = async (): Promise<void> => {
     setPerformingAction(true)

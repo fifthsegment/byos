@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { HTMLProps } from 'react'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import prettyBytes from 'pretty-bytes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Feather } from '@expo/vector-icons'
 import { Platform, StyleSheet } from 'react-native'
-import { Text } from 'react-native-paper'
+import { Checkbox, Text } from 'react-native-paper'
 
 import { ContextMenu } from '../ContextMenu'
 import { Asset } from '../../services/types'
@@ -43,10 +43,56 @@ const iconType = (asset: Asset): JSX.Element => {
   }
 }
 
-export const DataGridColumns = (): Array<ColumnDef<Asset, any>> => {
+const IndeterminateCheckbox = ({
+  indeterminate,
+  className = '',
+  ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>): JSX.Element => {
+  const ref = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    if (typeof indeterminate === 'boolean' && ref.current) {
+      ref.current.indeterminate = !rest.checked && indeterminate
+    }
+  }, [ref, indeterminate])
+
+  return (
+    <Checkbox
+      status={rest.checked ? 'checked' : 'unchecked'}
+      onPress={() => rest.onChange()}
+      ref={ref}
+      // className={className + ' cursor-pointer'}
+      {...rest}
+    />
+  )
+}
+
+export const DataGridColumns = (): any => {
   const columnHelper = createColumnHelper<Asset>()
   const columns: Array<ColumnDef<Asset, any>> = [
-    // Dispaly file name with icon
+    columnHelper.accessor('select', {
+      id: 'select',
+      header: ({ table }) => (
+        <IndeterminateCheckbox
+          {...{
+            checked: table.getIsAllRowsSelected(),
+            indeterminate: table.getIsSomeRowsSelected(),
+            onChange: table.getToggleAllRowsSelectedHandler()
+          }}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.toggleSelected
+            }}
+          />
+        )
+      }
+    }),
     columnHelper.accessor('fileName', {
       id: 'fileName',
       header: 'Name',

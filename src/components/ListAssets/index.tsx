@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Text, IconButton, Card, FAB, ToggleButton } from 'react-native-paper'
-import { Portal } from '@gorhom/portal'
+import { Portal, PortalHost } from '@gorhom/portal'
 import {
   ApplicationContext,
   ApplicationContextType
@@ -136,6 +136,7 @@ export const ListAssets: React.FC = () => {
                   {dirPath}
                 </Text>
                 <View style={styles.buttonGroup}>
+                  <PortalHost name="listassetsheader" />
                   <ToggleButton
                     icon="dots-grid"
                     value="grid"
