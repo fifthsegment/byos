@@ -133,7 +133,14 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
   }
 
   const deleteMultipleAssets = (): void => {
-    console.log('Delete multiple assets')
+    const folders = selectedRows
+      .filter((row) => row.original.isFolder)
+      .map((row) => row.original)
+    const assets = selectedRows
+      .filter((row) => !row.original.isFolder)
+      .map((row) => row.original)
+    console.log('Folders = ', folders)
+    console.log('Assets = ', assets)
   }
 
   return (
