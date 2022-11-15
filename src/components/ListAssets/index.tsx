@@ -20,6 +20,7 @@ import { DataGrid } from '../DataGrid'
 
 import { UploadFile } from '../UploadFile'
 import { CreateFolder } from '../CreateFolder/CreateFolder'
+import { deleteAssets } from '../../helpers/deleteAssets'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
@@ -191,6 +192,7 @@ export const ListAssets: React.FC = () => {
                   assets={data}
                   onPress={onPress}
                   isLoading={isLoading}
+                  deleteAssets={(assets) => deleteAssets(s3client, assets)}
                 />
               ) : (
                 <DataGrid

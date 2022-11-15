@@ -46,12 +46,14 @@ export interface DataTableProps {
   assets: Asset[] | undefined
   onPress: (asset: Asset) => void
   isLoading: boolean
+  deleteAssets: (assets: Asset[]) => Promise<void>
 }
 
 export const DataTable: (props: DataTableProps) => JSX.Element = ({
   assets,
   onPress,
-  isLoading
+  isLoading,
+  deleteAssets
 }: DataTableProps) => {
   const [data, setData] = React.useState<Asset[]>(() => assets || [])
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -132,15 +134,8 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
     }
   }
 
-  const deleteMultipleAssets = (): void => {
-    const folders = selectedRows
-      .filter((row) => row.original.isFolder)
-      .map((row) => row.original)
-    const assets = selectedRows
-      .filter((row) => !row.original.isFolder)
-      .map((row) => row.original)
-    console.log('Folders = ', folders)
-    console.log('Assets = ', assets)
+  const deleteMultipleAssets = async (): Promise<void> => {
+    await deleteAssets(selectedRows.map((row) => row.original))
   }
 
   return (
@@ -151,7 +146,9 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
             icon="delete"
             value="delete"
             onPress={() => {
-              deleteMultipleAssets()
+              deleteMultipleAssets().catch((error) => {
+                console.log('Error = ', error)
+              })
             }}
           />
         )}
