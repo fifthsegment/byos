@@ -192,7 +192,13 @@ export const ListAssets: React.FC = () => {
                   assets={data}
                   onPress={onPress}
                   isLoading={isLoading}
-                  deleteAssets={(assets) => deleteAssets(s3client, assets)}
+                  deleteAssets={(assets) =>
+                    deleteAssets(
+                      s3client,
+                      appState.s3credentials.bucket,
+                      assets
+                    )
+                  }
                 />
               ) : (
                 <DataGrid
