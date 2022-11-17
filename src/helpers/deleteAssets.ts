@@ -1,4 +1,8 @@
-import { DeleteObjectsCommand, S3Client } from '@aws-sdk/client-s3'
+import {
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+  S3Client
+} from '@aws-sdk/client-s3'
 import { Asset } from '../services/types'
 
 export const deleteAssets = async (
@@ -7,6 +11,14 @@ export const deleteAssets = async (
   assets: Asset[]
 ): Promise<void> => {
   const folders = assets.filter((item) => item.isFolder)
+  folders.forEach((folder) => {
+    // eslint-disable-next-line
+    const _cmd = new ListObjectsV2Command({
+      Bucket: bucket,
+      Prefix: folder.key
+    })
+  })
+
   // const files = assets.filter((item) => !item.isFolder)
   /* let itemsToDelete = []
   if (folders.length > 0) {
