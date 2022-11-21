@@ -46,7 +46,7 @@ export interface DataTableProps {
   assets: Asset[] | undefined
   onPress: (asset: Asset) => void
   isLoading: boolean
-  deleteAssets: (assets: Asset[]) => Promise<void>
+  deleteAssets: (assets: Asset[]) => void
 }
 
 export const DataTable: (props: DataTableProps) => JSX.Element = ({
@@ -134,8 +134,8 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
     }
   }
 
-  const deleteMultipleAssets = async (): Promise<void> => {
-    await deleteAssets(selectedRows.map((row) => row.original))
+  const deleteMultipleAssets = (): void => {
+    deleteAssets(selectedRows.map((row) => row.original))
   }
 
   return (
@@ -146,9 +146,7 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
             icon="delete"
             value="delete"
             onPress={() => {
-              deleteMultipleAssets().catch((error) => {
-                console.log('Error = ', error)
-              })
+              deleteMultipleAssets()
             }}
           />
         )}
@@ -164,24 +162,24 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
                 {header.isPlaceholder
                   ? null
                   : (
-                  <Text
-                    {...{
-                      onClick: header.column.getToggleSortingHandler()
-                    }}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                    {{
-                      asc: (
-                        <AntDesign name="arrowup" style={styles.sorterIcon} />
-                      ),
-                      desc: (
-                        <AntDesign name="arrowdown" style={styles.sorterIcon} />
-                      )
-                    }[header.column.getIsSorted() as string] ?? null}
-                  </Text>
+                    <Text
+                      {...{
+                        onClick: header.column.getToggleSortingHandler()
+                      }}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                      {{
+                        asc: (
+                          <AntDesign name="arrowup" style={styles.sorterIcon} />
+                        ),
+                        desc: (
+                          <AntDesign name="arrowdown" style={styles.sorterIcon} />
+                        )
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </Text>
                     )}
               </ReactPaperDataTable.Title>
             ))}
@@ -220,9 +218,8 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
             page={table.getState().pagination.pageIndex + 1}
             numberOfPages={table.getPageCount()}
             onPageChange={(page) => table.setPageIndex(page - 1)}
-            label={`${
-              table.getState().pagination.pageIndex + 1
-            } of ${table.getPageCount()}`}
+            label={`${table.getState().pagination.pageIndex + 1
+              } of ${table.getPageCount()}`}
           />
         </ReactPaperDataTable>
       </ScrollView>

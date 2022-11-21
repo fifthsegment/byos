@@ -15,7 +15,9 @@ import {
   PutBucketCorsCommandInput,
   PutBucketCorsCommand,
   CORSRule,
-  PutBucketCorsCommandOutput
+  PutBucketCorsCommandOutput,
+  DeleteObjectsCommandInput,
+  DeleteObjectsCommand
 } from '@aws-sdk/client-s3'
 import { XhrHttpHandler } from '@aws-sdk/xhr-http-handler'
 import { S3Initializer, GetAssetArgs, Asset } from './types'
@@ -117,6 +119,25 @@ export const deleteAsset: (
   }
 }
 
+export const deleteAssets: (
+  client: S3Client,
+  bucket: string,
+  assets: Array<{ Key: string }>
+) => Promise<any> = async (client, bucket, assets) => {
+  try {
+    const params: DeleteObjectsCommandInput = {
+      Bucket: bucket,
+      Delete: {
+        Objects: assets.map((asset) => ({ Key: asset.Key }))
+      }
+    }
+    const data = await client.send(new DeleteObjectsCommand(params))
+    return data
+  } catch (err) {
+    console.log('Error', err)
+  }
+}
+
 export const getAsset: (
   client: S3Client,
   params: GetObjectCommandInput
@@ -165,7 +186,7 @@ export const getAssetV2: (
   )
   try {
     await client.send(command)
-  } catch (error) {}
+  } catch (error) { }
   /* eslint-enable */
 
   /* return new Promise((resolve, reject) => {

@@ -17,7 +17,8 @@ import Credentials from './pages/credentials'
 import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-
+import { store } from './store'
+import { Provider } from 'react-redux'
 const Stack = createNativeStackNavigator()
 
 const styles = StyleSheet.create({
@@ -69,31 +70,33 @@ function App (): JSX.Element {
   })
 
   return (
-    <ThemeContextInternal.Provider value={themeState}>
-      <ThemeProvider>
-        <PortalProvider>
-          <ApplicationContext.Provider value={applicationState}>
-            {Platform.OS === 'web' && (
-              <NavigationContainer>
-                <Stack.Navigator>
-                  <Stack.Screen
-                    name="Home"
-                    component={Dashboard}
-                    options={navigationButtons}
-                  />
-                  <Stack.Screen
-                    name="Credentials"
-                    component={Credentials}
-                    options={navigationButtons}
-                  />
-                </Stack.Navigator>
-              </NavigationContainer>
-            )}
-            <MobileView />
-          </ApplicationContext.Provider>
-        </PortalProvider>
-      </ThemeProvider>
-    </ThemeContextInternal.Provider>
+    <Provider store={store}>
+      <ThemeContextInternal.Provider value={themeState}>
+        <ThemeProvider>
+          <PortalProvider>
+            <ApplicationContext.Provider value={applicationState}>
+              {Platform.OS === 'web' && (
+                <NavigationContainer>
+                  <Stack.Navigator>
+                    <Stack.Screen
+                      name="Home"
+                      component={Dashboard}
+                      options={navigationButtons}
+                    />
+                    <Stack.Screen
+                      name="Credentials"
+                      component={Credentials}
+                      options={navigationButtons}
+                    />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              )}
+              <MobileView />
+            </ApplicationContext.Provider>
+          </PortalProvider>
+        </ThemeProvider>
+      </ThemeContextInternal.Provider>
+    </Provider>
   )
 }
 
