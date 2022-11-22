@@ -20,6 +20,7 @@ import { DataGrid } from '../DataGrid'
 
 import { UploadFile } from '../UploadFile'
 import { CreateFolder } from '../CreateFolder/CreateFolder'
+import { deleteMultipleAssets } from '../../actions/deleteMultipleAssets'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
@@ -34,7 +35,6 @@ export const ListAssets: React.FC = () => {
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
   const [isTableView, setIsTableView] = React.useState(true)
-  const [, setAssetsToDelete] = React.useState<Asset[]>([])
   const [dataQuery, setDataQuery] = useState<GetAssetArgs>({
     Bucket: appState.s3credentials.bucket,
     Prefix: '',
@@ -193,7 +193,7 @@ export const ListAssets: React.FC = () => {
                     onPress={onPress}
                     isLoading={isLoading}
                     deleteAssets={(assets) => {
-                      setAssetsToDelete(assets)
+                      deleteMultipleAssets(assets)
                     }
                     }
                   />
