@@ -192,8 +192,9 @@ export const ListAssets: React.FC = () => {
                     assets={data}
                     onPress={onPress}
                     isLoading={isLoading}
-                    deleteAssets={(assets) => {
-                      deleteMultipleAssets(assets)
+                    deleteAssets={async (assets) => {
+                      await deleteMultipleAssets(s3client, appState.s3credentials.bucket, assets)
+                      doReload()
                     }
                     }
                   />

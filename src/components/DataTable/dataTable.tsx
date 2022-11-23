@@ -68,9 +68,10 @@ export const DataTable: (props: DataTableProps) => JSX.Element = ({
     }
   }, [screenType])
   useEffect(() => {
+    table.resetRowSelection()
     setData(assets || [])
     setCurrentPage(1)
-  }, [assets])
+  }, [assets?.map(asset => asset.key).join(',')])
   const table = useReactTable({
     data,
     columns,
