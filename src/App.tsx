@@ -7,7 +7,7 @@ import { PortalHost, PortalProvider } from '@gorhom/portal'
 
 import {
   ApplicationContext,
-  initialData,
+  initialData
 } from './contexts/application/ApplicationContext'
 import MobileView from './components/MobileView'
 import { setApplicationStateLS } from './services/localstorage'
@@ -19,19 +19,19 @@ import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 const Stack = createNativeStackNavigator()
 /**
- * 
+ *
  */
 const styles = StyleSheet.create({
   ButtonsWrapper: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   Button: {
     border: '1px',
-    borderStyle: 'solid',
-  },
+    borderStyle: 'solid'
+  }
 })
 
-function App(): JSX.Element {
+function App (): JSX.Element {
   const themeState = useState(theme)
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
@@ -66,7 +66,7 @@ function App(): JSX.Element {
           onPress={() => navigation.navigate('Credentials')}
         />
       </View>
-    ),
+    )
   })
 
   return (
