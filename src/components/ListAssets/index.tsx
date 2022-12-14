@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Text, IconButton, Card, FAB, ToggleButton } from 'react-native-paper'
-import { Portal } from '@gorhom/portal'
+import { Portal, PortalHost } from '@gorhom/portal'
 import {
   ApplicationContext,
   ApplicationContextType
@@ -20,6 +20,7 @@ import { DataGrid } from '../DataGrid'
 
 import { UploadFile } from '../UploadFile'
 import { CreateFolder } from '../CreateFolder/CreateFolder'
+import { deleteMultipleAssets } from '../../actions/deleteMultipleAssets'
 
 export const ListAssets: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<Asset | undefined>(
@@ -34,7 +35,6 @@ export const ListAssets: React.FC = () => {
   const [appState] = useContext<ApplicationContextType>(ApplicationContext)
   const [s3client, s3Initialized] = useS3Client(appState)
   const [isTableView, setIsTableView] = React.useState(true)
-
   const [dataQuery, setDataQuery] = useState<GetAssetArgs>({
     Bucket: appState.s3credentials.bucket,
     Prefix: '',
@@ -136,6 +136,7 @@ export const ListAssets: React.FC = () => {
                   {dirPath}
                 </Text>
                 <View style={styles.buttonGroup}>
+                  <PortalHost name="listassetsheader" />
                   <ToggleButton
                     icon="dots-grid"
                     value="grid"
@@ -186,11 +187,18 @@ export const ListAssets: React.FC = () => {
               </AppModal>
 
               {isTableView ? (
-                <DataTable
-                  assets={data}
-                  onPress={onPress}
-                  isLoading={isLoading}
-                />
+                <>
+                  <DataTable
+                    assets={data}
+                    onPress={onPress}
+                    isLoading={isLoading}
+                    deleteAssets={async (assets) => {
+                      await deleteMultipleAssets(s3client, appState.s3credentials.bucket, assets)
+                      doReload()
+                    }
+                    }
+                  />
+                </>
               ) : (
                 <DataGrid
                   assets={data}
