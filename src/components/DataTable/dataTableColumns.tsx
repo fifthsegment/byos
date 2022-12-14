@@ -73,13 +73,14 @@ export const DataGridColumns = (): any => {
     columnHelper.accessor('select', {
       id: 'select',
       header: ({ table }) => (
-        <IndeterminateCheckbox
+        /* <IndeterminateCheckbox
           {...{
             checked: table.getIsAllRowsSelected(),
             indeterminate: table.getIsSomeRowsSelected(),
             onChange: table.getToggleAllRowsSelectedHandler()
           }}
-        />
+        /> */
+          <></>
       ),
       cell: ({ row }) => {
         return (
