@@ -18,7 +18,9 @@ import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 const Stack = createNativeStackNavigator()
-
+/**
+ * 
+ */
 const styles = StyleSheet.create({
   ButtonsWrapper: {
     flexDirection: 'row',
