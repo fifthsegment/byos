@@ -7,7 +7,7 @@ import { PortalHost, PortalProvider } from '@gorhom/portal'
 
 import {
   ApplicationContext,
-  initialData
+  initialData,
 } from './contexts/application/ApplicationContext'
 import MobileView from './components/MobileView'
 import { setApplicationStateLS } from './services/localstorage'
@@ -17,21 +17,20 @@ import Credentials from './pages/credentials'
 import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import { store } from './store'
 import { Provider } from 'react-redux'
 const Stack = createNativeStackNavigator()
 
 const styles = StyleSheet.create({
   ButtonsWrapper: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   Button: {
     border: '1px',
-    borderStyle: 'solid'
-  }
+    borderStyle: 'solid',
+  },
 })
 
-function App (): JSX.Element {
+function App(): JSX.Element {
   const themeState = useState(theme)
   const { data: savedApplicationData, isLoaded } =
     useGetApplicationStateFromLs(initialData)
@@ -66,37 +65,35 @@ function App (): JSX.Element {
           onPress={() => navigation.navigate('Credentials')}
         />
       </View>
-    )
+    ),
   })
 
   return (
-    <Provider store={store}>
-      <ThemeContextInternal.Provider value={themeState}>
-        <ThemeProvider>
-          <PortalProvider>
-            <ApplicationContext.Provider value={applicationState}>
-              {Platform.OS === 'web' && (
-                <NavigationContainer>
-                  <Stack.Navigator>
-                    <Stack.Screen
-                      name="Home"
-                      component={Dashboard}
-                      options={navigationButtons}
-                    />
-                    <Stack.Screen
-                      name="Credentials"
-                      component={Credentials}
-                      options={navigationButtons}
-                    />
-                  </Stack.Navigator>
-                </NavigationContainer>
-              )}
-              <MobileView />
-            </ApplicationContext.Provider>
-          </PortalProvider>
-        </ThemeProvider>
-      </ThemeContextInternal.Provider>
-    </Provider>
+    <ThemeContextInternal.Provider value={themeState}>
+      <ThemeProvider>
+        <PortalProvider>
+          <ApplicationContext.Provider value={applicationState}>
+            {Platform.OS === 'web' && (
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Home"
+                    component={Dashboard}
+                    options={navigationButtons}
+                  />
+                  <Stack.Screen
+                    name="Credentials"
+                    component={Credentials}
+                    options={navigationButtons}
+                  />
+                </Stack.Navigator>
+              </NavigationContainer>
+            )}
+            <MobileView />
+          </ApplicationContext.Provider>
+        </PortalProvider>
+      </ThemeProvider>
+    </ThemeContextInternal.Provider>
   )
 }
 
