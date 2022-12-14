@@ -7,6 +7,10 @@ import { InputField } from '../Input/InputField'
 import { Button } from '../Button'
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
 import { S3Client } from '@aws-sdk/client-s3'
+import {
+  authorizeAccount,
+  getAuthorizationToken
+} from '../../services/backblaze/backblaze'
 
 export const SaveCredentialsForm: React.FC = () => {
   const [appState, setAppState] = useContext(ApplicationContext)
@@ -82,6 +86,15 @@ export const SaveCredentialsForm: React.FC = () => {
     }
   })
 
+  const b2AuthTest = async (): Promise<void> => {
+    const token = getAuthorizationToken(
+      s3credentials.apiKey,
+      s3credentials.apiSecret
+    )
+    const auth = await authorizeAccount(token)
+    console.log('authd', auth)
+  }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -101,6 +114,14 @@ export const SaveCredentialsForm: React.FC = () => {
           <InputField control={control} name="region" label="Region" />
         </Card.Content>
         <Card.Actions>
+          {/* eslint-disable-next-line */}
+          <Button
+            onPress={() => {
+              await b2AuthTest()
+            }}
+          >
+            Test B2
+          </Button>
           {/* eslint-disable-next-line */}
           <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
         </Card.Actions>
