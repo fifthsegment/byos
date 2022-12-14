@@ -17,7 +17,6 @@ import Credentials from './pages/credentials'
 import { theme } from './theme'
 import { ThemeContextInternal } from './contexts/theme/ThemeContextInternal'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import { Provider } from 'react-redux'
 const Stack = createNativeStackNavigator()
 
 const styles = StyleSheet.create({
