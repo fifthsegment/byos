@@ -80,11 +80,10 @@ export const DataGridColumns = (): any => {
             onChange: table.getToggleAllRowsSelectedHandler()
           }}
         /> */
-          <></>
+        <></>
       ),
       cell: ({ row }) => {
-        return !row.original.isFolder &&
-        (
+        return (
           <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
