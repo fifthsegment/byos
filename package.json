@@ -4,7 +4,7 @@
   "homepage": "./",
   "scripts": {
     "legacy-ssl": "export NODE_OPTIONS=--openssl-legacy-provider",
-    "start": "env REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.35 expo start",
+    "start": "env REACT_NATIVE_PACKAGER_HOSTNAME=192.168.2.168 expo start",
     "start:dev-client": "expo start --dev-client",
     "start:tunnel": "expo start --tunnel",
     "android": "expo run:android",
