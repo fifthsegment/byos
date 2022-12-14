@@ -83,7 +83,8 @@ export const DataGridColumns = (): any => {
           <></>
       ),
       cell: ({ row }) => {
-        return (
+        return !row.original.isFolder &&
+        (
           <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
