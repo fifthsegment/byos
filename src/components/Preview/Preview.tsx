@@ -12,6 +12,7 @@ import { getDownloadLinkByKey } from '../../services/cross-service-storage/cross
 import { useScreenSize } from '../../services/rn-responsive-design/useScreenSize'
 
 import prettyBytes from 'pretty-bytes'
+import FileViewer from 'react-file-viewer'
 
 export interface PreviewPropsType {
   asset: Asset
@@ -30,6 +31,9 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
   const [s3Client] = useS3Client(appState)
   const screenSize = useScreenSize()
   const [performingAction, setPerformingAction] = useState(false)
+  const [loadPreview, setLoadPreview] = useState(false)
+  const [previewLink, setPreviewLink] = useState('')
+  const [fileExtension, setFileExtension] = useState('')
 
   useEffect(() => {
     setUpdateAsset(asset)
@@ -66,21 +70,38 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
     onClose()
   }
 
-  const handleDownload = async (): Promise<void> => {
+  const handleDownload = async (doClick = true): Promise<string> => {
     const link = await getDownloadLinkByKey(
       appState,
       setAppState,
       s3Client,
       asset.key
     )
-    const a = document.createElement('a')
-    a.href = link
-    a.download = asset.key
-    a.style.display = 'none'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
+    if (doClick) {
+      const a = document.createElement('a')
+      a.href = link
+      a.download = asset.key
+      a.style.display = 'none'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+    }
+    return link
   }
+
+  const startLoadingPreview = async (): Promise<void> => {
+    const link = await handleDownload(false)
+    const ext = asset.fileName.split('.').pop()
+    setFileExtension(ext)
+    setLoadPreview(true)
+    setPreviewLink(link)
+  }
+
+  useEffect(() => {
+    return () => {
+      console.log('Closing Preview')
+    }
+  }, [])
 
   /* eslint-disable */
   return (
@@ -110,6 +131,7 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
             style={[styles.textCenter, styles.marginBottom]}
           >
             <Feather theme={theme} name="file" size={100} />
+            {loadPreview && <FileViewer fileType={fileExtension} filePath={previewLink} />}
           </Text>
           <Text variant="headlineSmall" style={styles.textCenter}>
             {isEditing ? (
@@ -132,6 +154,11 @@ const Preview = ({ asset, onClose, prefix }: PreviewPropsType): JSX.Element => {
                 onPress={() => setIsEditing(true)}
               />
             )}
+            <IconButton
+              theme={theme}
+              icon="image"
+              onPress={startLoadingPreview}
+            />
             <IconButton theme={theme} icon="trash-can" onPress={handleDelete} />
             <IconButton
               theme={theme}
